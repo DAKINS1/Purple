@@ -1,6 +1,5 @@
 $(document).ready(function() {
 
-
 	$('input.autocomplete').autocomplete({
 		data: {
 			"Apple": null,
@@ -10,8 +9,25 @@ $(document).ready(function() {
     limit: 20, // The max amount of results that can be shown at once. Default: Infinity.
     onAutocomplete: function(val) {
       // Callback function when value is autcompleted.
-   },
+  },
     minLength: 1, // The minimum length of the input for the autocomplete to start. Default: 1.
- });
+});
+
+// ajax
+
+
+
+var token = "bbc8c9ea38c3791e";
+var url = "https://api.eatstreet.com";
+url += '?' + $.param({
+	'access-token': token
+});
+
+$.ajax({
+	url: url,
+	method: 'GET'
+}).done(function(result) {
+	console.log(result);	
+});
 
 });
