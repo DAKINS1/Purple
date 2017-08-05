@@ -1,3 +1,10 @@
+html {
+	box-sizing: border-box;
+}
+*, *:before, *:after {
+	box-sizing: inherit;
+}
+
 .search-area {
 	margin: 20px auto;
 }
@@ -20,7 +27,7 @@ nav .input-field label {
 
 .input-box {
 	background-color: white !important;
-	padding: 0px 5px !important;
+	padding-left: 5px !important;
 	margin: 0 !important;
 	color: black;
 }
