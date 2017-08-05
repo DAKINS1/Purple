@@ -3,7 +3,34 @@
 
 var Squpon = {
 
-	currentLocation: ""
+	currentLocation: "",
+
+	locationInput: "",
+
+	queryInput: "",
+
+	// ajax call function with callback function so that you can handle response from ajax request on function call.
+	getJSON: function ( url, callback ) {
+
+		$.ajax({
+
+			method: 'GET',
+			url: url,
+			headers: {
+				'Authorization': 'api_key xlagn7'
+			}
+
+		}).done( function (response) {
+
+			console.log('getJSON() success!');
+			console.log(response);
+			
+			if( typeof callback === 'function') {
+				callback(response);
+			}
+		});
+
+	}
 }
 
 //Google Map Object.
@@ -125,10 +152,6 @@ $(document).ready(function() {
 
 			}
 		})
-
-
-
-
 
 	$('.carousel.carousel-slider').carousel({fullWidth: true});
 
