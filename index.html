@@ -2,15 +2,140 @@
 <html>
 <head>
 	<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-	<title>Food Finder</title>
+	<title>Squpon</title>
 	<!-- CSS-->
 	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.1/css/materialize.min.css">
+	<link rel="stylesheet" type="text/css" href="assets/css/style.css">
+
 </head>
 <body>
+	<div class="row header-wrapper deep-purple darken-4">
+		<div class="container">
+			<form>
+				<div class="row">
+					<div class="logo col s12 m3 center-align">
+						<a href="#"><img src="assets/images/squponwhite.png" class="responsive-img"></a>
+					</div>
+					<div class="col s12 m5 search">
+						<form>
+							<input id="search-input" type="text" class="input-box" placeholder="Search for">									
+						</form>
+					</div>
+					<div class="col s12 m3 location">
+						<form>
+							<input id="location-input" type="text" class="input-box" placeholder="Location">									
+						</form>
+					</div>
+					<div class="col s12 m1 center-align search-button">
+						<a id="search-submit" class="btn-floating btn-large waves-effect waves-light purple"><i class="material-icons">search</i></a>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
 
-	<!--  Scripts-->
-	<script src="http://code.jquery.com/jquery-3.2.1.min.js"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.1/js/materialize.min.js"></script>
-</body>
-</html>
+	<!-- Nav Bar -->
+	<nav>
+		<div class="nav-wrapper deep-purple darken-2 z-depth-3">
+			<div class="container">	
+				<a href="#" data-activates="mobile-demo" class="button-collapse"><i class="material-icons">menu</i></a>	
+				<ul id="nav-mobile" class="left hide-on-med-and-down">
+					<li><a href="recommendations.html">Things to Do</a></li>
+					<li><a href="reviews.html">Restaurant</a></li>
+					<li><a href="blogs.html">Shopping</a></li>
+				</ul>
+				<ul class="side-nav" id="mobile-demo">
+					<li><a href="#">Things to Do</a></li>
+					<li><a href="#">Restaurant</a></li>
+					<li><a href="#">Shopping</a></li>
+				</ul>
+			</div>
+		</div>
+	</nav>
+
+
+	<!-- Page Layout here -->
+	<div class="container">
+		<div class="row">
+			<div class="carousel carousel-slider center" data-indicators="true">
+				<div class="carousel-fixed-item center">
+					<a class="btn waves-effect white grey-text darken-text-2">button</a>
+				</div>
+				<div class="carousel-item red white-text" href="#one!">
+					<h2>First Panel</h2>
+					<p class="white-text">This is your first panel</p>
+				</div>
+				<div class="carousel-item amber white-text" href="#two!">
+					<h2>Second Panel</h2>
+					<p class="white-text">This is your second panel</p>
+				</div>
+				<div class="carousel-item green white-text" href="#three!">
+					<h2>Third Panel</h2>
+					<p class="white-text">This is your third panel</p>
+				</div>
+				<div class="carousel-item blue white-text" href="#four!">
+					<h2>Fourth Panel</h2>
+					<p class="white-text">This is your fourth panel</p>
+				</div>
+			</div>
+		</div>
+
+
+		<div class="row">
+			<div class="col s12 m4">
+				<div class="card">
+					<div class="card-image">
+						<img src="http://lorempixel.com/800/400/nature/1">
+						<span class="card-title">Card Title</span>
+					</div>
+					<div class="card-content">
+						<p>I am a very simple card. I am good at containing small bits of information.
+							I am convenient because I require little markup to use effectively.</p>
+						</div>
+						<div class="card-action">
+							<a href="#">This is a link</a>
+						</div>
+					</div>
+				</div>
+				<div class="col s12 m4">
+					<div class="card">
+						<div class="card-image">
+							<img src="http://lorempixel.com/800/400/nature/1">
+							<span class="card-title">Card Title</span>
+						</div>
+						<div class="card-content">
+							<p>I am a very simple card. I am good at containing small bits of information.
+								I am convenient because I require little markup to use effectively.</p>
+							</div>
+							<div class="card-action">
+								<a href="#">This is a link</a>
+							</div>
+						</div>
+					</div>
+					<div class="col s12 m4">
+						<div class="card">
+							<div class="card-image">
+								<img src="http://lorempixel.com/800/400/nature/1">
+								<span class="card-title">Card Title</span>
+							</div>
+							<div class="card-content">
+								<p>I am a very simple card. I am good at containing small bits of information.
+									I am convenient because I require little markup to use effectively.</p>
+								</div>
+								<div class="card-action">
+									<a href="#">This is a link</a>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+			</div>
+
+			<!--  Scripts-->
+			<script src="http://code.jquery.com/jquery-3.2.1.min.js"></script>
+			<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.1/js/materialize.min.js"></script>
+			<script type="text/javascript" src="assets/javascript/logic.js"></script>
+		</body>
+		</html>
