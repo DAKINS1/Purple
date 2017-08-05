@@ -13,21 +13,4 @@ $(document).ready(function() {
     minLength: 1, // The minimum length of the input for the autocomplete to start. Default: 1.
 });
 
-// ajax
-
-
-
-var token = "bbc8c9ea38c3791e";
-var url = "https://api.eatstreet.com";
-url += '?' + $.param({
-	'access-token': token
-});
-
-$.ajax({
-	url: url,
-	method: 'GET'
-}).done(function(result) {
-	console.log(result);	
-});
-
 });

@@ -5,3 +5,39 @@
 nav .input-field label {
 	top: -11px;
 }
+
+.logo img {
+	border: 2px dashed white;
+}
+
+.header-billboard {
+	padding: 20px;
+}
+
+.header-billboard img {
+	width: 400px;
+}
+
+.input-box {
+	background-color: white !important;
+	padding: 0px 5px !important;
+	margin: 0 !important;
+	color: black;
+}
+
+.header-wrapper {
+	padding-top: 10px;
+	margin-bottom: 0 !important;
+}
+
+.search, .location {
+	margin-top: 25px;
+}
+
+.search-button {
+	margin-top: 20px;
+}
+
+.nav-mobile li {
+	color: black;
+}
