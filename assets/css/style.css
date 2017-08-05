@@ -48,3 +48,7 @@ nav .input-field label {
 .carousel {
 	margin-top: 15px;
 }
+
+.modal.bottom-sheet {
+	max-height: 65%;
+}
