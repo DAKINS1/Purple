@@ -176,6 +176,16 @@ firebase.initializeApp(config);
    					couponDiv.append(card);
    					row.append(couponDiv);
 
+   					var couponURL = coupon.untracked_url
+
+   					// Write card data into firebase.
+   					database.ref('cards/' + couponNum).set({
+   						cardNum: couponNum,
+   						merchantName: merchantName,
+   						description: description,
+   						url: couponURL
+   					})
+
    					// Avoid repeated coupons in sequence
    					// while (results[couponNum].deal.short_title === results[couponNextNum].deal.short_title) {
    					// 	couponNum++;
