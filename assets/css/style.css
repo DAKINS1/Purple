@@ -64,6 +64,34 @@ nav {
 	width: 360px;
 }
 
+.card > div.card-reveal > div > a {
+	opacity: 0.5;
+	transition: 0.5s ease;
+}
+
+.card > div.card-reveal > div > a:hover {
+	opacity: 0.9;
+}
+
+.card > div.card-image.waves-effect.waves-block.waves-light > img {
+	transition: all 0.2s ease-in-out;
+}
+
+.card > div.card-image.waves-effect.waves-block.waves-light > img:hover {
+	transform: scale(1.06);
+}
+
+/* modal */
+.modal-content-title {
+	margin-left: 0.5vw;
+    padding-top: 1vw;
+    margin-bottom: 2vw;
+}
+
+.modal-content-description {
+	font-size: 1vw;
+}
+
 /* Google Map */
 
 .map-container {

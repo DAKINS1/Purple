@@ -148,8 +148,8 @@ firebase.initializeApp(config);
    					var shortTitle = coupon.short_title;
    					var cardMainTitle = $("<span class=\"card-title activator grey-text text-darken-4\">" + shortTitle + "<i class=\"material-icons right\">more_vert</i></span>");
 
-   					cardContent.append(cardMainTitle);
-   					card.append(cardContent);
+   					// cardContent.append(cardMainTitle);
+   					// card.append(cardContent);
 
    					var cardAction = $("<div class=\"card-action\">");
    					var categoryName = coupon.category_name;
@@ -163,7 +163,8 @@ firebase.initializeApp(config);
    					var cardReveal = $("<div class=\"card-reveal\">");
    					var cardRevealTitle = $("<span class=\"card-title grey-text text-darken-4\">" + merchantName + "<i class=\"material-icons right\">close</i></span>");
    					var description = coupon.title;
-   					var finePrint = $("<p class=\"truncate\">" + coupon.fine_print + "</p>"); 
+   					//class=\"truncate\"
+   					var finePrint = $("<p>" + coupon.fine_print + "</p>"); 
 
    					var toggleMenuTemp = '<div class="fixed-action-btn horizontal click-to-toggle"><a class="btn-floating btn-large red"><i class="material-icons">add</i></a><ul>'
    					+ '<li><a class="btn-floating modal-trigger red map-modal" href="#modal"><i class="material-icons">place</i></a></li>' 
@@ -176,6 +177,9 @@ firebase.initializeApp(config);
    					cardReveal.append("<h5>" + description + "</h5>");
    					cardReveal.append(finePrint);
    					cardReveal.append(toggleMenuTemp);
+
+   					cardContent.append(cardMainTitle);
+   					card.append(cardContent);
 
    					card.append(cardReveal);
 
