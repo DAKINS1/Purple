@@ -51,24 +51,43 @@ firebase.initializeApp(config);
 
    	var location = $("#location-input").val().trim();
    	console.log(location);
+	var query = $("#search-input").val().trim();
+   	console.log(query);
 
    	database.ref().push({
    		location: location,
+   		query: query,
    		dateAdded: firebase.database.ServerValue.TIMESTAMP
    	});
 
-   	displayInfo(location);
+   	displayInfo(location, query);
      // clear text-boxes for next entry
      $("#location-input").val("");
+     $("#search-input").val("");
      return false;
 
  });
 
 
+   function displayInfo(location, query) {
 
-   function displayInfo(location) {
+   	var queryURL = "https://api.sqoot.com/v2/deals/";
 
-   	var queryURL = "https://api.sqoot.com/v2/deals/?location=" + location + " &parent_slug=activities&events";
+   	//when query input is empty, but not location input
+   	if (query === "" && location !== "") {
+   		queryURL += '?location=' + location;
+   	}
+
+   	//when query input is not empty, but location is empty
+   	if (query !== "" && location === "") {
+   		queryURL += '?query=' + query;
+   	}
+
+   	//when both input is entered
+   	if (query !== "" && location !== "") {
+   		queryURL += '?query=' + query + '&location=' + location;
+   	}
+
    	$.ajax({
    		url: queryURL,
    		method: "GET",
@@ -76,16 +95,25 @@ firebase.initializeApp(config);
    			"Authorization" : "api_key xlagn7"
    		}
    	}).done(function(response) {
-   		console.log(response);
+
    		var results = response.deals;
    		console.log(results);
+
    		$(".main-content").empty();
-   		$(".main-content").html("<h3>Coupons in " + location + "<h3>")
+   		$(".main-content").html("<h3>Coupons for " + query + " in " + location + "<h3>")
 
    		var couponNum = 0;
    		var couponNextNum = 1;
 
    		for (var i = 0; i < results.length; i++) {
+
+   			// Validate Data
+   			if (results[i].deal.merchant.latitude){
+   				// get lat,lng from each deals and push into Squpon.dealsLocation array;
+   				Gmap.dealsLocation.push({'lat': results[i].deal.merchant.latitude, 'lng': results[i].deal.merchant.longitude});
+
+   			}
+   			
 
 			// Validate data
 			if (results[couponNum]) {
@@ -147,9 +175,9 @@ firebase.initializeApp(config);
    					row.append(couponDiv);
 
    					// Avoid repeated coupons in sequence
-   					while (results[couponNum].deal.short_title === results[couponNextNum].deal.short_title) {
-   						couponNum++;
-   					}
+   					// while (results[couponNum].deal.short_title === results[couponNextNum].deal.short_title) {
+   					// 	couponNum++;
+   					// }
 
    					couponNum++;
    					couponNextNum++;
@@ -158,7 +186,8 @@ firebase.initializeApp(config);
 
    			$(".main-content").append(row);
    		}
-
+   		console.log("======== Gmap latlng object ===========");
+		console.log(Gmap.dealsLocation);
    	});
    }
 
@@ -172,8 +201,8 @@ firebase.initializeApp(config);
 
    	var title = $("<h4>" + "Dummy Title" + "</h4>");
    	var row = $("<div class=\"row\">");
-   	var colLeft = $("<div class=\"col s12 m6\">");
-   	var map = $("<img src=\"assets/images/map.png\" class=\"responsive-img\">");
+   	var colLeft = $("<div class=\"col s12 m6 map\">");
+   	// var map = $("<img src=\"assets/images/map.png\" class=\"responsive-img\">");
    	var colRight = $("<div class=\"col s12 m6\">");
    	var text = "<p>Dummy Description</p>";
    	var link = $("<a class=\"modal-action waves-effect waves-green btn-large\">");
@@ -204,9 +233,7 @@ var Squpon = {
 
 	currentLocation: "",
 
-	locationInput: "",
-
-	queryInput: "",
+	dealsLocation: [],
 
 	// ajax call function with callback function so that you can handle response from ajax request on function call.
 	getJSON: function ( url, callback ) {
@@ -235,7 +262,12 @@ var Squpon = {
 //Google Map Object.
 var Gmap = {
 
-	current_location_loaded: false,
+	currentLocation: "",
+
+	// store latlng object from each deals
+	dealsLocation: [],
+
+	gmap: {},
 
 	getLocation: function () {
 
@@ -279,6 +311,7 @@ var Gmap = {
 
 	            	//update current location variable.
 	            	Squpon.currentLocation = results[0].formatted_address;
+	            	Gmap.currentLocation = results[0].formatted_address;
 
 	                //fill the inputbox
 	                $('#location-input').val(Squpon.currentLocation);
@@ -295,6 +328,30 @@ var Gmap = {
 	            // $('#address_new').html('<span class="color-red">' + error[status] + '</span>');
 	        }
 	    });
+	},
+
+	initMap: function () {
+
+		console.log("initMap function");
+
+		console.log(Gmap.dealsLocation[0]);
+
+		var myLatLng = Gmap.dealsLocation[0];
+
+		var map = new google.maps.Map(document.getElementById('map'), {
+			zoom: 11,
+			center: myLatLng
+		});
+
+		// Save map object to recall later
+		Gmap.gmap = map;
+
+		var marker = new google.maps.Marker({
+			position: myLatLng,
+			map: map,
+			title: 'deal location'
+		})
+
 	},
 
 	// It specifies a function to run if it fails to get the user's location
@@ -362,14 +419,18 @@ $(document).ready(function() {
 
 		var title = $("<h4>" + "Dummy Title" + "</h4>");
 		var row = $("<div class=\"row\">");
-		var colLeft = $("<div class=\"col s12 m6\">");
-		var map = $("<img src=\"assets/images/map.png\" class=\"responsive-img\">");
+		var colLeft = $("<div class=\"col s12 m6 map-container\">");
+		// var map = $("<img src=\"assets/images/map.png\" class=\"responsive-img\">");
+		var map = $('<div>');
 		var colRight = $("<div class=\"col s12 m6\">");
 		var text = "<p>Dummy Description</p>";
 		var link = $("<a class=\"modal-action waves-effect waves-green btn-large\">");
 		link.attr("href", "#DummyLink");
 		link.text("GO!")
+
+		map.attr('id', 'map');
 		colLeft.append(map);
+		// colLeft.append(map);
 
 		colRight.append(text);
 		colRight.append(link);
@@ -381,10 +442,32 @@ $(document).ready(function() {
 		$(".modal-content").append(title);
 		$(".modal-content").append(row);
 
-		$('.modal').modal();
+
+		// Modal Triggers here
+		$('.modal').modal({
+
+			// Callback for modal open
+			// When modal is opened, load google map
+			ready: function(modal, trigger){
+				
+				google.maps.event.addDomListener(window, 'load', Gmap.initMap);
+
+				// Center google map on brower resize
+				google.maps.event.addDomListener(window, 'resize', function () {
+
+					var map = Gmap.gmap;
+					var center = map.getCenter();
+				    google.maps.event.trigger(map, "resize");
+				    map.setCenter(center); 
+				})
+
+				// Load map
+				Gmap.initMap();
+			}
+		});
+
+		
 	})
-
-
 
 	// $('.modal').modal();
 });
