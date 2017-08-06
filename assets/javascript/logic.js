@@ -52,6 +52,9 @@ firebase.initializeApp(config);
 
    	event.preventDefault();
 
+   	//display pagination
+   	$('.pagination').removeClass('hidden');
+
    	var location = $("#location-input").val().trim();
    	console.log(location);
 	var query = $("#search-input").val().trim();
