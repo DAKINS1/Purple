@@ -54,7 +54,7 @@ firebase.initializeApp(config);
 
    	var location = $("#location-input").val().trim();
    	console.log(location);
-	var query = $("#search-input").val().trim();
+   	var query = $("#search-input").val().trim();
    	console.log(query);
 
    	searchRef.push({
@@ -102,11 +102,21 @@ firebase.initializeApp(config);
    		var results = response.deals;
    		console.log(results);
 
+   		// Remove duplicates coupons
+   		var seenCoupons = {};
+   		results = results.filter(function(currentObject) {
+   			if (currentObject.deal.short_title in seenCoupons) {
+   				return false;
+   			} else {
+   				seenCoupons[currentObject.deal.short_title] = true;
+   				return true;
+   			}
+   		});
+
    		$(".main-content").empty();
    		$(".main-content").html("<h3>Coupons for " + query + " in " + location + "<h3>")
 
    		var couponNum = 0;
-   		var couponNextNum = 1;
 
    		for (var i = 0; i < results.length; i++) {
 
@@ -186,20 +196,14 @@ firebase.initializeApp(config);
    						url: couponURL
    					})
 
-   					// Avoid repeated coupons in sequence
-   					// while (results[couponNum].deal.short_title === results[couponNextNum].deal.short_title) {
-   					// 	couponNum++;
-   					// }
-
    					couponNum++;
-   					couponNextNum++;
    				}
    			}
 
    			$(".main-content").append(row);
    		}
    		console.log("======== Gmap latlng object ===========");
-		console.log(Gmap.dealsLocation);
+   		console.log(Gmap.dealsLocation);
    	});
    }
 
@@ -379,17 +383,17 @@ var Gmap = {
 
 		switch(error.code) {
 			case error.PERMISSION_DENIED:
-				x.innerHTML = "User denied the request for Geolocation."
-				break;
+			x.innerHTML = "User denied the request for Geolocation."
+			break;
 			case error.POSITION_UNAVAILABLE:
-				x.innerHTML = "Location information is unavailable."
-				break;
+			x.innerHTML = "Location information is unavailable."
+			break;
 			case error.TIMEOUT:
-				x.innerHTML = "The request to get user location timed out."
-				break;
+			x.innerHTML = "The request to get user location timed out."
+			break;
 			case error.UNKNOWN_ERROR:
-				x.innerHTML = "An unknown error occurred."
-				break;
+			x.innerHTML = "An unknown error occurred."
+			break;
 		}
 	}
 }
@@ -479,8 +483,8 @@ $(document).ready(function() {
 					// grab current map object
 					var map = Gmap.gmap;
 					var center = map.getCenter();
-				    google.maps.event.trigger(map, "resize");
-				    map.setCenter(center); 
+					google.maps.event.trigger(map, "resize");
+					map.setCenter(center); 
 				})
 
 				// Load map
