@@ -69,7 +69,6 @@ firebase.initializeApp(config);
  });
 
 
-
    function displayInfo(location, query) {
 
    	var queryURL = "https://api.sqoot.com/v2/deals/";
@@ -107,6 +106,14 @@ firebase.initializeApp(config);
    		var couponNextNum = 1;
 
    		for (var i = 0; i < results.length; i++) {
+
+   			// Validate Data
+   			if (results[i].deal.merchant.latitude){
+   				// get lat,lng from each deals and push into Squpon.dealsLocation array;
+   				Gmap.dealsLocation.push({'lat': results[i].deal.merchant.latitude, 'lng': results[i].deal.merchant.longitude});
+
+   			}
+   			
 
 			// Validate data
 			if (results[couponNum]) {
@@ -179,7 +186,8 @@ firebase.initializeApp(config);
 
    			$(".main-content").append(row);
    		}
-
+   		console.log("======== Gmap latlng object ===========");
+		console.log(Gmap.dealsLocation);
    	});
    }
 
@@ -254,7 +262,10 @@ var Squpon = {
 //Google Map Object.
 var Gmap = {
 
-	current_location_loaded: false,
+	currentLocation: "",
+
+	// store latlng object from each deals
+	dealsLocation: [],
 
 	getLocation: function () {
 
@@ -298,6 +309,7 @@ var Gmap = {
 
 	            	//update current location variable.
 	            	Squpon.currentLocation = results[0].formatted_address;
+	            	Gmap.currentLocation = results[0].formatted_address;
 
 	                //fill the inputbox
 	                $('#location-input').val(Squpon.currentLocation);
