@@ -1,8 +1,11 @@
-html {
-	box-sizing: border-box;
+body {
+	display: flex;
+	min-height: 100vh;
+	flex-direction: column;
 }
-*, *:before, *:after {
-	box-sizing: inherit;
+
+main {
+	flex: 1 0 auto;
 }
 
 .search-area {

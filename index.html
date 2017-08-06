@@ -10,83 +10,86 @@
 	<script src="https://www.gstatic.com/firebasejs/4.2.0/firebase.js"></script>
 </head>
 <body>
-	<div class="row header-wrapper deep-purple darken-4">
-		<div class="container">
-			<form>
-				<div class="row">
-					<div class="logo col s12 m3 center-align">
-						<a href="#"><img src="assets/images/squponwhite.png" class="responsive-img"></a>
-					</div>
-					<div class="col s12 m5 search">
-						<form>
-							<input id="search-input" type="text" class="input-box" placeholder="Search for">
-						</form>
-					</div>
-					<div class="col s12 m3 location">
-						<form>
-							<input id="location-input" type="text" class="input-box" placeholder="Location">
-						</form>
-					</div>
-					<div class="col s12 m1 center-align search-button">
-						<a id="search-submit" class="btn-floating btn-large waves-effect waves-light purple"><i class="material-icons">search</i></a>
-					</div>
-				</div>
-			</form>
-		</div>
-	</div>
-
-	<!-- Nav Bar -->
-	<nav>
-		<div class="nav-wrapper deep-purple darken-2 z-depth-3">
+	<header>
+		<div class="row header-wrapper deep-purple darken-4">
 			<div class="container">
-				<a href="#" data-activates="mobile-demo" class="button-collapse"><i class="material-icons">menu</i></a>
-				<ul id="nav-mobile" class="left hide-on-med-and-down">
-					<li><a href="recommendations.html">Things to Do</a></li>
-					<li><a href="reviews.html">Restaurant</a></li>
-					<li><a href="blogs.html">Shopping</a></li>
-				</ul>
-				<ul class="side-nav" id="mobile-demo">
-					<li><a href="#">Things to Do</a></li>
-					<li><a href="#">Restaurant</a></li>
-					<li><a href="#">Shopping</a></li>
-				</ul>
+				<form>
+					<div class="row">
+						<div class="logo col s12 m3 center-align">
+							<a href="#"><img src="assets/images/squponwhite.png" class="responsive-img"></a>
+						</div>
+						<div class="col s12 m5 search">
+							<form>
+								<input id="search-input" type="text" class="input-box" placeholder="Search for">
+							</form>
+						</div>
+						<div class="col s12 m3 location">
+							<form>
+								<input id="location-input" type="text" class="input-box" placeholder="Location">
+							</form>
+						</div>
+						<div class="col s12 m1 center-align search-button">
+							<a id="search-submit" class="btn-floating btn-large waves-effect waves-light purple"><i class="material-icons">search</i></a>
+						</div>
+					</div>
+				</form>
 			</div>
 		</div>
-	</nav>
 
+		<!-- Nav Bar -->
+		<nav>
+			<div class="nav-wrapper deep-purple darken-2 z-depth-3">
+				<div class="container">
+					<a href="#" data-activates="mobile-demo" class="button-collapse"><i class="material-icons">menu</i></a>
+					<ul id="nav-mobile" class="left hide-on-med-and-down">
+						<li><a href="recommendations.html">Things to Do</a></li>
+						<li><a href="reviews.html">Restaurant</a></li>
+						<li><a href="blogs.html">Shopping</a></li>
+					</ul>
+					<ul class="side-nav" id="mobile-demo">
+						<li><a href="#">Things to Do</a></li>
+						<li><a href="#">Restaurant</a></li>
+						<li><a href="#">Shopping</a></li>
+					</ul>
+				</div>
+			</div>
+		</nav>
+	</header>
 
 	<!-- Page Layout here -->
-	<div class="container main-content">
-		<div class="row">
-			<div class="carousel carousel-slider center" data-indicators="true">
-				<div class="carousel-fixed-item center">
+	<main>
+		<div class="container main-content">
+			<div class="row">
+				<div class="carousel carousel-slider center" data-indicators="true">
+					<div class="carousel-fixed-item center">
+					</div>
+
+
+					<div class="carousel-item red white-text" href="#one!" id="first">
+						<p class="white-text"></p>
+					</div>
+
+
+					<div class="carousel-item amber white-text" href="#two!" id="second">
+						<p class="white-text"></p>
+					</div>
+
+
+					<div class="carousel-item green white-text" href="#three!" id="third">
+						<p class="white-text"></p>
+					</div>
+
+
+					<div class="carousel-item blue white-text" href="#four!" id="fourth">
+						<p class="white-text"></p>
+					</div>
+
+
 				</div>
-
-
-				<div class="carousel-item red white-text" href="#one!" id="first">
-					<p class="white-text"></p>
-				</div>
-
-
-				<div class="carousel-item amber white-text" href="#two!" id="second">
-					<p class="white-text"></p>
-				</div>
-
-
-				<div class="carousel-item green white-text" href="#three!" id="third">
-					<p class="white-text"></p>
-				</div>
-
-
-				<div class="carousel-item blue white-text" href="#four!" id="fourth">
-					<p class="white-text"></p>
-				</div>
-
-
 			</div>
-		</div>
 
-	</div> <!-- end of Main -->
+		</div> 
+	</main> <!-- end of Main -->
 
 	<!-- Modal Structure -->
 	<div id="modal" class="modal bottom-sheet">
