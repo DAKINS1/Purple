@@ -7,7 +7,7 @@
 	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.1/css/materialize.min.css">
 	<link rel="stylesheet" type="text/css" href="assets/css/style.css">
-
+	<script src="https://www.gstatic.com/firebasejs/4.2.0/firebase.js"></script>
 </head>
 <body>
 	<div class="row header-wrapper deep-purple darken-4">
@@ -19,12 +19,12 @@
 					</div>
 					<div class="col s12 m5 search">
 						<form>
-							<input id="search-input" type="text" class="input-box" placeholder="Search for">									
+							<input id="search-input" type="text" class="input-box" placeholder="Search for">
 						</form>
 					</div>
 					<div class="col s12 m3 location">
 						<form>
-							<input id="location-input" type="text" class="input-box" placeholder="Location">									
+							<input id="location-input" type="text" class="input-box" placeholder="Location">
 						</form>
 					</div>
 					<div class="col s12 m1 center-align search-button">
@@ -38,8 +38,8 @@
 	<!-- Nav Bar -->
 	<nav>
 		<div class="nav-wrapper deep-purple darken-2 z-depth-3">
-			<div class="container">	
-				<a href="#" data-activates="mobile-demo" class="button-collapse"><i class="material-icons">menu</i></a>	
+			<div class="container">
+				<a href="#" data-activates="mobile-demo" class="button-collapse"><i class="material-icons">menu</i></a>
 				<ul id="nav-mobile" class="left hide-on-med-and-down">
 					<li><a href="recommendations.html">Things to Do</a></li>
 					<li><a href="reviews.html">Restaurant</a></li>
@@ -56,165 +56,42 @@
 
 
 	<!-- Page Layout here -->
-	<div class="container">
+	<div class="container main-content">
 		<div class="row">
 			<div class="carousel carousel-slider center" data-indicators="true">
 				<div class="carousel-fixed-item center">
 				</div>
+
+
 				<div class="carousel-item red white-text" href="#one!" id="first">
-					<h2></h2>
-					<p class="white-text" id="firstText"></p>
+					<p class="white-text"></p>
 				</div>
+
+
 				<div class="carousel-item amber white-text" href="#two!" id="second">
-					<h2>Second Panel</h2>
-					<p class="white-text">This is your second panel</p>
+					<p class="white-text"></p>
 				</div>
+
+
 				<div class="carousel-item green white-text" href="#three!" id="third">
-					<h2>Third Panel</h2>
-					<p class="white-text">This is your third panel</p>
+					<p class="white-text"></p>
 				</div>
+
+
 				<div class="carousel-item blue white-text" href="#four!" id="fourth">
-					<h2>Fourth Panel</h2>
-					<p class="white-text">This is your fourth panel</p>
+					<p class="white-text"></p>
 				</div>
+
+
 			</div>
 		</div>
 
-		<div class="row">
-			<div class="col s12 m4">
-				<div class="card">
-					<div class="card-image waves-effect waves-block waves-light">
-						<img class="activator" src="http://lorempixel.com/800/400/nature/1">
-					</div>
-					<div class="card-content">
-						<span class="card-title activator grey-text text-darken-4">Card Title<i class="material-icons right">more_vert</i></span>
-						<p><a href="#">This is a link</a></p>
-					</div>
-					<div class="card-reveal">
-						<span class="card-title grey-text text-darken-4">Card Title<i class="material-icons right">close</i></span>
-						<p>Here is some more information about this product that is only revealed once clicked on.</p>
-						<div class="fixed-action-btn horizontal click-to-toggle">
-							<a class="btn-floating btn-large red">
-								<i class="material-icons">add</i>
-							</a>
-							<ul>
-								<!-- Modal Trigger -->
-								<li><a class="btn-floating modal-trigger red map-modal" href="#modal"><i class="material-icons">place</i></a></li>
-								<li><a class="btn-floating yellow darken-1"><i class="material-icons">link</i></a></li>
-								<li><a class="btn-floating green"><i class="material-icons">share</i></a></li>
-								<li><a class="btn-floating blue"><i class="material-icons">file_download</i></a></li>
-							</ul>
-						</div>
-					</div>
-				</div>
-			</div>
-			<div class="col s12 m4">
-				<div class="card">
-					<div class="card-image waves-effect waves-block waves-light">
-						<img class="activator" src="http://lorempixel.com/800/400/nature/1">
-					</div>
-					<div class="card-content">
-						<span class="card-title activator grey-text text-darken-4">Card Title<i class="material-icons right">more_vert</i></span>
-						<p><a href="#">This is a link</a></p>
-					</div>
-					<div class="card-reveal">
-						<span class="card-title grey-text text-darken-4">Card Title<i class="material-icons right">close</i></span>
-						<p>Here is some more information about this product that is only revealed once clicked on.</p>
-						<div class="fixed-action-btn horizontal click-to-toggle">
-							<a class="btn-floating btn-large red">
-								<i class="material-icons">add</i>
-							</a>
-							<ul>
-								<!-- Modal Trigger -->
-								<li><a class="btn-floating modal-trigger red map-modal" href="#modal"><i class="material-icons">place</i></a></li>
-								<li><a class="btn-floating yellow darken-1"><i class="material-icons">link</i></a></li>
-								<li><a class="btn-floating green"><i class="material-icons">share</i></a></li>
-								<li><a class="btn-floating blue"><i class="material-icons">file_download</i></a></li>
-							</ul>
-						</div>
-					</div>
-				</div>
-			</div>
-			<div class="col s12 m4">
-				<div class="card">
-					<div class="card-image waves-effect waves-block waves-light">
-						<img class="activator" src="http://lorempixel.com/800/400/nature/1">
-					</div>
-					<div class="card-content">
-						<span class="card-title activator grey-text text-darken-4">Card Title<i class="material-icons right">more_vert</i></span>
-						<p><a href="#">This is a link</a></p>
-					</div>
-					<div class="card-reveal">
-						<span class="card-title grey-text text-darken-4">Card Title<i class="material-icons right">close</i></span>
-						<p>Here is some more information about this product that is only revealed once clicked on.</p>
-						<div class="fixed-action-btn horizontal click-to-toggle">
-							<a class="btn-floating btn-large red">
-								<i class="material-icons">add</i>
-							</a>
-							<ul>
-								<!-- Modal Trigger -->
-								<li><a class="btn-floating modal-trigger red map-modal" href="#modal"><i class="material-icons">place</i></a></li>
-								<li><a class="btn-floating yellow darken-1"><i class="material-icons">link</i></a></li>
-								<li><a class="btn-floating green"><i class="material-icons">share</i></a></li>
-								<li><a class="btn-floating blue"><i class="material-icons">file_download</i></a></li>
-							</ul>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div> <!-- end of Row -->
-	</div> <!-- end of Container -->
+	</div> <!-- end of Main -->
 
-	<!-- Modal Structure -->
-	<div id="modal" class="modal bottom-sheet">
-		<div class="modal-content"></div>
-	</div>
 
-	<div class="row center-align">
-		<ul class="pagination">
-			<li class="disabled"><a href="#!"><i class="material-icons">chevron_left</i></a></li>
-			<li class="active"><a href="#!">1</a></li>
-			<li class="waves-effect"><a href="#!">2</a></li>
-			<li class="waves-effect"><a href="#!">3</a></li>
-			<li class="waves-effect"><a href="#!">4</a></li>
-			<li class="waves-effect"><a href="#!">5</a></li>
-			<li class="waves-effect"><a href="#!"><i class="material-icons">chevron_right</i></a></li>
-		</ul>
-	</div>
-</div>
-
-</div>
-
-<footer class="page-footer deep-purple darken-2">
-	<div class="container">
-		<div class="row">
-			<div class="col l6 s12">
-				<h5 class="white-text">Squpon</h5>
-				<p class="grey-text text-lighten-4">Description Here.</p>
-			</div>
-			<div class="col l4 offset-l2 s12">
-				<h5 class="white-text">Links</h5>
-				<ul>
-					<li><a class="grey-text text-lighten-3" href="#!">Things to Do</a></li>
-					<li><a class="grey-text text-lighten-3" href="#!">Restaurant</a></li>
-					<li><a class="grey-text text-lighten-3" href="#!">Shopping</a></li>
-				</ul>
-			</div>
-		</div>
-	</div>
-	<div class="footer-copyright deep-purple darken-3">
-		<div class="container">
-			© 2017 Copyright
-		</div>
-	</div>
-</footer>
-
-<!--  Scripts-->
-<!-- Google map -->
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBZ0-zTd_gm89myBSRl47Yi0rprg7wjgKs"
-    async defer></script>
-<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.1/js/materialize.min.js"></script>
-<script type="text/javascript" src="assets/javascript/logic.js"></script>
+	<!--  Scripts-->
+	<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.1/js/materialize.min.js"></script>
+	<script type="text/javascript" src="assets/javascript/logic.js"></script>
 </body>
 </html>

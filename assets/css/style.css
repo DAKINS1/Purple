@@ -25,6 +25,10 @@ nav .input-field label {
 	width: 400px;
 }
 
+nav {
+	margin-bottom: 15px;
+}
+
 .input-box {
 	background-color: white !important;
 	padding-left: 5px !important;
@@ -45,10 +49,11 @@ nav .input-field label {
 	margin-top: 20px;
 }
 
-.carousel {
-	margin-top: 15px;
-}
 
 .modal.bottom-sheet {
 	max-height: 65%;
+}
+
+.main img {
+	width: 360px;
 }
