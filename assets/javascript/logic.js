@@ -4,7 +4,7 @@ $(document).ready(function() {
 // Deal of the day to be displayed on page load
 var startPanelImages = [];
 
-var queryURL = "http://api.sqoot.com/v2/deals/?online=true&per_page=4";
+var queryURL = "https://api.sqoot.com/v2/deals/?online=true&per_page=4";
 $.ajax({
 	url: queryURL,
 	method: "GET",
@@ -68,7 +68,7 @@ firebase.initializeApp(config);
 
    function displayInfo(location) {
 
-   	var queryURL = "http://api.sqoot.com/v2/deals/?location=" + location + " &parent_slug=activities&events";
+   	var queryURL = "https://api.sqoot.com/v2/deals/?location=" + location + " &parent_slug=activities&events";
    	$.ajax({
    		url: queryURL,
    		method: "GET",
@@ -329,7 +329,7 @@ $(document).ready(function() {
 	// Deal of the day to be displayed on page load
 	var startPanelImages = [];
 
-	var queryURL = "http://api.sqoot.com/v2/deals/?online=true&per_page=4";
+	var queryURL = "https://api.sqoot.com/v2/deals/?online=true&per_page=4";
 	$.ajax({
 		url: queryURL,
 		method: "GET",
