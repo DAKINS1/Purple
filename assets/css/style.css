@@ -60,3 +60,13 @@ nav {
 .main img {
 	width: 360px;
 }
+
+/* Google Map */
+
+.map-container {
+	height: 400px;
+}
+
+#map {
+	height: 100%;
+}

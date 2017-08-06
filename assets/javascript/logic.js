@@ -201,8 +201,8 @@ firebase.initializeApp(config);
 
    	var title = $("<h4>" + "Dummy Title" + "</h4>");
    	var row = $("<div class=\"row\">");
-   	var colLeft = $("<div class=\"col s12 m6\">");
-   	var map = $("<img src=\"assets/images/map.png\" class=\"responsive-img\">");
+   	var colLeft = $("<div class=\"col s12 m6 map\">");
+   	// var map = $("<img src=\"assets/images/map.png\" class=\"responsive-img\">");
    	var colRight = $("<div class=\"col s12 m6\">");
    	var text = "<p>Dummy Description</p>";
    	var link = $("<a class=\"modal-action waves-effect waves-green btn-large\">");
@@ -267,6 +267,8 @@ var Gmap = {
 	// store latlng object from each deals
 	dealsLocation: [],
 
+	gmap: {},
+
 	getLocation: function () {
 
 		//Check if Geolocation is supported
@@ -326,6 +328,30 @@ var Gmap = {
 	            // $('#address_new').html('<span class="color-red">' + error[status] + '</span>');
 	        }
 	    });
+	},
+
+	initMap: function () {
+
+		console.log("initMap function");
+
+		console.log(Gmap.dealsLocation[0]);
+
+		var myLatLng = Gmap.dealsLocation[0];
+
+		var map = new google.maps.Map(document.getElementById('map'), {
+			zoom: 11,
+			center: myLatLng
+		});
+
+		// Save map object to recall later
+		Gmap.gmap = map;
+
+		var marker = new google.maps.Marker({
+			position: myLatLng,
+			map: map,
+			title: 'deal location'
+		})
+
 	},
 
 	// It specifies a function to run if it fails to get the user's location
@@ -393,14 +419,18 @@ $(document).ready(function() {
 
 		var title = $("<h4>" + "Dummy Title" + "</h4>");
 		var row = $("<div class=\"row\">");
-		var colLeft = $("<div class=\"col s12 m6\">");
-		var map = $("<img src=\"assets/images/map.png\" class=\"responsive-img\">");
+		var colLeft = $("<div class=\"col s12 m6 map-container\">");
+		// var map = $("<img src=\"assets/images/map.png\" class=\"responsive-img\">");
+		var map = $('<div>');
 		var colRight = $("<div class=\"col s12 m6\">");
 		var text = "<p>Dummy Description</p>";
 		var link = $("<a class=\"modal-action waves-effect waves-green btn-large\">");
 		link.attr("href", "#DummyLink");
 		link.text("GO!")
+
+		map.attr('id', 'map');
 		colLeft.append(map);
+		// colLeft.append(map);
 
 		colRight.append(text);
 		colRight.append(link);
@@ -412,10 +442,32 @@ $(document).ready(function() {
 		$(".modal-content").append(title);
 		$(".modal-content").append(row);
 
-		$('.modal').modal();
+
+		// Modal Triggers here
+		$('.modal').modal({
+
+			// Callback for modal open
+			// When modal is opened, load google map
+			ready: function(modal, trigger){
+				
+				google.maps.event.addDomListener(window, 'load', Gmap.initMap);
+
+				// Center google map on brower resize
+				google.maps.event.addDomListener(window, 'resize', function () {
+
+					var map = Gmap.gmap;
+					var center = map.getCenter();
+				    google.maps.event.trigger(map, "resize");
+				    map.setCenter(center); 
+				})
+
+				// Load map
+				Gmap.initMap();
+			}
+		});
+
+		
 	})
-
-
 
 	// $('.modal').modal();
 });
