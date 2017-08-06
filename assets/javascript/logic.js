@@ -51,24 +51,44 @@ firebase.initializeApp(config);
 
    	var location = $("#location-input").val().trim();
    	console.log(location);
+	var query = $("#search-input").val().trim();
+   	console.log(query);
 
    	database.ref().push({
    		location: location,
+   		query: query,
    		dateAdded: firebase.database.ServerValue.TIMESTAMP
    	});
 
    	displayInfo(location);
      // clear text-boxes for next entry
      $("#location-input").val("");
+     $("#search-input").val("");
      return false;
 
  });
 
 
 
-   function displayInfo(location) {
+   function displayInfo(location, query) {
 
-   	var queryURL = "https://api.sqoot.com/v2/deals/?location=" + location + " &parent_slug=activities&events";
+   	var queryURL = "https://api.sqoot.com/v2/deals/";
+
+   	//when query input is empty, but not location input
+   	if (query === "" && location !== "") {
+   		queryURL += '?location=' + location;
+   	}
+
+   	//when query input is not empty, but location is empty
+   	if (query !== "" && location === "") {
+   		queryURL += '?query=' + query;
+   	}
+
+   	//when both input is entered
+   	if (query !== "" && location !== "") {
+   		queryURL += '?query=' + query + '&location=' + location;
+   	}
+
    	$.ajax({
    		url: queryURL,
    		method: "GET",
@@ -76,11 +96,12 @@ firebase.initializeApp(config);
    			"Authorization" : "api_key xlagn7"
    		}
    	}).done(function(response) {
-   		console.log(response);
+
    		var results = response.deals;
    		console.log(results);
+
    		$(".main-content").empty();
-   		$(".main-content").html("<h3>Coupons in " + location + "<h3>")
+   		$(".main-content").html("<h3>Coupons for " + query + " in " + location + "<h3>")
 
    		var couponNum = 0;
    		var couponNextNum = 1;
@@ -147,9 +168,9 @@ firebase.initializeApp(config);
    					row.append(couponDiv);
 
    					// Avoid repeated coupons in sequence
-   					while (results[couponNum].deal.short_title === results[couponNextNum].deal.short_title) {
-   						couponNum++;
-   					}
+   					// while (results[couponNum].deal.short_title === results[couponNextNum].deal.short_title) {
+   					// 	couponNum++;
+   					// }
 
    					couponNum++;
    					couponNextNum++;
@@ -204,9 +225,7 @@ var Squpon = {
 
 	currentLocation: "",
 
-	locationInput: "",
-
-	queryInput: "",
+	dealsLocation: [],
 
 	// ajax call function with callback function so that you can handle response from ajax request on function call.
 	getJSON: function ( url, callback ) {
