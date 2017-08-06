@@ -60,7 +60,7 @@ firebase.initializeApp(config);
    		dateAdded: firebase.database.ServerValue.TIMESTAMP
    	});
 
-   	displayInfo(location);
+   	displayInfo(location, query);
      // clear text-boxes for next entry
      $("#location-input").val("");
      $("#search-input").val("");
