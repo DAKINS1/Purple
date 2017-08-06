@@ -52,3 +52,7 @@ nav .input-field label {
 .modal.bottom-sheet {
 	max-height: 65%;
 }
+
+.main img {
+	width: 360px;
+}
