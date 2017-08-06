@@ -129,8 +129,8 @@ firebase.initializeApp(config);
 
    					var coupon = results[couponNum].deal;
 
-   					var couponDiv = $("<div class=\"col s12 m4\">");
-   					var card = $("<div class=\"card\">");
+   					var couponDiv = $("<div class=\"col s12 m4 card-div\">");
+   					var card = $("<div class='card' id='card-" + couponNum +"'>");
    					var cardImage = $("<div class=\"card-image waves-effect waves-block waves-light\">");
    					var couponImg = $("<img class=\"activator responsive-img\">");
 
@@ -331,7 +331,7 @@ var Gmap = {
 	        	var error = {
 
 	        		'ZERO_RESULTS': 'no adress'
-	        		
+
 	        	}
 
 	        	alert('Geocoder failed due to: ' + error[status]);
