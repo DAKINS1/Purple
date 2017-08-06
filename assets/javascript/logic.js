@@ -5,6 +5,7 @@ $(document).ready(function() {
 var startPanelImages = [];
 
 var queryURL = "https://api.sqoot.com/v2/deals/?online=true&per_page=4";
+
 $.ajax({
 	url: queryURL,
 	method: "GET",
@@ -40,6 +41,8 @@ var config = {
 firebase.initializeApp(config);
   // Create a variable to reference the database
   var database= firebase.database();
+  var searchRef = database.ref('/searchQuery');
+  var cardsRef = database.ref('/cards');
 
   var location = "";
 
@@ -54,7 +57,7 @@ firebase.initializeApp(config);
 	var query = $("#search-input").val().trim();
    	console.log(query);
 
-   	database.ref().push({
+   	searchRef.push({
    		location: location,
    		query: query,
    		dateAdded: firebase.database.ServerValue.TIMESTAMP
@@ -113,7 +116,6 @@ firebase.initializeApp(config);
    				Gmap.dealsLocation.push({'lat': results[i].deal.merchant.latitude, 'lng': results[i].deal.merchant.longitude});
 
    			}
-   			
 
 			// Validate data
 			if (results[couponNum]) {
@@ -127,8 +129,8 @@ firebase.initializeApp(config);
 
    					var coupon = results[couponNum].deal;
 
-   					var couponDiv = $("<div class=\"col s12 m4\">");
-   					var card = $("<div class=\"card\">");
+   					var couponDiv = $("<div class=\"col s12 m4 card-div\">");
+   					var card = $("<div class='card' id='card-" + couponNum +"'>");
    					var cardImage = $("<div class=\"card-image waves-effect waves-block waves-light\">");
    					var couponImg = $("<img class=\"activator responsive-img\">");
 
@@ -306,7 +308,9 @@ var Gmap = {
 		var latlng = new google.maps.LatLng(lat, lng);
 
 		geocoder.geocode({'latLng': latlng}, function(results, status) {
+
 			if(status == google.maps.GeocoderStatus.OK) {
+
 				if(results[0]) {
 
 	            	//update current location variable.
@@ -317,11 +321,17 @@ var Gmap = {
 	                $('#location-input').val(Squpon.currentLocation);
 
 	            } else {
+
 	            	alert('No results found');
+
 	            }
+
 	        } else {
+
 	        	var error = {
+
 	        		'ZERO_RESULTS': 'no adress'
+
 	        	}
 
 	        	alert('Geocoder failed due to: ' + error[status]);
@@ -359,17 +369,17 @@ var Gmap = {
 
 		switch(error.code) {
 			case error.PERMISSION_DENIED:
-			x.innerHTML = "User denied the request for Geolocation."
-			break;
+				x.innerHTML = "User denied the request for Geolocation."
+				break;
 			case error.POSITION_UNAVAILABLE:
-			x.innerHTML = "Location information is unavailable."
-			break;
+				x.innerHTML = "Location information is unavailable."
+				break;
 			case error.TIMEOUT:
-			x.innerHTML = "The request to get user location timed out."
-			break;
+				x.innerHTML = "The request to get user location timed out."
+				break;
 			case error.UNKNOWN_ERROR:
-			x.innerHTML = "An unknown error occurred."
-			break;
+				x.innerHTML = "An unknown error occurred."
+				break;
 		}
 	}
 }
@@ -425,6 +435,7 @@ $(document).ready(function() {
 		var colRight = $("<div class=\"col s12 m6\">");
 		var text = "<p>Dummy Description</p>";
 		var link = $("<a class=\"modal-action waves-effect waves-green btn-large\">");
+
 		link.attr("href", "#DummyLink");
 		link.text("GO!")
 
@@ -455,6 +466,7 @@ $(document).ready(function() {
 				// Center google map on brower resize
 				google.maps.event.addDomListener(window, 'resize', function () {
 
+					// grab current map object
 					var map = Gmap.gmap;
 					var center = map.getCenter();
 				    google.maps.event.trigger(map, "resize");
