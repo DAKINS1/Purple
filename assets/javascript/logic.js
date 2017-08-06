@@ -94,6 +94,9 @@ firebase.initializeApp(config);
    		queryURL += '?query=' + query + '&location=' + location;
    	}
 
+   	//block online deal when user search through searchbar to initiate google map for everydeal
+   	queryURL += '&online=false';
+
    	$.ajax({
    		url: queryURL,
    		method: "GET",
@@ -180,6 +183,17 @@ firebase.initializeApp(config);
    					row.append(couponDiv);
 
    					var couponURL = coupon.untracked_url
+
+
+   					//store card info in JSON object
+   					var dataCard = {
+   						'shortTitle': shortTitle,
+   						'description': description,
+   						'url': couponURL
+   					}
+
+   					couponDiv.attr('data-card', JSON.stringify(dataCard));
+
 
    					// Write card data into firebase.
    					database.ref('cards/' + couponNum).set({
@@ -438,18 +452,24 @@ $(document).ready(function() {
 	$(".main-content").delegate('.map-modal', 'click', function() {
 		console.log("test");
 
+		//grab cardData from its parent div.
+		//data will be automatically converted to JSON object
+		var cardData = $(this).closest("div[data-card]").data('card');
+
 		$(".modal-content").empty();
 
-		var title = $("<h4>" + "Dummy Title" + "</h4>");
+		// Fill modal contents
+		var title = $("<h4 class='modal-content-title'>" + cardData['shortTitle'] + "</h4>");
 		var row = $("<div class=\"row\">");
 		var colLeft = $("<div class=\"col s12 m6 map-container\">");
 		// var map = $("<img src=\"assets/images/map.png\" class=\"responsive-img\">");
 		var map = $('<div>');
 		var colRight = $("<div class=\"col s12 m6\">");
-		var text = "<p>Dummy Description</p>";
+		var text = "<p class='modal-content-description'>" + cardData['description'] +"</p>";
 		var link = $("<a class=\"modal-action waves-effect waves-green btn-large\">");
 
-		link.attr("href", "#DummyLink");
+		link.attr("href", cardData['url']);
+		link.attr('target','_blank');
 		link.text("GO!")
 
 		map.attr('id', 'map');
