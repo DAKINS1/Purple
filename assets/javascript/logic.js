@@ -1,101 +1,121 @@
-$(document).ready(function() {
-	$(".button-collapse").sideNav();
+// $(document).ready(function() {
 
-// Deal of the day to be displayed on page load
-var startPanelImages = [];
+// // Deal of the day to be displayed on page load
+// var startPanelImages = [];
 
-var queryURL = "https://api.sqoot.com/v2/deals/?online=true&per_page=4";
+// var queryURL = "https://api.sqoot.com/v2/deals/?online=true&per_page=4";
 
-$.ajax({
-	url: queryURL,
-	method: "GET",
-	headers: {
-		"Authorization" : "api_key xlagn7"
-	}
-}).done(function(response){
-	console.log(response);
+// $.ajax({
+// 	url: queryURL,
+// 	method: "GET",
+// 	headers: {
+// 		"Authorization" : "api_key xlagn7"
+// 	}
+// }).done(function(response){
+// 	console.log(response);
 
-	var slideIds = ["first", "second", "third", "fourth"];
-	for(var i=0; i<response.deals.length; i++) {
-		var dealPic = $("<img>");
-		dealPic.attr("src", response.deals[i].deal.image_url);
-		var shortTitle = $("<h2>").html(response.deals[i].deal.short_title);
+// 	var slideIds = ["first", "second", "third", "fourth"];
+// 	for(var i=0; i<response.deals.length; i++) {
+// 		var dealPic = $("<img>");
+// 		dealPic.attr("src", response.deals[i].deal.image_url);
+// 		var shortTitle = $("<h2>").html(response.deals[i].deal.short_title);
 
-		var newDiv = $("<div>");
-		newDiv.append(dealPic);
-		newDiv.append(shortTitle);
-		$("#" + slideIds[i]).append(newDiv);
-	}
-})
+// 		var newDiv = $("<div>");
+// 		newDiv.append(dealPic);
+// 		newDiv.append(shortTitle);
+// 		$("#" + slideIds[i]).append(newDiv);
+// 	}
+// })
 
-// THIS IS WHERE MY CODE STARTS WITH FIREBASE INITIATION
-//initiating firebase to hold the search & location information
-var config = {
-	apiKey: "AIzaSyDODJ70GzuA3CF8kKG2JIyr1242t7P0qRE",
-	authDomain: "foodfinder-1dd71.firebaseapp.com",
-	databaseURL: "https://foodfinder-1dd71.firebaseio.com",
-	projectId: "foodfinder-1dd71",
-	storageBucket: "foodfinder-1dd71.appspot.com",
-	messagingSenderId: "883513307329"
-};
-firebase.initializeApp(config);
-  // Create a variable to reference the database
-  var database= firebase.database();
-  var searchRef = database.ref('/searchQuery');
-  var cardsRef = database.ref('/cards');
+// // THIS IS WHERE MY CODE STARTS WITH FIREBASE INITIATION
+// //initiating firebase to hold the search & location information
+// var config = {
+// 	apiKey: "AIzaSyDODJ70GzuA3CF8kKG2JIyr1242t7P0qRE",
+// 	authDomain: "foodfinder-1dd71.firebaseapp.com",
+// 	databaseURL: "https://foodfinder-1dd71.firebaseio.com",
+// 	projectId: "foodfinder-1dd71",
+// 	storageBucket: "foodfinder-1dd71.appspot.com",
+// 	messagingSenderId: "883513307329"
+// };
+// firebase.initializeApp(config);
+  
+//   // Create a variable to reference the database
+//   var database= firebase.database();
+//   var searchRef = database.ref('/searchQuery');
+//   var cardsRef = database.ref('/cards');
 
-  var location = "";
-
-
-   // Whenever a user clicks the add train submit button
-   $("#search-submit").on("click", function(event){
-
-   	event.preventDefault();
-
-   	//display pagination
-   	$('.pagination').removeClass('hidden');
-
-   	var location = $("#location-input").val().trim();
-   	console.log(location);
-   	var query = $("#search-input").val().trim();
-   	console.log(query);
-
-   	searchRef.push({
-   		location: location,
-   		query: query,
-   		dateAdded: firebase.database.ServerValue.TIMESTAMP
-   	});
-
-   	displayInfo(location, query);
-     // clear text-boxes for next entry
-     $("#location-input").val("");
-     $("#search-input").val("");
-     return false;
-
- });
+//   var location = "";
 
 
-   function displayInfo(location, query) {
+//    // Whenever a user clicks the add submit button
+// 	$("#search-submit").on("click", function(event){
+
+// 		event.preventDefault();
+
+// 		//display pagination
+// 		$('.pagination').removeClass('hidden');
+
+// 		var location = $("#location-input").val().trim();
+// 		console.log(location);
+// 		var query = $("#search-input").val().trim();
+// 		console.log(query);
+
+// 		searchRef.push({
+// 			location: location,
+// 			query: query,
+// 			dateAdded: firebase.database.ServerValue.TIMESTAMP
+// 		});
+
+// 		displayInfo(location, query);
+// 		// clear text-boxes for next entry
+// 		$("#location-input").val("");
+// 		$("#search-input").val("");
+		
+
+// 	});
+
+function displayInfo(location, query, category) {
+
+   	console.log("category. " + category)
+   	console.log(typeof category);
+
+   	console.log("location:  " + location)
+
+   	console.log("query:   " + query)
+   	console.log(typeof query);
 
    	var queryURL = "https://api.sqoot.com/v2/deals/";
 
-   	//when query input is empty, but not location input
-   	if (query === "" && location !== "") {
-   		queryURL += '?location=' + location;
-   	}
+   	if (category === undefined){
+   		//when query input is empty, but not location input
+	   	if (query === "" && location !== "") {
+	   		queryURL += '?location=' + location;
+	   	}
 
-   	//when query input is not empty, but location is empty
-   	if (query !== "" && location === "") {
-   		queryURL += '?query=' + query;
-   	}
+	   	//when query input is not empty, but location is empty
+	   	//w/o location, search for online deals
+	   	if (query !== "" && location === "") {
+	   		queryURL += '?query=' + query + '&online=true';
+	   	}
 
-   	//when both input is entered
-   	if (query !== "" && location !== "") {
-   		queryURL += '?query=' + query + '&location=' + location;
-   	}
+	   	//when both input is entered
+	   	if (query !== "" && location !== "") {
+	   		queryURL += '?query=' + query + '&location=' + location;
+	   	}
 
-   	//block online deal when user search through searchbar to initiate google map for everydeal
-   	queryURL += '&online=false';
+   	} else {
+
+   		// If user allow geolocation, use it for searching category
+   		if (Gmap.isCurrentLocation){
+   			queryURL += '?category_slugs=' + category + '&location=' + location;
+
+   			//If user blocks geolocation, search for online deals.
+   		} else {
+   			queryURL += '?category_slugs=' + category + '&online=true';
+   		}
+
+   	}
+   	
 
    	$.ajax({
    		url: queryURL,
@@ -210,12 +230,12 @@ firebase.initializeApp(config);
 
 
    					// Write card data into firebase.
-   					database.ref('cards/' + couponNum).set({
-   						cardNum: couponNum,
-   						merchantName: merchantName,
-   						description: description,
-   						url: couponURL
-   					})
+   					// database.ref('cards/' + couponNum).set({
+   					// 	cardNum: couponNum,
+   					// 	merchantName: merchantName,
+   					// 	description: description,
+   					// 	url: couponURL
+   					// })
 
    					couponNum++;
    				}
@@ -226,46 +246,10 @@ firebase.initializeApp(config);
    		console.log("======== Gmap latlng object ===========");
    		console.log(Gmap.dealsLocation);
    	});
-   }
 
-   $('.carousel.carousel-slider').carousel({fullWidth: true});
+}
 
-
-
-   $(".map-modal").on("click", function() {
-
-   	$(".modal-content").empty();
-
-   	var title = $("<h4>" + "Dummy Title" + "</h4>");
-   	var row = $("<div class=\"row\">");
-   	var colLeft = $("<div class=\"col s12 m6 map\">");
-   	// var map = $("<img src=\"assets/images/map.png\" class=\"responsive-img\">");
-   	var colRight = $("<div class=\"col s12 m6\">");
-   	var text = "<p>Dummy Description</p>";
-   	var link = $("<a class=\"modal-action waves-effect waves-green btn-large\">");
-   	link.attr("href", "#DummyLink");
-   	link.text("GO!")
-   	colLeft.append(map);
-
-   	colRight.append(text);
-   	colRight.append(link);
-
-   	row.append(colLeft);
-   	row.append(colRight);
-
-
-   	$(".modal-content").append(title);
-   	$(".modal-content").append(row);
-
-   	$('.modal').modal();
-   })
-
-
-
-	// $('.modal').modal();
-});
 // Squpon Object.
-
 var Squpon = {
 
 	currentLocation: "",
@@ -298,6 +282,8 @@ var Squpon = {
 
 //Google Map Object.
 var Gmap = {
+
+	isCurrentLocation: false,
 
 	currentLocation: "",
 
@@ -354,6 +340,8 @@ var Gmap = {
 
 	                //fill the inputbox
 	                $('#location-input').val(Squpon.currentLocation);
+
+	                Gmap.isCurrentLocation = true;
 
 	            } else {
 
@@ -423,6 +411,81 @@ var Gmap = {
 
 
 $(document).ready(function() {
+
+	// Deal of the day to be displayed on page load
+	var startPanelImages = [];
+
+	var queryURL = "https://api.sqoot.com/v2/deals/?online=true&per_page=4";
+
+	$.ajax({
+		url: queryURL,
+		method: "GET",
+		headers: {
+			"Authorization" : "api_key xlagn7"
+		}
+	}).done(function(response){
+		console.log(response);
+
+		var slideIds = ["first", "second", "third", "fourth"];
+		for(var i=0; i<response.deals.length; i++) {
+			var dealPic = $("<img>");
+			dealPic.attr("src", response.deals[i].deal.image_url);
+			var shortTitle = $("<h2>").html(response.deals[i].deal.short_title);
+
+			var newDiv = $("<div>");
+			newDiv.append(dealPic);
+			newDiv.append(shortTitle);
+			$("#" + slideIds[i]).append(newDiv);
+		}
+	})
+
+	// THIS IS WHERE MY CODE STARTS WITH FIREBASE INITIATION
+	//initiating firebase to hold the search & location information
+	var config = {
+		apiKey: "AIzaSyDODJ70GzuA3CF8kKG2JIyr1242t7P0qRE",
+		authDomain: "foodfinder-1dd71.firebaseapp.com",
+		databaseURL: "https://foodfinder-1dd71.firebaseio.com",
+		projectId: "foodfinder-1dd71",
+		storageBucket: "foodfinder-1dd71.appspot.com",
+		messagingSenderId: "883513307329"
+	};
+	firebase.initializeApp(config);
+
+	// Create a variable to reference the database
+	var database= firebase.database();
+	var searchRef = database.ref('/searchQuery');
+	var cardsRef = database.ref('/cards');
+
+	var location = "";
+
+
+   // Whenever a user clicks the add submit button
+	$("#search-submit").on("click", function(event){
+
+		event.preventDefault();
+
+		//display pagination
+		$('.pagination').removeClass('hidden');
+
+		var location = $("#location-input").val().trim();
+		console.log(location);
+		var query = $("#search-input").val().trim();
+		console.log(query);
+
+		searchRef.push({
+			location: location,
+			query: query,
+			dateAdded: firebase.database.ServerValue.TIMESTAMP
+		});
+
+		displayInfo(location, query);
+		// clear text-boxes for next entry
+		$("#location-input").val("");
+		$("#search-input").val("");
+		
+
+	});
+
 	$(".button-collapse").sideNav();
 
 	// Get current location, and fill the location input with current location.
@@ -520,6 +583,22 @@ $(document).ready(function() {
 		});
 
 		
+	});
+
+	$('.nav-category').on('click', function(event) {
+
+		event.preventDefault();
+
+		var category = $(this).data('slug');
+		console.log(category);
+
+		var location = Gmap.currentLocation;
+		console.log(location);
+
+		query = "";
+
+		displayInfo(location, query, category);
+
 	})
 
 	// $('.modal').modal();
