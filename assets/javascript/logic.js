@@ -104,7 +104,7 @@ firebase.initializeApp(config);
    					var cardImage = $("<div class=\"card-image waves-effect waves-block waves-light\">");
    					var couponImg = $("<img class=\"activator responsive-img\">");
 
-   					couponImg.attr("src", coupon.image_url+"?geometry=400x");
+   					couponImg.attr("src", coupon.image_url);
    					cardImage.append(couponImg);
    					card.append(cardImage);
 
@@ -166,7 +166,7 @@ firebase.initializeApp(config);
 
 
 
-   $(".main-content").delegate("click", ".map-modal", function() {
+   $(".map-modal").on("click", function() {
 
    	$(".modal-content").empty();
 
@@ -355,7 +355,8 @@ $(document).ready(function() {
 	$('.carousel.carousel-slider').carousel({fullWidth: true});
 
 
-	$(document).on('click', '.map-modal', function() {
+	$(".main-content").delegate('.map-modal', 'click', function() {
+		console.log("test");
 
 		$(".modal-content").empty();
 
