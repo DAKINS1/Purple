@@ -52,6 +52,9 @@ firebase.initializeApp(config);
 
    	event.preventDefault();
 
+   	//display pagination
+   	$('.pagination').removeClass('hidden');
+
    	var location = $("#location-input").val().trim();
    	console.log(location);
    	var query = $("#search-input").val().trim();
@@ -90,6 +93,9 @@ firebase.initializeApp(config);
    	if (query !== "" && location !== "") {
    		queryURL += '?query=' + query + '&location=' + location;
    	}
+
+   	//block online deal when user search through searchbar to initiate google map for everydeal
+   	queryURL += '&online=false';
 
    	$.ajax({
    		url: queryURL,
@@ -152,8 +158,8 @@ firebase.initializeApp(config);
    					var shortTitle = coupon.short_title;
    					var cardMainTitle = $("<span class=\"card-title activator grey-text text-darken-4\">" + shortTitle + "<i class=\"material-icons right\">more_vert</i></span>");
 
-   					cardContent.append(cardMainTitle);
-   					card.append(cardContent);
+   					// cardContent.append(cardMainTitle);
+   					// card.append(cardContent);
 
    					var cardAction = $("<div class=\"card-action\">");
    					var categoryName = coupon.category_name;
@@ -167,7 +173,8 @@ firebase.initializeApp(config);
    					var cardReveal = $("<div class=\"card-reveal\">");
    					var cardRevealTitle = $("<span class=\"card-title grey-text text-darken-4\">" + merchantName + "<i class=\"material-icons right\">close</i></span>");
    					var description = coupon.title;
-   					var finePrint = $("<p class=\"truncate\">" + coupon.fine_print + "</p>"); 
+   					//class=\"truncate\"
+   					var finePrint = $("<p>" + coupon.fine_print + "</p>"); 
 
    					var toggleMenuTemp = '<div class="fixed-action-btn horizontal click-to-toggle"><a class="btn-floating btn-large red"><i class="material-icons">add</i></a><ul>'
    					+ '<li><a class="btn-floating modal-trigger red map-modal" href="#modal"><i class="material-icons">place</i></a></li>' 
@@ -181,12 +188,26 @@ firebase.initializeApp(config);
    					cardReveal.append(finePrint);
    					cardReveal.append(toggleMenuTemp);
 
+   					cardContent.append(cardMainTitle);
+   					card.append(cardContent);
+
    					card.append(cardReveal);
 
    					couponDiv.append(card);
    					row.append(couponDiv);
 
    					var couponURL = coupon.untracked_url
+
+
+   					//store card info in JSON object
+   					var dataCard = {
+   						'shortTitle': shortTitle,
+   						'description': description,
+   						'url': couponURL
+   					}
+
+   					couponDiv.attr('data-card', JSON.stringify(dataCard));
+
 
    					// Write card data into firebase.
    					database.ref('cards/' + couponNum).set({
@@ -439,18 +460,24 @@ $(document).ready(function() {
 	$(".main-content").delegate('.map-modal', 'click', function() {
 		console.log("test");
 
+		//grab cardData from its parent div.
+		//data will be automatically converted to JSON object
+		var cardData = $(this).closest("div[data-card]").data('card');
+
 		$(".modal-content").empty();
 
-		var title = $("<h4>" + "Dummy Title" + "</h4>");
+		// Fill modal contents
+		var title = $("<h4 class='modal-content-title'>" + cardData['shortTitle'] + "</h4>");
 		var row = $("<div class=\"row\">");
 		var colLeft = $("<div class=\"col s12 m6 map-container\">");
 		// var map = $("<img src=\"assets/images/map.png\" class=\"responsive-img\">");
 		var map = $('<div>');
 		var colRight = $("<div class=\"col s12 m6\">");
-		var text = "<p>Dummy Description</p>";
+		var text = "<p class='modal-content-description'>" + cardData['description'] +"</p>";
 		var link = $("<a class=\"modal-action waves-effect waves-green btn-large\">");
 
-		link.attr("href", "#DummyLink");
+		link.attr("href", cardData['url']);
+		link.attr('target','_blank');
 		link.text("GO!")
 
 		map.attr('id', 'map');
