@@ -64,28 +64,22 @@ nav {
 	width: 360px;
 }
 
-.card > div.card-reveal > div > a {
-	opacity: 0.5;
-	transition: 0.5s ease;
+div.card-image > span.coupon-price {
+	font-size: 2em;
+	background-color: #9575cd;
+	padding: 6px 25px !important;
+	font-weight: 500;
 }
 
-.card > div.card-reveal > div > a:hover {
-	opacity: 0.9;
-}
-
-.card > div.card-image.waves-effect.waves-block.waves-light > img {
-	transition: all 0.2s ease-in-out;
-}
-
-.card > div.card-image.waves-effect.waves-block.waves-light > img:hover {
-	transform: scale(1.06);
+.card-action > .btn:hover {
+	background-color: #7e57c2 !important;
 }
 
 /* modal */
 .modal-content-title {
 	margin-left: 0.5vw;
-    padding-top: 1vw;
-    margin-bottom: 2vw;
+	padding-top: 1vw;
+	margin-bottom: 2vw;
 }
 
 .modal-content-description {
