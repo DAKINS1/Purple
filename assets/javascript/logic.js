@@ -143,6 +143,7 @@ function displayInfo(location, query, category) {
 
    					//store card info in JSON object
    					var dataCard = {
+   						'cardNum': couponNum,
    						'shortTitle': shortTitle,
    						'description': description,
    						'url': couponURL
@@ -295,13 +296,13 @@ var Gmap = {
 	      });
 	 },
 
-	 initMap: function () {
+	 initMap: function ( cardNum ) {
 
 	 	console.log("initMap function");
 
 	 	console.log(Gmap.dealsLocation[0]);
 
-	 	var myLatLng = Gmap.dealsLocation[0];
+	 	var myLatLng = Gmap.dealsLocation[cardNum];
 
 	 	var map = new google.maps.Map(document.getElementById('map'), {
 	 		zoom: 12,
@@ -499,6 +500,8 @@ $(document).ready(function() {
 		//data will be automatically converted to JSON object
 		var cardData = $(this).closest("div[data-card]").data('card');
 
+		var cardNum = cardData['cardNum'];
+
 		$(".modal-content").empty();
 
 		// Fill modal contents
@@ -550,7 +553,7 @@ $(document).ready(function() {
 				})
 
 				// Load map
-				Gmap.initMap();
+				Gmap.initMap( cardNum );
 			}
 		});
 
