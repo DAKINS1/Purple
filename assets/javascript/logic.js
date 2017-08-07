@@ -200,6 +200,18 @@ var Squpon = {
 	}
 }
 
+var placeSearch, autocomplete;
+
+var componentForm = {
+street_number: 'short_name',
+route: 'long_name',
+locality: 'long_name',
+administrative_area_level_1: 'short_name',
+country: 'long_name',
+postal_code: 'short_name'
+};
+
+
 //Google Map Object.
 var Gmap = {
 
@@ -307,6 +319,25 @@ var Gmap = {
 
 	},
 
+	initAutoComplete: function () {
+
+		// Create the autocomplete object, restricting the search to geographical
+        // location types.
+		autocomplete = new google.maps.places.Autocomplete((document.getElementById('location-input')),{types: ['geocode']});
+
+		// When the user selects an address from the dropdown, populate the address
+        // fields in the form.
+        autocomplete.addListener('place_changed', this.fillInAddress);
+	},
+
+	fillInAddress: function () {
+		// Get the place details from the autocomplete object.
+        var place = autocomplete.getPlace();
+
+        //formatted_address
+        document.getElementById('location-input').value = place.formatted_address;
+	},
+
 	// It specifies a function to run if it fails to get the user's location
 	showError: function (error) {
 
@@ -332,6 +363,8 @@ var Gmap = {
 
 
 $(document).ready(function() {
+
+	Gmap.initAutoComplete();
 
 	$(".button-collapse").sideNav();
 	$('.carousel.carousel-slider').carousel({fullWidth: true});
