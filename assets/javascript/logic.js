@@ -1,107 +1,39 @@
-$(document).ready(function() {
-	$(".button-collapse").sideNav();
-
-	$('.carousel.carousel-slider').carousel({fullWidth: true});
-
-// Deal of the day to be displayed on page load
-var startPanelImages = [];
-
-var queryURL = "https://api.sqoot.com/v2/deals/?online=true&per_page=4";
-
-$.ajax({
-	url: queryURL,
-	method: "GET",
-	headers: {
-		"Authorization" : "api_key xlagn7"
-	}
-}).done(function(response){
-	console.log(response);
-
-	var slideIds = ["first", "second", "third", "fourth"];
-	for(var i=0; i<response.deals.length; i++) {
-		var dealPic = $("<img>");
-		dealPic.addClass("deal-link");
-		dealPic.attr("src", response.deals[i].deal.image_url);
-		var shortTitle = $("<h2>").html(response.deals[i].deal.short_title);
-
-		
-
-		var newDiv = $("<div>");
-		newDiv.append(dealPic);
-		newDiv.append(shortTitle);
-		$("#" + slideIds[i]).append(newDiv).wrap($("<a/>").attr("href", response.deals[i].deal.untracked_url));
-
-	}
-})
-
-// THIS IS WHERE MY CODE STARTS WITH FIREBASE INITIATION
-//initiating firebase to hold the search & location information
-var config = {
-	apiKey: "AIzaSyDODJ70GzuA3CF8kKG2JIyr1242t7P0qRE",
-	authDomain: "foodfinder-1dd71.firebaseapp.com",
-	databaseURL: "https://foodfinder-1dd71.firebaseio.com",
-	projectId: "foodfinder-1dd71",
-	storageBucket: "foodfinder-1dd71.appspot.com",
-	messagingSenderId: "883513307329"
-};
-firebase.initializeApp(config);
-  // Create a variable to reference the database
-  var database= firebase.database();
-  var searchRef = database.ref('/searchQuery');
-  var cardsRef = database.ref('/cards');
-
-  var location = "";
 
 
-   // Whenever a user clicks the add train submit button
-   $("#search-submit").on("click", function(event){
 
-   	event.preventDefault();
-
-   	//display pagination
-   	$('.pagination').removeClass('hidden');
-
-   	var location = $("#location-input").val().trim();
-   	console.log(location);
-   	var query = $("#search-input").val().trim();
-   	console.log(query);
-
-   	searchRef.push({
-   		location: location,
-   		query: query,
-   		dateAdded: firebase.database.ServerValue.TIMESTAMP
-   	});
-
-   	displayInfo(location, query);
-     // clear text-boxes for next entry
-     $("#location-input").val("");
-     $("#search-input").val("");
-     return false;
-
-  });
-
-
-   function displayInfo(location, query) {
+function displayInfo(location, query, category) {
 
    	var queryURL = "https://api.sqoot.com/v2/deals/";
 
-   	//when query input is empty, but not location input
-   	if (query === "" && location !== "") {
-   		queryURL += '?location=' + location;
-   	}
+   	if (category === undefined){
+   		//when query input is empty, but not location input
+	   	if (query === "" && location !== "") {
+	   		queryURL += '?location=' + location;
+	   	}
 
-   	//when query input is not empty, but location is empty
-   	if (query !== "" && location === "") {
-   		queryURL += '?query=' + query;
-   	}
+	   	//when query input is not empty, but location is empty
+	   	//w/o location, search for online deals
+	   	if (query !== "" && location === "") {
+	   		queryURL += '?query=' + query + '&online=true';
+	   	}
 
-   	//when both input is entered
-   	if (query !== "" && location !== "") {
-   		queryURL += '?query=' + query + '&location=' + location;
-   	}
+	   	//when both input is entered
+	   	if (query !== "" && location !== "") {
+	   		queryURL += '?query=' + query + '&location=' + location;
+	   	}
 
-   	//block online deal when user search through searchbar to initiate google map for everydeal
-   	queryURL += '&online=false';
+   	} else {
+
+   		// If user allow geolocation, use it for searching category
+   		if (Gmap.isCurrentLocation){
+   			queryURL += '?category_slugs=' + category + '&location=' + location;
+
+   			//If user blocks geolocation, search for online deals.
+   		} else {
+   			queryURL += '?category_slugs=' + category + '&online=true';
+   		}
+
+   	}
 
    	$.ajax({
    		url: queryURL,
@@ -220,12 +152,12 @@ firebase.initializeApp(config);
 
 
    					// Write card data into firebase.
-   					database.ref('cards/' + couponNum).set({
-   						cardNum: couponNum,
-   						merchantName: merchantName,
-   						description: description,
-   						url: couponURL
-   					})
+   					// database.ref('cards/' + couponNum).set({
+   					// 	cardNum: couponNum,
+   					// 	merchantName: merchantName,
+   					// 	description: description,
+   					// 	url: couponURL
+   					// })
 
    					couponNum++;
    				}
@@ -238,10 +170,7 @@ firebase.initializeApp(config);
    	});
 }
 
-
-});
 // Squpon Object.
-
 var Squpon = {
 
 	currentLocation: "",
@@ -268,12 +197,13 @@ var Squpon = {
 				callback(response);
 			}
 		});
-
 	}
 }
 
 //Google Map Object.
 var Gmap = {
+
+	isCurrentLocation: false,
 
 	currentLocation: "",
 
@@ -331,6 +261,8 @@ var Gmap = {
 	                //fill the inputbox
 	                $('#location-input').val(Squpon.currentLocation);
 
+	                Gmap.isCurrentLocation = true;
+
 	             } else {
 
 	             	alert('No results found');
@@ -360,7 +292,7 @@ var Gmap = {
 	 	var myLatLng = Gmap.dealsLocation[0];
 
 	 	var map = new google.maps.Map(document.getElementById('map'), {
-	 		zoom: 11,
+	 		zoom: 12,
 	 		center: myLatLng
 	 	});
 
@@ -380,16 +312,16 @@ var Gmap = {
 
 		switch(error.code) {
 			case error.PERMISSION_DENIED:
-			x.innerHTML = "User denied the request for Geolocation."
+				console.log("User denied the request for Geolocation.");
 			break;
 			case error.POSITION_UNAVAILABLE:
-			x.innerHTML = "Location information is unavailable."
+				console.log("Location information is unavailable.");
 			break;
 			case error.TIMEOUT:
-			x.innerHTML = "The request to get user location timed out."
+				console.log("The request to get user location timed out.");
 			break;
 			case error.UNKNOWN_ERROR:
-			x.innerHTML = "An unknown error occurred."
+				console.log("An unknown error occurred.");
 			break;
 		}
 	}
@@ -398,8 +330,69 @@ var Gmap = {
 
 
 
+
 $(document).ready(function() {
+
 	$(".button-collapse").sideNav();
+	$('.carousel.carousel-slider').carousel({fullWidth: true});
+
+	// Deal of the day to be displayed on page load
+	var startPanelImages = [];
+
+	var queryURL = "https://api.sqoot.com/v2/deals/?online=true&per_page=4";
+
+	$.ajax({
+		url: queryURL,
+		method: "GET",
+		headers: {
+			"Authorization" : "api_key xlagn7"
+		}
+	}).done(function(response){
+		console.log(response);
+		console.log("gg")
+
+		var slideIds = ["first", "second", "third", "fourth"];
+		for(var i=0; i<response.deals.length; i++) {
+			var dealPic = $("<img>");
+			dealPic.addClass("deal-link");
+			dealPic.attr("src", response.deals[i].deal.image_url);
+			var shortTitle = $("<h2>").html(response.deals[i].deal.short_title);
+
+			var newDiv = $("<div>");
+			newDiv.append(dealPic);
+			newDiv.append(shortTitle);
+			$("#" + slideIds[i]).append(newDiv).wrap($("<a/>").attr("href", response.deals[i].deal.untracked_url));
+
+		}
+	})
+
+	// Whenever a user clicks the add train submit button
+	$("#search-submit").on("click", function(event){
+
+		event.preventDefault();
+
+		//display pagination
+		$('.pagination').removeClass('hidden');
+
+		var location = $("#location-input").val().trim();
+		console.log(location);
+		var query = $("#search-input").val().trim();
+		console.log(query);
+
+		searchRef.push({
+			location: location,
+			query: query,
+			dateAdded: firebase.database.ServerValue.TIMESTAMP
+		});
+
+		displayInfo(location, query);
+
+		// clear text-boxes for next entry
+		$("#location-input").val("");
+		$("#search-input").val("");
+		return false;
+
+	});
 
 	// Get current location, and fill the location input with current location.
 	Gmap.getLocation();
@@ -428,6 +421,42 @@ $(document).ready(function() {
 
 
 		}
+	})
+
+	// THIS IS WHERE MY CODE STARTS WITH FIREBASE INITIATION
+	//initiating firebase to hold the search & location information
+	var config = {
+		apiKey: "AIzaSyDODJ70GzuA3CF8kKG2JIyr1242t7P0qRE",
+		authDomain: "foodfinder-1dd71.firebaseapp.com",
+		databaseURL: "https://foodfinder-1dd71.firebaseio.com",
+		projectId: "foodfinder-1dd71",
+		storageBucket: "foodfinder-1dd71.appspot.com",
+		messagingSenderId: "883513307329"
+	};
+	firebase.initializeApp(config);
+
+	// Create a variable to reference the database
+	var database= firebase.database();
+	var searchRef = database.ref('/searchQuery');
+	var cardsRef = database.ref('/cards');
+
+	var location = "";
+
+	// Categories in Navbar Click handler
+	$('.nav-category').on('click', function(event) {
+
+		event.preventDefault();
+
+		var category = $(this).data('slug');
+		console.log(category);
+
+		var location = Gmap.currentLocation;
+		console.log(location);
+
+		query = "";
+
+		displayInfo(location, query, category);
+
 	})
 
 	$(".main-content").delegate('.map-modal', 'click', function() {
