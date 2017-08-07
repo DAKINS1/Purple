@@ -370,6 +370,15 @@ $(document).ready(function() {
 	$(".button-collapse").sideNav();
 	$('.carousel.carousel-slider').carousel({fullWidth: true});
 
+	// Enterkey listener for search button
+	$(document).on("keyup", function (event) {
+        if (event.which == 13) {
+        	event.preventDefault();
+            $("#search-submit").trigger('click');
+        }
+    });
+	 
+
 	// Deal of the day to be displayed on page load
 	var startPanelImages = [];
 
