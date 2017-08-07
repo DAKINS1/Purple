@@ -81,27 +81,39 @@ firebase.initializeApp(config);
   });
 
 
-   function displayInfo(location, query) {
+   function displayInfo(location, query, category) {
 
    	var queryURL = "https://api.sqoot.com/v2/deals/";
 
-   	//when query input is empty, but not location input
-   	if (query === "" && location !== "") {
-   		queryURL += '?location=' + location;
-   	}
+   	if (category === undefined){
+   		//when query input is empty, but not location input
+	   	if (query === "" && location !== "") {
+	   		queryURL += '?location=' + location;
+	   	}
 
-   	//when query input is not empty, but location is empty
-   	if (query !== "" && location === "") {
-   		queryURL += '?query=' + query;
-   	}
+	   	//when query input is not empty, but location is empty
+	   	//w/o location, search for online deals
+	   	if (query !== "" && location === "") {
+	   		queryURL += '?query=' + query + '&online=true';
+	   	}
 
-   	//when both input is entered
-   	if (query !== "" && location !== "") {
-   		queryURL += '?query=' + query + '&location=' + location;
-   	}
+	   	//when both input is entered
+	   	if (query !== "" && location !== "") {
+	   		queryURL += '?query=' + query + '&location=' + location;
+	   	}
 
-   	//block online deal when user search through searchbar to initiate google map for everydeal
-   	queryURL += '&online=false';
+   	} else {
+
+   		// If user allow geolocation, use it for searching category
+   		if (Gmap.isCurrentLocation){
+   			queryURL += '?category_slugs=' + category + '&location=' + location;
+
+   			//If user blocks geolocation, search for online deals.
+   		} else {
+   			queryURL += '?category_slugs=' + category + '&online=true';
+   		}
+
+   	}
 
    	$.ajax({
    		url: queryURL,
@@ -275,6 +287,8 @@ var Squpon = {
 //Google Map Object.
 var Gmap = {
 
+	isCurrentLocation: false,
+
 	currentLocation: "",
 
 	// store latlng object from each deals
@@ -331,6 +345,8 @@ var Gmap = {
 	                //fill the inputbox
 	                $('#location-input').val(Squpon.currentLocation);
 
+	                Gmap.isCurrentLocation = true;
+
 	             } else {
 
 	             	alert('No results found');
@@ -380,16 +396,16 @@ var Gmap = {
 
 		switch(error.code) {
 			case error.PERMISSION_DENIED:
-			x.innerHTML = "User denied the request for Geolocation."
+				console.log("User denied the request for Geolocation.");
 			break;
 			case error.POSITION_UNAVAILABLE:
-			x.innerHTML = "Location information is unavailable."
+				console.log("Location information is unavailable.");
 			break;
 			case error.TIMEOUT:
-			x.innerHTML = "The request to get user location timed out."
+				console.log("The request to get user location timed out.");
 			break;
 			case error.UNKNOWN_ERROR:
-			x.innerHTML = "An unknown error occurred."
+				console.log("An unknown error occurred.");
 			break;
 		}
 	}
