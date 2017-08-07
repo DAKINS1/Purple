@@ -75,6 +75,12 @@ div.card-image > span.coupon-price {
 	background-color: #7e57c2 !important;
 }
 
+.img-fit {
+	height: 200px;
+	-o-object-fit: cover;
+	object-fit: cover;
+}
+
 /* modal */
 .modal-content-title {
 	margin-left: 0.5vw;

@@ -150,7 +150,7 @@ firebase.initializeApp(config);
    					var couponDiv = $("<div class=\"col s12 m4 card-div\">");
    					var card = $("<div class=\"card sticky-action hoverable\" id=\"card-" + couponNum + "\">");
    					var cardImage = $("<div class=\"card-image\">");
-   					var couponImg = $("<img class=\"activator responsive-img\">");
+   					var couponImg = $("<img class=\"activator img-fit\">");
    					var couponPrice = coupon.price;
    					var price = $("<span class=\"card-title coupon-price right-align\">").append("$" + couponPrice);
    					var moreInfoBtn = "<a class=\"btn-floating halfway-fab waves-effect waves-light activator purple\"><i class=\"material-icons\">more_vert</i></a>";
