@@ -3,7 +3,7 @@ function displayInfo(location, query, category) {
 
 	var queryURL = "https://api.sqoot.com/v2/deals/";
 
-	if (category === undefined){
+	if (category === undefined || category === ""){
    		//when query input is empty, but not location input
    		if (query === "" && location !== "") {
    			queryURL += '?location=' + location;
@@ -42,6 +42,7 @@ function displayInfo(location, query, category) {
    	}).done(function(response) {
 
    		var results = response.deals;
+ 		console.log("results");
    		console.log(results);
 
    		// Remove duplicates coupons
