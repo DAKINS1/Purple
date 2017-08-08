@@ -81,6 +81,14 @@ div.card-image > span.coupon-price {
 	object-fit: cover;
 }
 
+.card.large {
+	height: 450px;
+}
+
+.card.large .card-image {
+	overflow: visible;
+}
+
 /* modal */
 .modal-content-title {
 	margin-left: 0.5vw;

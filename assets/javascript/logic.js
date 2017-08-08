@@ -1,15 +1,13 @@
 
-
-
 function displayInfo(location, query, category) {
 
-   	var queryURL = "https://api.sqoot.com/v2/deals/";
+	var queryURL = "https://api.sqoot.com/v2/deals/";
 
-   	if (category === undefined){
+	if (category === undefined){
    		//when query input is empty, but not location input
-	   	if (query === "" && location !== "") {
-	   		queryURL += '?location=' + location;
-	   	}
+   		if (query === "" && location !== "") {
+   			queryURL += '?location=' + location;
+   		}
 
 	   	//when query input is not empty, but location is empty
 	   	//w/o location, search for online deals
@@ -22,7 +20,7 @@ function displayInfo(location, query, category) {
 	   		queryURL += '?query=' + query + '&location=' + location;
 	   	}
 
-   	} else {
+	   } else {
 
    		// If user allow geolocation, use it for searching category
    		if (Gmap.isCurrentLocation){
@@ -68,7 +66,6 @@ function displayInfo(location, query, category) {
    			if (results[i].deal.merchant.latitude){
    				// get lat,lng from each deals and push into Squpon.dealsLocation array;
    				Gmap.dealsLocation.push({'lat': results[i].deal.merchant.latitude, 'lng': results[i].deal.merchant.longitude});
-
    			}
 
 			// Validate data
@@ -84,7 +81,7 @@ function displayInfo(location, query, category) {
    					var coupon = results[couponNum].deal;
 
    					var couponDiv = $("<div class=\"col s12 m4 card-div\">");
-   					var card = $("<div class=\"card sticky-action hoverable\" id=\"card-" + couponNum + "\">");
+   					var card = $("<div class=\"card large sticky-action hoverable\" id=\"card-" + couponNum + "\">");
    					var cardImage = $("<div class=\"card-image\">");
    					var couponImg = $("<img class=\"activator img-fit\">");
    					var couponPrice = coupon.price;
@@ -121,13 +118,6 @@ function displayInfo(location, query, category) {
    					var description = coupon.title;
    					var finePrint = $("<p>" + coupon.fine_print + "</p>"); 
 
-   					// var toggleMenuTemp = '<div class="fixed-action-btn horizontal click-to-toggle"><a class="btn-floating btn-large red"><i class="material-icons">add</i></a><ul>'
-   					// + '<li><a class="btn-floating modal-trigger red map-modal" href="#modal"><i class="material-icons">place</i></a></li>' 
-   					// + '<li><a class="btn-floating yellow darken-1"><i class="material-icons">link</i></a></li>'
-   					// + '<li><a class="btn-floating green"><i class="material-icons">share</i></a></li>'
-   					// + '<li><a class="btn-floating blue"><i class="material-icons">file_download</i></a></li>'
-   					// + '</ul></div>'
-
    					cardReveal.append(cardRevealTitle);
    					cardReveal.append("<h5>" + description + "</h5>");
    					cardReveal.append(finePrint);
@@ -138,8 +128,7 @@ function displayInfo(location, query, category) {
    					couponDiv.append(card);
    					row.append(couponDiv);
 
-   					var couponURL = coupon.untracked_url
-
+   					var couponURL = coupon.untracked_url;
 
    					//store card info in JSON object
    					var dataCard = {
@@ -150,7 +139,6 @@ function displayInfo(location, query, category) {
    					}
 
    					couponDiv.attr('data-card', JSON.stringify(dataCard));
-
 
    					// Write card data into firebase.
    					// database.ref('cards/' + couponNum).set({
@@ -204,12 +192,12 @@ var Squpon = {
 var placeSearch, autocomplete;
 
 var componentForm = {
-street_number: 'short_name',
-route: 'long_name',
-locality: 'long_name',
-administrative_area_level_1: 'short_name',
-country: 'long_name',
-postal_code: 'short_name'
+	street_number: 'short_name',
+	route: 'long_name',
+	locality: 'long_name',
+	administrative_area_level_1: 'short_name',
+	country: 'long_name',
+	postal_code: 'short_name'
 };
 
 
@@ -254,18 +242,18 @@ var Gmap = {
 
 	    Gmap.coordinates_to_address(position.coords.latitude, position.coords.longitude)
 
-	 },
+	},
 
-	 coordinates_to_address: function (lat, lng) {
+	coordinates_to_address: function (lat, lng) {
 
-	 	var geocoder= new google.maps.Geocoder();
-	 	var latlng = new google.maps.LatLng(lat, lng);
+		var geocoder= new google.maps.Geocoder();
+		var latlng = new google.maps.LatLng(lat, lng);
 
-	 	geocoder.geocode({'latLng': latlng}, function(results, status) {
+		geocoder.geocode({'latLng': latlng}, function(results, status) {
 
-	 		if(status == google.maps.GeocoderStatus.OK) {
+			if(status == google.maps.GeocoderStatus.OK) {
 
-	 			if(results[0]) {
+				if(results[0]) {
 
 	            	//update current location variable.
 	            	Squpon.currentLocation = results[0].formatted_address;
@@ -276,38 +264,38 @@ var Gmap = {
 
 	                Gmap.isCurrentLocation = true;
 
-	             } else {
+	            } else {
 
-	             	alert('No results found');
+	            	alert('No results found');
 
-	             }
+	            }
 
-	          } else {
+	        } else {
 
-	          	var error = {
+	        	var error = {
 
-	          		'ZERO_RESULTS': 'no adress'
+	        		'ZERO_RESULTS': 'no adress'
 
-	          	}
+	        	}
 
-	          	alert('Geocoder failed due to: ' + error[status]);
+	        	alert('Geocoder failed due to: ' + error[status]);
 	            // $('#address_new').html('<span class="color-red">' + error[status] + '</span>');
-	         }
-	      });
-	 },
+	        }
+	    });
+	},
 
-	 initMap: function ( cardNum ) {
+	initMap: function ( cardNum ) {
 
-	 	console.log("initMap function");
+		console.log("initMap function");
 
-	 	console.log(Gmap.dealsLocation[0]);
+		console.log(Gmap.dealsLocation[0]);
 
-	 	var myLatLng = Gmap.dealsLocation[cardNum];
+		var myLatLng = Gmap.dealsLocation[cardNum];
 
-	 	var map = new google.maps.Map(document.getElementById('map'), {
-	 		zoom: 12,
-	 		center: myLatLng
-	 	});
+		var map = new google.maps.Map(document.getElementById('map'), {
+			zoom: 12,
+			center: myLatLng
+		});
 
 		// Save map object to recall later
 		Gmap.gmap = map;
@@ -324,44 +312,40 @@ var Gmap = {
 
 		// Create the autocomplete object, restricting the search to geographical
         // location types.
-		autocomplete = new google.maps.places.Autocomplete((document.getElementById('location-input')),{types: ['geocode']});
+        autocomplete = new google.maps.places.Autocomplete((document.getElementById('location-input')),{types: ['geocode']});
 
 		// When the user selects an address from the dropdown, populate the address
         // fields in the form.
         autocomplete.addListener('place_changed', this.fillInAddress);
-	},
+    },
 
-	fillInAddress: function () {
+    fillInAddress: function () {
 		// Get the place details from the autocomplete object.
-        var place = autocomplete.getPlace();
+		var place = autocomplete.getPlace();
 
         //formatted_address
         document.getElementById('location-input').value = place.formatted_address;
-	},
+    },
 
 	// It specifies a function to run if it fails to get the user's location
 	showError: function (error) {
 
 		switch(error.code) {
 			case error.PERMISSION_DENIED:
-				console.log("User denied the request for Geolocation.");
+			console.log("User denied the request for Geolocation.");
 			break;
 			case error.POSITION_UNAVAILABLE:
-				console.log("Location information is unavailable.");
+			console.log("Location information is unavailable.");
 			break;
 			case error.TIMEOUT:
-				console.log("The request to get user location timed out.");
+			console.log("The request to get user location timed out.");
 			break;
 			case error.UNKNOWN_ERROR:
-				console.log("An unknown error occurred.");
+			console.log("An unknown error occurred.");
 			break;
 		}
 	}
 }
-
-
-
-
 
 $(document).ready(function() {
 
@@ -372,12 +356,12 @@ $(document).ready(function() {
 
 	// Enterkey listener for search button
 	$(document).on("keyup", function (event) {
-        if (event.which == 13) {
-        	event.preventDefault();
-            $("#search-submit").trigger('click');
-        }
-    });
-	 
+		if (event.which == 13) {
+			event.preventDefault();
+			$("#search-submit").trigger('click');
+		}
+	});
+
 
 	// Deal of the day to be displayed on page load
 	var startPanelImages = [];
@@ -460,9 +444,6 @@ $(document).ready(function() {
 
 			$("#first").append(dealPic);
 			$("#firstText").append(shortTitle);
-
-
-
 		}
 	})
 
@@ -499,7 +480,6 @@ $(document).ready(function() {
 		query = "";
 
 		displayInfo(location, query, category);
-
 	})
 
 	$(".main-content").delegate('.map-modal', 'click', function() {
@@ -569,5 +549,4 @@ $(document).ready(function() {
 		
 	})
 
-	// $('.modal').modal();
 });
