@@ -153,10 +153,13 @@ function displayInfo(location, query, category) {
    			}
 
    			$(".main-content").append(row);
-   		}
-   		console.log("======== Gmap latlng object ===========");
-   		console.log(Gmap.dealsLocation);
-   	});
+   			
+			//display pagination
+			$('.pagination').removeClass('hidden');
+		}
+		console.log("======== Gmap latlng object ===========");
+		console.log(Gmap.dealsLocation);
+	});
 }
 
 // Squpon Object.
@@ -399,9 +402,6 @@ $(document).ready(function() {
 	$("#search-submit").on("click", function(event){
 
 		event.preventDefault();
-
-		//display pagination
-		$('.pagination').removeClass('hidden');
 
 		var location = $("#location-input").val().trim();
 		console.log(location);
