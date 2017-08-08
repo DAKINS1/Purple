@@ -55,8 +55,11 @@ function displayInfo(location, query, category) {
    			}
    		});
 
-   		$(".main-content").empty();
-   		$(".main-content").html("<h3>Coupons for " + query + " in " + location + "<h3>")
+   		if (query && location) {
+   			$(".main-content").append("<h3>Coupons for " + query + " in " + location + "<h3>");
+   		} else if (!query && location){
+   			$(".main-content").append("<h3>Coupons in " + location + "<h3>");
+   		}   		
 
    		var couponNum = 0;
 
@@ -161,6 +164,20 @@ function displayInfo(location, query, category) {
 		console.log(Gmap.dealsLocation);
 	});
 }
+
+// Populate front page with coupons by location from IP address
+function ipLocation() {
+	queryURL = "http://freegeoip.net/json/";
+
+	$.ajax({
+		url : queryURL,
+		method : "GET"
+	}).done(function(ip) {
+		console.log(ip);
+		displayInfo(ip.city + ", " + ip.region_code, "", "");
+	});
+}
+
 
 // Squpon Object.
 var Squpon = {
@@ -354,15 +371,21 @@ $(document).ready(function() {
 
 	Gmap.initAutoComplete();
 
+	ipLocation();
+
 	$(".button-collapse").sideNav();
 	$('.carousel.carousel-slider').carousel({fullWidth: true});
 
 	// Enterkey listener for search button
-	$(document).on("keyup", function (event) {
-		if (event.which == 13) {
+	// $(document).on("keyup", function (event) {
+	// 	if (event.which == 13) {
+	// 		event.preventDefault();
+	// 		$("#search-submit").trigger('click');
+	// 	}
+	// });
+	$('#location-input').keypress(function(event){
+		if (event.keyCode === 10 || event.keyCode === 13) 
 			event.preventDefault();
-			$("#search-submit").trigger('click');
-		}
 	});
 
 
@@ -413,6 +436,8 @@ $(document).ready(function() {
 			query: query,
 			dateAdded: firebase.database.ServerValue.TIMESTAMP
 		});
+
+		$(".main-content").empty();
 
 		displayInfo(location, query);
 
@@ -472,6 +497,8 @@ $(document).ready(function() {
 	$('.nav-category').on('click', function(event) {
 
 		event.preventDefault();
+
+		$(".main-content").empty();
 
 		var category = $(this).data('slug');
 		console.log(category);
