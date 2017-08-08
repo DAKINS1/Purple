@@ -70,7 +70,7 @@ function displayInfo(location, query, category) {
 
 			// Validate data
 			if (results[couponNum]) {
-				var row = $("<div class=\"row\">");
+				var row = $("<div class=\"row card-display\">");
 			}
 
 			for (var j = 0; j < 3; j++) {
@@ -381,11 +381,13 @@ $(document).ready(function() {
 		var slideIds = ["first", "second", "third", "fourth"];
 		for(var i=0; i<response.deals.length; i++) {
 			var dealPic = $("<img>");
+			var dealHeader = $("<p>").html("Deal of the Day");
 			dealPic.addClass("deal-link");
 			dealPic.attr("src", response.deals[i].deal.image_url);
 			var shortTitle = $("<h2>").html(response.deals[i].deal.short_title);
 
 			var newDiv = $("<div>");
+			newDiv.append(dealHeader);
 			newDiv.append(dealPic);
 			newDiv.append(shortTitle);
 			$("#" + slideIds[i]).append(newDiv).wrap($("<a/>").attr("href", response.deals[i].deal.untracked_url));
