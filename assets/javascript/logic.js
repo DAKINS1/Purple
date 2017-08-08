@@ -82,7 +82,7 @@ function displayInfo(location, query, category) {
 
    					var couponDiv = $("<div class=\"col s12 m4 card-div\">");
    					var card = $("<div class=\"card large sticky-action hoverable\" id=\"card-" + couponNum + "\">");
-   					var cardImage = $("<div class=\"card-image\">");
+   					var cardImage = $("<div class=\"card-image waves-effect waves-block waves-light\">");
    					var couponImg = $("<img class=\"activator img-fit\">");
    					var couponPrice = coupon.price;
    					var price = $("<span class=\"card-title coupon-price right-align\">").append("$" + couponPrice);
