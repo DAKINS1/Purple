@@ -167,7 +167,7 @@ function displayInfo(location, query, category) {
 
 // Populate front page with coupons by location from IP address
 function ipLocation() {
-	queryURL = "http://freegeoip.net/json/";
+	queryURL = "https://freegeoip.net/json/";
 
 	$.ajax({
 		url : queryURL,
