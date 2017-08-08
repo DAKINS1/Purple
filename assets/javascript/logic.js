@@ -55,13 +55,15 @@ function displayInfo(location, query, category) {
    			}
    		});
 
-   		var $grid = $('.grid').masonry({
-   			itemSelector: '.grid-item'
-   		});
-
    		$(".main-content").empty();
-   		$(".coupons-container").empty();   		
-   		$(".main-content").html("<h3>Coupons for " + query + " in " + location + "<h3>")
+   		$("#coupons-container").empty();
+   		$(".main-content").html("<h3>Coupons for " + query + " in " + location + "<h3>");
+
+   		var $grid = $('.grid').masonry({
+   			itemSelector: '.grid-item',
+   			columnWidth: '.m4',
+   			horizontalOrder: true
+   		});
 
    		var couponNum = 0;
 
@@ -417,7 +419,8 @@ $(document).ready(function() {
 		// clear text-boxes for next entry
 		$("#location-input").val("");
 		$("#search-input").val("");
-		return false;
+
+		// return false;
 
 	});
 
