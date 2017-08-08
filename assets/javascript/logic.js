@@ -55,7 +55,12 @@ function displayInfo(location, query, category) {
    			}
    		});
 
+   		var $grid = $('.grid').masonry({
+   			itemSelector: '.grid-item'
+   		});
+
    		$(".main-content").empty();
+   		$(".coupons-container").empty();   		
    		$(".main-content").html("<h3>Coupons for " + query + " in " + location + "<h3>")
 
    		var couponNum = 0;
@@ -68,95 +73,90 @@ function displayInfo(location, query, category) {
    				Gmap.dealsLocation.push({'lat': results[i].deal.merchant.latitude, 'lng': results[i].deal.merchant.longitude});
    			}
 
-			// Validate data
-			if (results[couponNum]) {
-				var row = $("<div class=\"row\">");
+   			// Validate data
+   			if (results[couponNum]) {
+
+   				var coupon = results[couponNum].deal;
+
+   				var couponDiv = $("<div class=\"col s12 m4 grid-item card-div\">");
+   				var card = $("<div class=\"card sticky-action hoverable\" id=\"card-" + couponNum + "\">");
+   				var cardImage = $("<div class=\"card-image\">");
+   				var couponImg = $("<img class=\"activator img-fit responsive-img\">");
+   				var couponPrice = coupon.price;
+   				var price = $("<span class=\"card-title coupon-price right-align\">").append("$" + couponPrice);
+   				var moreInfoBtn = "<a class=\"btn-floating halfway-fab waves-effect waves-light activator purple\"><i class=\"material-icons\">more_vert</i></a>";
+
+   				couponImg.attr("src", coupon.image_url);
+   				cardImage.append(couponImg);
+   				cardImage.append(moreInfoBtn);
+   				cardImage.append(price);
+   				card.append(cardImage);   					
+
+   				var cardContent = $("<div class=\"card-content\">");
+   				var shortTitle = coupon.short_title;
+   				var merchantName = coupon.merchant.name;
+
+   				var cardMainTitle = $("<span class=\"card-title activator grey-text text-darken-4\">" + shortTitle + "</span>");
+
+   				cardContent.append(cardMainTitle);
+   				cardContent.append("<p>" + merchantName + "</p>");
+   				card.append(cardContent);
+
+
+   				var cardAction = $("<div class=\"card-action center-align\">");
+   				var scoopBtn = $("<a href=\"#modal\" class=\"waves-effect waves-teal btn deep-purple modal-trigger map-modal\"><i class=\"material-icons left\">play_for_work</i>Scoop</a>");
+   				var categoryName = coupon.category_name;
+
+   				cardAction.append(scoopBtn);
+   				card.append(cardAction);
+
+   				var categoryName = coupon.category_name;
+   				var cardReveal = $("<div class=\"card-reveal\">");
+   				var cardRevealTitle = $("<span class=\"card-title grey-text text-darken-4\">" + merchantName + "<i class=\"material-icons right\">close</i></span>");
+   				var description = coupon.title;
+   				var finePrint = $("<p>" + coupon.fine_print + "</p>"); 
+
+   				cardReveal.append(cardRevealTitle);
+   				cardReveal.append("<h5>" + description + "</h5>");
+   				cardReveal.append(finePrint);
+				//cardReveal.append(toggleMenuTemp);
+
+				card.append(cardReveal);
+
+				couponDiv.append(card);
+				$("#coupons-container").append(couponDiv).masonry( 'appended', couponDiv );
+
+				var couponURL = coupon.untracked_url;
+
+				//store card info in JSON object
+				var dataCard = {
+					'cardNum': couponNum,
+					'shortTitle': shortTitle,
+					'description': description,
+					'url': couponURL
+				}
+
+				couponDiv.attr('data-card', JSON.stringify(dataCard));
+
+				// Write card data into firebase.
+				// database.ref('cards/' + couponNum).set({
+				// 	cardNum: couponNum,
+				// 	merchantName: merchantName,
+				// 	description: description,
+				// 	url: couponURL
+				// })
+
+				couponNum++;	
 			}
+		}
 
-			for (var j = 0; j < 3; j++) {
+		$grid.imagesLoaded().progress( function() {
+			$grid.masonry('layout');
+		});
 
-   				// Validate data
-   				if (results[couponNum]) {
-
-   					var coupon = results[couponNum].deal;
-
-   					var couponDiv = $("<div class=\"col s12 m4 card-div\">");
-   					var card = $("<div class=\"card large sticky-action hoverable\" id=\"card-" + couponNum + "\">");
-   					var cardImage = $("<div class=\"card-image\">");
-   					var couponImg = $("<img class=\"activator img-fit\">");
-   					var couponPrice = coupon.price;
-   					var price = $("<span class=\"card-title coupon-price right-align\">").append("$" + couponPrice);
-   					var moreInfoBtn = "<a class=\"btn-floating halfway-fab waves-effect waves-light activator purple\"><i class=\"material-icons\">more_vert</i></a>";
-
-   					couponImg.attr("src", coupon.image_url);
-   					cardImage.append(couponImg);
-   					cardImage.append(moreInfoBtn);
-   					cardImage.append(price);
-   					card.append(cardImage);   					
-
-   					var cardContent = $("<div class=\"card-content\">");
-   					var shortTitle = coupon.short_title;
-   					var merchantName = coupon.merchant.name;
-   					
-   					var cardMainTitle = $("<span class=\"card-title activator grey-text text-darken-4\">" + shortTitle + "</span>");
-
-   					cardContent.append(cardMainTitle);
-   					cardContent.append("<p>" + merchantName + "</p>");
-   					card.append(cardContent);
-
-
-   					var cardAction = $("<div class=\"card-action center-align\">");
-   					var scoopBtn = $("<a href=\"#modal\" class=\"waves-effect waves-teal btn deep-purple modal-trigger map-modal\"><i class=\"material-icons left\">play_for_work</i>Scoop</a>");
-   					var categoryName = coupon.category_name;
-
-   					cardAction.append(scoopBtn);
-   					card.append(cardAction);
-
-   					var categoryName = coupon.category_name;
-   					var cardReveal = $("<div class=\"card-reveal\">");
-   					var cardRevealTitle = $("<span class=\"card-title grey-text text-darken-4\">" + merchantName + "<i class=\"material-icons right\">close</i></span>");
-   					var description = coupon.title;
-   					var finePrint = $("<p>" + coupon.fine_print + "</p>"); 
-
-   					cardReveal.append(cardRevealTitle);
-   					cardReveal.append("<h5>" + description + "</h5>");
-   					cardReveal.append(finePrint);
-   					//cardReveal.append(toggleMenuTemp);
-
-   					card.append(cardReveal);
-
-   					couponDiv.append(card);
-   					row.append(couponDiv);
-
-   					var couponURL = coupon.untracked_url;
-
-   					//store card info in JSON object
-   					var dataCard = {
-   						'cardNum': couponNum,
-   						'shortTitle': shortTitle,
-   						'description': description,
-   						'url': couponURL
-   					}
-
-   					couponDiv.attr('data-card', JSON.stringify(dataCard));
-
-   					// Write card data into firebase.
-   					// database.ref('cards/' + couponNum).set({
-   					// 	cardNum: couponNum,
-   					// 	merchantName: merchantName,
-   					// 	description: description,
-   					// 	url: couponURL
-   					// })
-
-   					couponNum++;
-   				}
-   			}
-
-   			$(".main-content").append(row);
-   		}
-   		console.log("======== Gmap latlng object ===========");
-   		console.log(Gmap.dealsLocation);
-   	});
+		console.log("======== Gmap latlng object ===========");
+		console.log(Gmap.dealsLocation);
+	});
 }
 
 // Squpon Object.
@@ -482,7 +482,7 @@ $(document).ready(function() {
 		displayInfo(location, query, category);
 	})
 
-	$(".main-content").delegate('.map-modal', 'click', function() {
+	$("#coupons-container").delegate('.map-modal', 'click', function() {
 		console.log("test");
 
 		//grab cardData from its parent div.
