@@ -368,9 +368,18 @@ var Gmap = {
 	}
 }
 
+
+// because google api is loaded asynchronously..
+// use callback to wait unitl api is fully loaded.
+
+init = {}
+
+init.autocomplete = function () {
+	Gmap.initAutoComplete();
+}
+
 $(document).ready(function() {
 
-	Gmap.initAutoComplete();
 
 	ipLocation();
 
