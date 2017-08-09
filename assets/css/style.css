@@ -74,11 +74,38 @@ nav {
 	border-radius: 50px;
 }
 
+.card.large {
+	height: 450px;
+}
+
+.btn-floating.halfway-fab {
+	position: absolute;
+	right: 24px;
+	top: 180px;
+	z-index: 2;
+}
+
+.card.sticky-action .card-reveal {
+	z-index: 3;
+}
+
+.card.sticky-action .card-action {
+	z-index: 4;
+}
+
 div.card-image > span.coupon-price {
 	font-size: 2em;
 	background-color: #9575cd;
 	padding: 6px 25px !important;
 	font-weight: 500;
+}
+
+.card > div.card-image.waves-effect.waves-block.waves-light > img {
+	transition: all 0.2s ease-in-out;
+}
+
+.card > div.card-image.waves-effect.waves-block.waves-light > img:hover {
+	transform: scale(1.06);
 }
 
 .card-action > .btn:hover {
@@ -89,14 +116,6 @@ div.card-image > span.coupon-price {
 	height: 200px;
 	-o-object-fit: cover;
 	object-fit: cover;
-}
-
-.card.large {
-	height: 450px;
-}
-
-.card.large .card-image {
-	overflow: visible;
 }
 
 /* modal */

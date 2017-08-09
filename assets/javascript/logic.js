@@ -86,16 +86,17 @@ function displayInfo(location, query, category) {
 
    					var couponDiv = $("<div class=\"col s12 m4 card-div\">");
    					var card = $("<div class=\"card large sticky-action hoverable\" id=\"card-" + couponNum + "\">");
+   					var moreInfoBtn = "<a class=\"btn-floating halfway-fab waves-effect waves-light activator purple\"><i class=\"material-icons\">more_vert</i></a>";
    					var cardImage = $("<div class=\"card-image waves-effect waves-block waves-light\">");
    					var couponImg = $("<img class=\"activator img-fit\">");
    					var couponPrice = coupon.price;
    					var price = $("<span class=\"card-title coupon-price right-align\">").append("$" + couponPrice);
-   					var moreInfoBtn = "<a class=\"btn-floating halfway-fab waves-effect waves-light activator purple\"><i class=\"material-icons\">more_vert</i></a>";
+   					
 
    					couponImg.attr("src", coupon.image_url);
-   					cardImage.append(couponImg);
-   					cardImage.append(moreInfoBtn);
+   					cardImage.append(couponImg);   					
    					cardImage.append(price);
+   					card.append(moreInfoBtn);
    					card.append(cardImage);
 
    					var cardContent = $("<div class=\"card-content\">");
@@ -107,7 +108,6 @@ function displayInfo(location, query, category) {
    					cardContent.append(cardMainTitle);
    					cardContent.append("<p>" + merchantName + "</p>");
    					card.append(cardContent);
-
 
    					var cardAction = $("<div class=\"card-action center-align\">");
    					var scoopBtn = $("<a href=\"#modal\" class=\"waves-effect waves-teal btn deep-purple modal-trigger map-modal\"><i class=\"material-icons left\">play_for_work</i>Scoop</a>");
