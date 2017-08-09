@@ -42,7 +42,7 @@ function displayInfo(location, query, category) {
    	}).done(function(response) {
 
    		var results = response.deals;
- 		console.log("results");
+   		console.log("results");
    		console.log(results);
 
    		// Remove duplicates coupons
@@ -375,7 +375,8 @@ $(document).ready(function() {
 	ipLocation();
 
 	$(".button-collapse").sideNav();
-	$('.carousel.carousel-slider').carousel({fullWidth: true});
+	$('.carousel').carousel();
+	// $('.carousel.carousel-slider').carousel({fullWidth: true});
 
 	// Enterkey listener for search button
 	// $(document).on("keyup", function (event) {
