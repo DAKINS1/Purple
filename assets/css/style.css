@@ -68,10 +68,10 @@ nav {
 	width: 360px;
 }
 
-
-.carousel .carousel-item {
+.carousel .carousel-item img {
 	width: 280px;
 	height: 280px;
+	border-radius: 50px;
 }
 
 div.card-image > span.coupon-price {
