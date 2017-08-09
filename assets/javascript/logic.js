@@ -1,9 +1,10 @@
 
-function displayInfo(location, query, category) {
+function displayInfo(location, query, category, page) {
 
 	var queryURL = "https://api.sqoot.com/v2/deals/";
 
-	if (category === undefined || category === ""){
+	if (category === ""){
+
    		//when query input is empty, but not location input
    		if (query === "" && location !== "") {
    			queryURL += '?location=' + location;
@@ -20,18 +21,30 @@ function displayInfo(location, query, category) {
 	   		queryURL += '?query=' + query + '&location=' + location;
 	   	}
 
-	   } else {
+	} else {
 
    		// If user allow geolocation, use it for searching category
    		if (Gmap.isCurrentLocation){
    			queryURL += '?category_slugs=' + category + '&location=' + location;
 
-   			//If user blocks geolocation, search for online deals.
+   		//If user blocks geolocation, search for online deals.
    		} else {
    			queryURL += '?category_slugs=' + category + '&online=true';
    		}
 
    	}
+
+   	if ( page === "") {
+
+   		queryURL += '&page=1' + '&per_page=9';
+
+   	} else {
+
+   		queryURL += '&page=' + page + '&per_page=9';
+
+   	}
+
+   	console.log("query= " + queryURL);
 
    	$.ajax({
    		url: queryURL,
@@ -41,6 +54,8 @@ function displayInfo(location, query, category) {
    		}
    	}).done(function(response) {
 
+   		console.log("response")
+   		console.log(response);
    		var results = response.deals;
  		console.log("results");
    		console.log(results);
@@ -57,9 +72,9 @@ function displayInfo(location, query, category) {
    		});
 
    		if (query && location) {
-   			$(".main-content").append("<h3>Coupons for " + query + " in " + location + "<h3>");
+   			$(".main-content").append("<h3 class='main-content-header'>Coupons for " + query + " in " + location + "<h3>");
    		} else if (!query && location){
-   			$(".main-content").append("<h3>Coupons in " + location + "<h3>");
+   			$(".main-content").append("<h3 class='main-content-header'>Coupons in " + location + "<h3>");
    		}   		
 
    		var couponNum = 0;
@@ -175,7 +190,8 @@ function ipLocation() {
 		method : "GET"
 	}).done(function(ip) {
 		console.log(ip);
-		displayInfo(ip.city + ", " + ip.region_code, "", "");
+		Squpon.queryLocation = ip.city + ", " + ip.region_code;
+		displayInfo(ip.city + ", " + ip.region_code, "", "","");
 	});
 }
 
@@ -186,6 +202,14 @@ var Squpon = {
 	currentLocation: "",
 
 	dealsLocation: [],
+
+	queryLocation: "",
+
+	queryQuery: "",
+
+	queryCategory: "",
+
+	pageNumber: 1,
 
 	// ajax call function with callback function so that you can handle response from ajax request on function call.
 	getJSON: function ( url, callback ) {
@@ -452,7 +476,10 @@ $(document).ready(function() {
 
 		$(".main-content").empty();
 
-		displayInfo(location, query);
+		Squpon.queryLocation = location;
+		Squpon.queryQuery = query;
+
+		displayInfo(location, query, "", "");
 
 		// clear text-boxes for next entry
 		$("#location-input").val("");
@@ -516,10 +543,81 @@ $(document).ready(function() {
 		var location = Gmap.currentLocation;
 		console.log(location);
 
+		Squpon.queryLocation = location;
+		Squpon.queryCategory = category;
+
 		query = "";
 
-		displayInfo(location, query, category);
-	})
+		displayInfo(location, query, category, "");
+	});
+
+	$('.page-number').on('click', function (event) {
+
+		event.preventDefault();
+
+		// Clean contents before appending.
+		$('h3.main-content-header').remove();
+		$('div.card-display').remove();
+		
+		var $li = $('.pagination li');
+
+		// Change active class to current page
+		$li.removeClass('active').addClass('waves-effect');
+		$(this).closest('li').addClass('active');
+
+		// Grab query info from previous search
+		var location = Squpon.queryLocation;
+		var query = Squpon.queryQuery;
+		var category = Squpon.queryCategory;
+		var page = $(this).closest("a[data-page]").data('page');
+		Squpon.pageNumber = page;
+
+		console.log(page);
+
+		displayInfo(location, query, category, page);
+
+	});
+
+	$('#next').on('click', function (event) {
+
+		event.preventDefault();
+
+		// Clean contents before appending.
+		$('h3.main-content-header').remove();
+		$('div.card-display').remove();
+
+		// Grab location, query, category for searching
+		var location = Squpon.queryLocation;
+		var query = Squpon.queryQuery;
+		var category = Squpon.queryCategory;
+
+		console.log(location + "      " + query + "     " + category);
+
+		var page = Squpon.pageNumber + 1;
+		var next = page + 1;
+		var prev = page -1;
+
+		var $prevPage = $('.pagination').find('a[data-page=' + prev + ']');
+		var $currPage = $('.pagination').find('a[data-page='+ page +']');
+		console.log("page:  " + page);
+
+		if ( page === 5 ) {
+
+			$(this).closest('li').removeClass('waves-effect').addClass('disabled');
+			$prevPage.closest('li').removeClass('active').addClass('waves-effect');
+			$currPage.closest('li').removeClass('waves-effect').addClass('active');
+
+			displayInfo(location, query, category, page);
+
+		} else {
+			
+			$prevPage.closest('li').removeClass('active').addClass('waves-effect');
+			$currPage.closest('li').removeClass('waves-effect').addClass('active');
+
+			Squpon.pageNumber++;
+			displayInfo(location, query, category, page);
+		}
+	});
 
 	$(".main-content").delegate('.map-modal', 'click', function() {
 		console.log("test");
@@ -588,6 +686,6 @@ $(document).ready(function() {
 		});
 
 		
-	})
+	});
 
 });

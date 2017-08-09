@@ -93,6 +93,10 @@ div.card-image > span.coupon-price {
 	overflow: visible;
 }
 
+.nav-category {
+	color: white;
+}
+
 /* modal */
 .modal-content-title {
 	margin-left: 0.5vw;
