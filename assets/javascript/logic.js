@@ -386,6 +386,9 @@ $(document).ready(function() {
 	$(".button-collapse").sideNav();
 	$('.carousel.carousel-slider').carousel({fullWidth: true});
 
+	// Get current location, and fill the location input with current location.
+	Gmap.getLocation();
+
 	// Enterkey listener for search button
 	// $(document).on("keyup", function (event) {
 	// 	if (event.which == 13) {
@@ -457,9 +460,6 @@ $(document).ready(function() {
 		return false;
 
 	});
-
-	// Get current location, and fill the location input with current location.
-	// Gmap.getLocation();
 
 	// // Deal of the day to be displayed on page load
 	// var startPanelImages = [];
