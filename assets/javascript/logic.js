@@ -60,7 +60,7 @@ function displayInfo(location, query, category) {
    			$(".main-content").append("<h3>Coupons for " + query + " in " + location + "<h3>");
    		} else if (!query && location){
    			$(".main-content").append("<h3>Coupons in " + location + "<h3>");
-   		}   		
+   		}
 
    		var couponNum = 0;
 
@@ -96,12 +96,12 @@ function displayInfo(location, query, category) {
    					cardImage.append(couponImg);
    					cardImage.append(moreInfoBtn);
    					cardImage.append(price);
-   					card.append(cardImage);   					
+   					card.append(cardImage);
 
    					var cardContent = $("<div class=\"card-content\">");
    					var shortTitle = coupon.short_title;
    					var merchantName = coupon.merchant.name;
-   					
+
    					var cardMainTitle = $("<span class=\"card-title activator grey-text text-darken-4\">" + shortTitle + "</span>");
 
    					cardContent.append(cardMainTitle);
@@ -120,7 +120,7 @@ function displayInfo(location, query, category) {
    					var cardReveal = $("<div class=\"card-reveal\">");
    					var cardRevealTitle = $("<span class=\"card-title grey-text text-darken-4\">" + merchantName + "<i class=\"material-icons right\">close</i></span>");
    					var description = coupon.title;
-   					var finePrint = $("<p>" + coupon.fine_print + "</p>"); 
+   					var finePrint = $("<p>" + coupon.fine_print + "</p>");
 
    					cardReveal.append(cardRevealTitle);
    					cardReveal.append("<h5>" + description + "</h5>");
@@ -157,7 +157,7 @@ function displayInfo(location, query, category) {
    			}
 
    			$(".main-content").append(row);
-   			
+
 			//display pagination
 			$('.pagination').removeClass('hidden');
 		}
@@ -202,7 +202,7 @@ var Squpon = {
 
 			console.log('getJSON() success!');
 			console.log(response);
-			
+
 			if( typeof callback === 'function') {
 				callback(response);
 			}
@@ -386,7 +386,7 @@ $(document).ready(function() {
 	// 	}
 	// });
 	$('#location-input').keypress(function(event){
-		if (event.keyCode === 10 || event.keyCode === 13) 
+		if (event.keyCode === 10 || event.keyCode === 13)
 			event.preventDefault();
 	});
 
@@ -423,7 +423,7 @@ $(document).ready(function() {
 		}
 	})
 
-	// Whenever a user clicks the add train submit button
+	// Whenever a user clicks submit button
 	$("#search-submit").on("click", function(event){
 
 		event.preventDefault();
@@ -559,7 +559,7 @@ $(document).ready(function() {
 			// Callback for modal open
 			// When modal is opened, load google map
 			ready: function(modal, trigger){
-				
+
 				google.maps.event.addDomListener(window, 'load', Gmap.initMap);
 
 				// Center google map on brower resize
@@ -569,7 +569,7 @@ $(document).ready(function() {
 					var map = Gmap.gmap;
 					var center = map.getCenter();
 					google.maps.event.trigger(map, "resize");
-					map.setCenter(center); 
+					map.setCenter(center);
 				})
 
 				// Load map
@@ -577,7 +577,7 @@ $(document).ready(function() {
 			}
 		});
 
-		
+
 	})
 
 });
