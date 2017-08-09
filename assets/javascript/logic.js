@@ -113,7 +113,7 @@ function displayInfo(location, query, category) {
    					var scoopBtn = $("<a href=\"#modal\" class=\"\">Scoop</a>");
    					scoopBtn.attr("href", "#modal");
    					scoopBtn.attr("data-id", coupon.id);
-   					scoopBtn.addClass("scoop-btn waves-effect waves-teal btn deep-purple modal-trigger map-modal");
+   					scoopBtn.addClass("scoop-btn waves-effect waves-purple btn deep-purple modal-trigger map-modal");
    					scoopBtn.html("<i class=\"material-icons left\">play_for_work</i>Scoop");
 
    					var categoryName = coupon.category_name;
