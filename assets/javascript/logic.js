@@ -195,6 +195,122 @@ function ipLocation() {
 	});
 }
 
+// Next Arrow Event Handler
+function next(event) {
+
+	event.preventDefault();
+
+	// Clean contents before appending.
+	$('h3.main-content-header').remove();
+	$('div.card-display').remove();
+
+	// Grab location, query, category for searching
+	var location = Squpon.queryLocation;
+	var query = Squpon.queryQuery;
+	var category = Squpon.queryCategory;
+
+	var curr = Squpon.pageNumber + 1;
+	var prev = curr -1;
+
+	var $prevPage = $('.pagination').find('a[data-page=' + prev + ']');
+	var $currPage = $('.pagination').find('a[data-page='+ curr +']');
+
+	console.log("page:  " + curr);
+
+	// When curr number reaches 5, disable next arrow
+	if ( curr === 5 ) {
+
+		// fade out arrow
+		$(this).closest('li').removeClass('waves-effect').addClass('disabled');
+
+		// unbind click handler.
+		$(this).off('click');
+
+		// change active class
+		$prevPage.closest('li').removeClass('active').addClass('waves-effect');
+		$currPage.closest('li').removeClass('waves-effect').addClass('active');
+
+		Squpon.pageNumber++;
+		displayInfo(location, query, category, curr);
+
+	} else {
+
+		// Enable click effect on previous arrow
+		if ( curr === 2 ) {
+			
+			$('#previous').closest('li').removeClass('disabled').addClass('waves-effect');
+			$('#previous').off('click');
+			$('#previous').on('click', previous);
+
+		}
+		
+		$prevPage.closest('li').removeClass('active').addClass('waves-effect');
+		$currPage.closest('li').removeClass('waves-effect').addClass('active');
+
+		Squpon.pageNumber++;
+		displayInfo(location, query, category, curr);
+
+	}
+
+	console.log('Squpon.pageNumber:    ' + Squpon.pageNumber);
+}
+
+// Previous Arrow Event Handler
+function previous(event) {
+
+	console.log("PREVIOUS");
+
+	event.preventDefault();
+
+	// Clean contents before appending.
+	$('h3.main-content-header').remove();
+	$('div.card-display').remove();
+
+	// Grab location, query, category for searching
+	var location = Squpon.queryLocation;
+	var query = Squpon.queryQuery;
+	var category = Squpon.queryCategory;
+
+	var curr = Squpon.pageNumber - 1;
+	var prev = curr + 1;
+
+	var $prevPage = $('.pagination').find('a[data-page=' + prev + ']');
+	var $currPage = $('.pagination').find('a[data-page='+ curr +']');
+
+	console.log("page:    " + curr);
+
+	// when current number reaches 1, disable previous arrow
+	if ( curr === 1 ) {
+
+		// fade out previous arrow when curr page is 1
+		$(this).closest('li').removeClass('waves-effect').addClass('disabled');
+
+		// disable click handler
+		$(this).off('click');
+
+		// change active class
+		$prevPage.closest('li').removeClass('active').addClass('waves-effect');
+		$currPage.closest('li').removeClass('waves-effect').addClass('active');
+		Squpon.pageNumber--;
+		displayInfo(location, query, category, curr);
+
+	} else {
+
+		// re-enable next arrow
+		if ( curr === 4 ) {
+			$('#next').closest('li').removeClass('disabled').addClass('waves-effect');
+			$('#next').on('click', next);
+		}
+
+		$prevPage.closest('li').removeClass('active').addClass('waves-effect');
+		$currPage.closest('li').removeClass('waves-effect').addClass('active');
+		Squpon.pageNumber--;
+		displayInfo(location, query, category, curr);
+	}
+	
+}
+
+
 
 // Squpon Object.
 var Squpon = {
@@ -392,7 +508,6 @@ var Gmap = {
 	}
 }
 
-
 // because google api is loaded asynchronously..
 // use callback to wait unitl api is fully loaded.
 
@@ -578,46 +693,9 @@ $(document).ready(function() {
 
 	});
 
-	$('#next').on('click', function (event) {
+	$('#next').on('click', next);
 
-		event.preventDefault();
-
-		// Clean contents before appending.
-		$('h3.main-content-header').remove();
-		$('div.card-display').remove();
-
-		// Grab location, query, category for searching
-		var location = Squpon.queryLocation;
-		var query = Squpon.queryQuery;
-		var category = Squpon.queryCategory;
-
-		console.log(location + "      " + query + "     " + category);
-
-		var page = Squpon.pageNumber + 1;
-		var next = page + 1;
-		var prev = page -1;
-
-		var $prevPage = $('.pagination').find('a[data-page=' + prev + ']');
-		var $currPage = $('.pagination').find('a[data-page='+ page +']');
-		console.log("page:  " + page);
-
-		if ( page === 5 ) {
-
-			$(this).closest('li').removeClass('waves-effect').addClass('disabled');
-			$prevPage.closest('li').removeClass('active').addClass('waves-effect');
-			$currPage.closest('li').removeClass('waves-effect').addClass('active');
-
-			displayInfo(location, query, category, page);
-
-		} else {
-			
-			$prevPage.closest('li').removeClass('active').addClass('waves-effect');
-			$currPage.closest('li').removeClass('waves-effect').addClass('active');
-
-			Squpon.pageNumber++;
-			displayInfo(location, query, category, page);
-		}
-	});
+	$('#previous').on('click', previous);
 
 	$(".main-content").delegate('.map-modal', 'click', function() {
 		console.log("test");
