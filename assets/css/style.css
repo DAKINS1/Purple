@@ -68,6 +68,12 @@ nav {
 	width: 360px;
 }
 
+
+.carousel .carousel-item {
+	width: 280px;
+	height: 280px;
+}
+
 div.card-image > span.coupon-price {
 	font-size: 2em;
 	background-color: #9575cd;
