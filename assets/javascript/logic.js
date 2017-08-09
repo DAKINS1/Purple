@@ -110,7 +110,12 @@ function displayInfo(location, query, category) {
 
 
    					var cardAction = $("<div class=\"card-action center-align\">");
-   					var scoopBtn = $("<a href=\"#modal\" class=\"scoop-btn waves-effect waves-teal btn deep-purple modal-trigger map-modal\"><i class=\"material-icons left\">play_for_work</i>Scoop</a>");
+   					var scoopBtn = $("<a href=\"#modal\" class=\"\">Scoop</a>");
+   					scoopBtn.attr("href", "#modal");
+   					scoopBtn.attr("data-id", coupon.id);
+   					scoopBtn.addClass("scoop-btn waves-effect waves-teal btn deep-purple modal-trigger map-modal");
+   					scoopBtn.html("<i class=\"material-icons left\">play_for_work</i>Scoop");
+
    					var categoryName = coupon.category_name;
 
    					cardAction.append(scoopBtn);
@@ -143,14 +148,6 @@ function displayInfo(location, query, category) {
    					}
 
    					couponDiv.attr('data-card', JSON.stringify(dataCard));
-
-   					// Write card data into firebase.
-   					// database.ref('cards/' + couponNum).set({
-   					// 	cardNum: couponNum,
-   					// 	merchantName: merchantName,
-   					// 	description: description,
-   					// 	url: couponURL
-   					// })
 
    					couponNum++;
    				}
@@ -588,4 +585,24 @@ $(document).ready(function() {
 		});		
 	});
 
+	$(".main-content").delegate('.scoop-btn', 'click', function() {
+
+		var couponID = $(this).data("id");
+		// Write card data into firebase.
+		database.ref("/cards/").push({
+			couponID: couponID
+		});
+
+	});
+
+	var getCoupons = database.ref("/cards/");
+	getCoupons.on("value", function(snapshot) {
+		snapshot.forEach(function(childSnapshot) {
+			var childKey = childSnapshot.key;
+			var childData = childSnapshot.val();
+			console.log(childKey);
+			console.log(childData.couponID);
+		});
+
+	});
 });
