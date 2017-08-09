@@ -681,7 +681,8 @@ $(document).ready(function() {
 		console.log(location);
 
 		Squpon.pageNumber = 1;
-		$('[data-card]').removeClass('active').addClass('waves-effect');
+	
+		$('[data-page]').closest('li').removeClass('active').addClass('waves-effect');
 		$('.pagination').find('a[data-page=1]').closest('li').removeClass('waves-effect').addClass('active');
 		Squpon.queryLocation = location;
 		Squpon.queryCategory = category;
