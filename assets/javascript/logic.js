@@ -57,7 +57,7 @@ function displayInfo(location, query, category, page) {
    		console.log("response")
    		console.log(response);
    		var results = response.deals;
- 		console.log("results");
+   		console.log("results");
    		console.log(results);
 
    		// Remove duplicates coupons
@@ -74,8 +74,13 @@ function displayInfo(location, query, category, page) {
    		if (query && location) {
    			$(".main-content").append("<h3 class='main-content-header'>Coupons for " + query + " in " + location + "<h3>");
    		} else if (!query && location){
+
    			$(".main-content").append("<h3 class='main-content-header'>Coupons in " + location + "<h3>");
    		}   		
+
+   			$(".main-content").append("<h3>Coupons in " + location + "<h3>");
+   		}
+
 
    		var couponNum = 0;
 
@@ -101,28 +106,28 @@ function displayInfo(location, query, category, page) {
 
    					var couponDiv = $("<div class=\"col s12 m4 card-div\">");
    					var card = $("<div class=\"card large sticky-action hoverable\" id=\"card-" + couponNum + "\">");
+   					var moreInfoBtn = "<a class=\"btn-floating halfway-fab waves-effect waves-light activator purple\"><i class=\"material-icons\">more_vert</i></a>";
    					var cardImage = $("<div class=\"card-image waves-effect waves-block waves-light\">");
    					var couponImg = $("<img class=\"activator img-fit\">");
    					var couponPrice = coupon.price;
    					var price = $("<span class=\"card-title coupon-price right-align\">").append("$" + couponPrice);
-   					var moreInfoBtn = "<a class=\"btn-floating halfway-fab waves-effect waves-light activator purple\"><i class=\"material-icons\">more_vert</i></a>";
+   					
 
    					couponImg.attr("src", coupon.image_url);
-   					cardImage.append(couponImg);
-   					cardImage.append(moreInfoBtn);
+   					cardImage.append(couponImg);   					
    					cardImage.append(price);
-   					card.append(cardImage);   					
+   					card.append(moreInfoBtn);
+   					card.append(cardImage);
 
    					var cardContent = $("<div class=\"card-content\">");
    					var shortTitle = coupon.short_title;
    					var merchantName = coupon.merchant.name;
-   					
+
    					var cardMainTitle = $("<span class=\"card-title activator grey-text text-darken-4\">" + shortTitle + "</span>");
 
    					cardContent.append(cardMainTitle);
    					cardContent.append("<p>" + merchantName + "</p>");
    					card.append(cardContent);
-
 
    					var cardAction = $("<div class=\"card-action center-align\">");
    					var scoopBtn = $("<a href=\"#modal\" class=\"waves-effect waves-teal btn deep-purple modal-trigger map-modal\"><i class=\"material-icons left\">play_for_work</i>Scoop</a>");
@@ -135,7 +140,7 @@ function displayInfo(location, query, category, page) {
    					var cardReveal = $("<div class=\"card-reveal\">");
    					var cardRevealTitle = $("<span class=\"card-title grey-text text-darken-4\">" + merchantName + "<i class=\"material-icons right\">close</i></span>");
    					var description = coupon.title;
-   					var finePrint = $("<p>" + coupon.fine_print + "</p>"); 
+   					var finePrint = $("<p>" + coupon.fine_print + "</p>");
 
    					cardReveal.append(cardRevealTitle);
    					cardReveal.append("<h5>" + description + "</h5>");
@@ -172,7 +177,7 @@ function displayInfo(location, query, category, page) {
    			}
 
    			$(".main-content").append(row);
-   			
+
 			//display pagination
 			$('.pagination').removeClass('hidden');
 		}
@@ -342,7 +347,7 @@ var Squpon = {
 
 			console.log('getJSON() success!');
 			console.log(response);
-			
+
 			if( typeof callback === 'function') {
 				callback(response);
 			}
@@ -523,7 +528,8 @@ $(document).ready(function() {
 	ipLocation();
 
 	$(".button-collapse").sideNav();
-	$('.carousel.carousel-slider').carousel({fullWidth: true});
+	$('.carousel').carousel();
+	// $('.carousel.carousel-slider').carousel({fullWidth: true});
 
 	// Get current location, and fill the location input with current location.
 	Gmap.getLocation();
@@ -536,7 +542,7 @@ $(document).ready(function() {
 	// 	}
 	// });
 	$('#location-input').keypress(function(event){
-		if (event.keyCode === 10 || event.keyCode === 13) 
+		if (event.keyCode === 10 || event.keyCode === 13)
 			event.preventDefault();
 	});
 
@@ -573,7 +579,7 @@ $(document).ready(function() {
 		}
 	})
 
-	// Whenever a user clicks the add train submit button
+	// Whenever a user clicks submit button
 	$("#search-submit").on("click", function(event){
 
 		event.preventDefault();
@@ -745,7 +751,7 @@ $(document).ready(function() {
 			// Callback for modal open
 			// When modal is opened, load google map
 			ready: function(modal, trigger){
-				
+
 				google.maps.event.addDomListener(window, 'load', Gmap.initMap);
 
 				// Center google map on brower resize
@@ -755,7 +761,7 @@ $(document).ready(function() {
 					var map = Gmap.gmap;
 					var center = map.getCenter();
 					google.maps.event.trigger(map, "resize");
-					map.setCenter(center); 
+					map.setCenter(center);
 				})
 
 				// Load map
@@ -763,7 +769,12 @@ $(document).ready(function() {
 			}
 		});
 
+
 		
 	});
+
+
+	})
+
 
 });
