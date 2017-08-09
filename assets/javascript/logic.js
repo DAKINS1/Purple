@@ -72,15 +72,13 @@ function displayInfo(location, query, category, page) {
    		});
 
    		if (query && location) {
+
    			$(".main-content").append("<h3 class='main-content-header'>Coupons for " + query + " in " + location + "<h3>");
+
    		} else if (!query && location){
 
    			$(".main-content").append("<h3 class='main-content-header'>Coupons in " + location + "<h3>");
    		}   		
-
-   			$(".main-content").append("<h3>Coupons in " + location + "<h3>");
-   		}
-
 
    		var couponNum = 0;
 
@@ -768,13 +766,8 @@ $(document).ready(function() {
 				Gmap.initMap( cardNum );
 			}
 		});
-
-
 		
 	});
 
+})
 
-	})
-
-
-});
