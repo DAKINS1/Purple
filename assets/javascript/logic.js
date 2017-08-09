@@ -459,30 +459,30 @@ $(document).ready(function() {
 	});
 
 	// Get current location, and fill the location input with current location.
-	Gmap.getLocation();
+	// Gmap.getLocation();
 
-	// Deal of the day to be displayed on page load
-	var startPanelImages = [];
+	// // Deal of the day to be displayed on page load
+	// var startPanelImages = [];
 
-	var queryURL = "https://api.sqoot.com/v2/deals/?online=true&per_page=4";
-	$.ajax({
-		url: queryURL,
-		method: "GET",
-		headers: {
-			"Authorization" : "api_key xlagn7"
-		}
-	}).done(function(response){
-		console.log(response);
+	// var queryURL = "https://api.sqoot.com/v2/deals/?online=true&per_page=4";
+	// $.ajax({
+	// 	url: queryURL,
+	// 	method: "GET",
+	// 	headers: {
+	// 		"Authorization" : "api_key xlagn7"
+	// 	}
+	// }).done(function(response){
+	// 	console.log(response);
 
-		for(var i=0; i<response.deals.length; i++) {
-			var dealPic = $("<img>");
-			dealPic.attr("src", response.deals[i].deal.image_url);
-			var shortTitle = $("<h2>").html(response.deals[i].deal.short_title);
+	// 	for(var i=0; i<response.deals.length; i++) {
+	// 		var dealPic = $("<img>");
+	// 		dealPic.attr("src", response.deals[i].deal.image_url);
+	// 		var shortTitle = $("<h2>").html(response.deals[i].deal.short_title);
 
-			$("#first").append(dealPic);
-			$("#firstText").append(shortTitle);
-		}
-	})
+	// 		$("#first").append(dealPic);
+	// 		$("#firstText").append(shortTitle);
+	// 	}
+	// })
 
 	// THIS IS WHERE MY CODE STARTS WITH FIREBASE INITIATION
 	//initiating firebase to hold the search & location information
@@ -533,7 +533,7 @@ $(document).ready(function() {
 		$(".modal-content").empty();
 
 		// Fill modal contents
-		var title = $("<h4 class='modal-content-title'>" + cardData['shortTitle'] + "</h4>");
+		var title = $("<span>" + "<h4 class='modal-content-title'>" + cardData['shortTitle'] + "</h4>" + "<i class=\"material-icons right\">close</i>" + "</span>");
 		var row = $("<div class=\"row\">");
 		var colLeft = $("<div class=\"col s12 m6 map-container\">");
 		// var map = $("<img src=\"assets/images/map.png\" class=\"responsive-img\">");
@@ -546,6 +546,10 @@ $(document).ready(function() {
 		link.attr('target','_blank');
 		link.text("GO!")
 
+		$("#modal").delegate(".right", "click", function() {
+			$(".bottom-sheet").modal("close");
+		})
+
 		map.attr('id', 'map');
 		colLeft.append(map);
 		// colLeft.append(map);
@@ -556,10 +560,8 @@ $(document).ready(function() {
 		row.append(colLeft);
 		row.append(colRight);
 
-
 		$(".modal-content").append(title);
 		$(".modal-content").append(row);
-
 
 		// Modal Triggers here
 		$('.modal').modal({
