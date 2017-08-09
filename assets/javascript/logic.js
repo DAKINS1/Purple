@@ -42,7 +42,7 @@ function displayInfo(location, query, category) {
    	}).done(function(response) {
 
    		var results = response.deals;
- 		console.log("results");
+   		console.log("results");
    		console.log(results);
 
    		// Remove duplicates coupons
@@ -110,7 +110,7 @@ function displayInfo(location, query, category) {
 
 
    					var cardAction = $("<div class=\"card-action center-align\">");
-   					var scoopBtn = $("<a href=\"#modal\" class=\"waves-effect waves-teal btn deep-purple modal-trigger map-modal\"><i class=\"material-icons left\">play_for_work</i>Scoop</a>");
+   					var scoopBtn = $("<a href=\"#modal\" class=\"scoop-btn waves-effect waves-teal btn deep-purple modal-trigger map-modal\"><i class=\"material-icons left\">play_for_work</i>Scoop</a>");
    					var categoryName = coupon.category_name;
 
    					cardAction.append(scoopBtn);
@@ -574,9 +574,7 @@ $(document).ready(function() {
 				// Load map
 				Gmap.initMap( cardNum );
 			}
-		});
-
-		
-	})
+		});		
+	});
 
 });
