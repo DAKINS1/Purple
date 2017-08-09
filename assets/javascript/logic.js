@@ -1,4 +1,3 @@
-
 function displayInfo(location, query, category, page) {
 
 	var queryURL = "https://api.sqoot.com/v2/deals/";
@@ -54,10 +53,10 @@ function displayInfo(location, query, category, page) {
    		}
    	}).done(function(response) {
 
-   		console.log("response")
+   		console.log("================ response from ajax call (displayInfo)==============")
    		console.log(response);
    		var results = response.deals;
-   		console.log("results");
+   		console.log("================ results =================");
    		console.log(results);
 
    		// Remove duplicates coupons
@@ -82,7 +81,12 @@ function displayInfo(location, query, category, page) {
 
    		var couponNum = 0;
 
+   		console.log('results.length:   ' + results.length)
+
    		for (var i = 0; i < results.length; i++) {
+
+   			console.log(' ');
+   			console.log('i:   ' + i);
 
    			// Validate Data
    			if (results[i].deal.merchant.latitude){
@@ -96,6 +100,8 @@ function displayInfo(location, query, category, page) {
 			}
 
 			for (var j = 0; j < 3; j++) {
+
+				console.log('              rendering deal cards:  ' + j);
 
    				// Validate data
    				if (results[couponNum]) {
@@ -192,6 +198,7 @@ function ipLocation() {
 		url : queryURL,
 		method : "GET"
 	}).done(function(ip) {
+		console.log("=================== ipLocation ajax request ==================")
 		console.log(ip);
 		Squpon.queryLocation = ip.city + ", " + ip.region_code;
 		displayInfo(ip.city + ", " + ip.region_code, "", "","");
@@ -260,8 +267,6 @@ function next(event) {
 
 // Previous Arrow Event Handler
 function previous(event) {
-
-	console.log("PREVIOUS");
 
 	event.preventDefault();
 
@@ -350,6 +355,15 @@ var Squpon = {
 				callback(response);
 			}
 		});
+	},
+
+	displayObject: function () {
+		console.log('----------- queryLocation ---------')
+		console.log(this.queryLocation);
+		console.log('----------- queryQuery ---------')
+		console.log(this.queryQuery);
+		console.log('----------- queryCatagory ---------')
+		console.log(this.queryCategory);
 	}
 }
 
@@ -451,8 +465,6 @@ var Gmap = {
 	initMap: function ( cardNum ) {
 
 		console.log("initMap function");
-
-		console.log(Gmap.dealsLocation[0]);
 
 		var myLatLng = Gmap.dealsLocation[cardNum];
 
@@ -557,8 +569,6 @@ $(document).ready(function() {
 			"Authorization" : "api_key xlagn7"
 		}
 	}).done(function(response){
-		console.log(response);
-		console.log("gg")
 
 		var slideIds = ["first", "second", "third", "fourth"];
 		for(var i=0; i<response.deals.length; i++) {
@@ -583,9 +593,7 @@ $(document).ready(function() {
 		event.preventDefault();
 
 		var location = $("#location-input").val().trim();
-		console.log(location);
 		var query = $("#search-input").val().trim();
-		console.log(query);
 
 		searchRef.push({
 			location: location,
@@ -595,6 +603,12 @@ $(document).ready(function() {
 
 		$(".main-content").empty();
 
+		// when search btn is clicked, change page to first page.
+		Squpon.pageNumber = 1;
+
+		// update active class to display
+		$('.pagination li').removeClass('active').addClass('waves-effect');
+		$('.pagination').find('a[data-page=1]').closest('li').removeClass('waves-effect').addClass('active');
 		Squpon.queryLocation = location;
 		Squpon.queryQuery = query;
 
@@ -603,6 +617,8 @@ $(document).ready(function() {
 		// clear text-boxes for next entry
 		$("#location-input").val("");
 		$("#search-input").val("");
+
+		Squpon.displayObject();
 		return false;
 
 	});
@@ -652,6 +668,8 @@ $(document).ready(function() {
 	// Categories in Navbar Click handler
 	$('.nav-category').on('click', function(event) {
 
+		console.log('========= Nav Categories are clicked ========');
+
 		event.preventDefault();
 
 		$(".main-content").empty();
@@ -662,12 +680,17 @@ $(document).ready(function() {
 		var location = Gmap.currentLocation;
 		console.log(location);
 
+		Squpon.pageNumber = 1;
+		$('[data-card]').removeClass('active').addClass('waves-effect');
+		$('.pagination').find('a[data-page=1]').closest('li').removeClass('waves-effect').addClass('active');
 		Squpon.queryLocation = location;
 		Squpon.queryCategory = category;
 
 		query = "";
 
 		displayInfo(location, query, category, "");
+
+		Squpon.displayObject();
 	});
 
 	$('.page-number').on('click', function (event) {
@@ -682,7 +705,7 @@ $(document).ready(function() {
 
 		// Change active class to current page
 		$li.removeClass('active').addClass('waves-effect');
-		$(this).closest('li').addClass('active');
+		$(this).closest('li').removeClass('waves-effect').addClass('active');
 
 		// Grab query info from previous search
 		var location = Squpon.queryLocation;
@@ -691,7 +714,38 @@ $(document).ready(function() {
 		var page = $(this).closest("a[data-page]").data('page');
 		Squpon.pageNumber = page;
 
-		console.log(page);
+		if (page === 1) {
+			// fade out previous arrow when curr page is 1
+			$('#previous').closest('li').removeClass('waves-effect').addClass('disabled');
+
+			// disable click handler
+			$('#previous').off('click');
+		}
+
+		if (page === 2 || page === 3 || page === 4 || page === 5) {
+
+			$('#previous').closest('li').removeClass('disabled').addClass('waves-effect');
+			$('#previous').off('click');
+			$('#previous').on('click', previous);
+
+		}
+
+		if (page === 4 ) {
+
+			$('#next').closest('li').removeClass('disabled').addClass('waves-effect');
+			$('#next').on('click', next);
+
+		}
+
+		if (page === 5) {
+			// fade out next arrow when curr page is 1
+			$('#next').closest('li').removeClass('waves-effect').addClass('disabled');
+
+			// disable click handler
+			$('#next').off('click');
+		}
+
+		console.log('page:  ' + page);
 
 		displayInfo(location, query, category, page);
 
@@ -702,7 +756,6 @@ $(document).ready(function() {
 	$('#previous').on('click', previous);
 
 	$(".main-content").delegate('.map-modal', 'click', function() {
-		console.log("test");
 
 		//grab cardData from its parent div.
 		//data will be automatically converted to JSON object
@@ -770,4 +823,3 @@ $(document).ready(function() {
 	})
 
 });
-
