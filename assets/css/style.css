@@ -118,21 +118,10 @@ div.card-image > span.coupon-price {
 	object-fit: cover;
 }
 
-<<<<<<< HEAD
-.card.large {
-	height: 450px;
-}
-
-.card.large .card-image {
-	overflow: visible;
-}
-
 .nav-category {
 	color: white;
 }
 
-=======
->>>>>>> 5dbf3c1ac6c01d270758c81192ce75f34e4b93cd
 /* modal */
 .modal-content-title {
 	margin-left: 0.5vw;

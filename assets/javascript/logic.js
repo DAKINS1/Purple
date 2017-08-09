@@ -767,7 +767,7 @@ $(document).ready(function() {
 			}
 		});
 		
-	});
+	})
 
-})
+});
 
