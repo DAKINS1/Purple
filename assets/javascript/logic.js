@@ -1,3 +1,11 @@
+
+/*******************************************************************
+	
+						 DisplayInfo
+
+********************************************************************/
+
+
 function displayInfo(location, query, category, page) {
 
 	var queryURL = "https://api.sqoot.com/v2/deals/";
@@ -212,7 +220,12 @@ function ipLocation() {
 	});
 }
 
-// Next Arrow Event Handler
+/*******************************************************************
+	
+				Next Arrow Event Handler
+
+********************************************************************/
+
 function next(event) {
 
 	event.preventDefault();
@@ -272,7 +285,12 @@ function next(event) {
 	console.log('Squpon.pageNumber:    ' + Squpon.pageNumber);
 }
 
-// Previous Arrow Event Handler
+/*******************************************************************
+	
+				Previous Arrow Event Handler
+
+********************************************************************/
+
 function previous(event) {
 
 	event.preventDefault();
@@ -329,8 +347,11 @@ function previous(event) {
 }
 
 
+/*******************************************************************
+	
+						Squpon Object
 
-// Squpon Object.
+********************************************************************/
 var Squpon = {
 
 	currentLocation: "",
@@ -389,7 +410,12 @@ var componentForm = {
 };
 
 
-//Google Map Object.
+/*******************************************************************
+	
+						Google Map Object
+
+********************************************************************/
+
 var Gmap = {
 
 	isCurrentLocation: false,
@@ -543,6 +569,13 @@ init.autocomplete = function () {
 	Gmap.initAutoComplete();
 }
 
+/*******************************************************************
+	
+						Main Function
+
+********************************************************************/
+
+
 $(document).ready(function() {
 
 	ipLocation();
@@ -597,7 +630,13 @@ $(document).ready(function() {
 		}
 	})
 
-	// Whenever a user clicks submit button
+
+	/*******************************************************************
+	
+						Search Submit Click Handler
+
+	********************************************************************/
+
 	$("#search-submit").on("click", function(event){
 
 		event.preventDefault();
@@ -635,29 +674,6 @@ $(document).ready(function() {
 
 	});
 
-	// // Deal of the day to be displayed on page load
-	// var startPanelImages = [];
-
-	// var queryURL = "https://api.sqoot.com/v2/deals/?online=true&per_page=4";
-	// $.ajax({
-	// 	url: queryURL,
-	// 	method: "GET",
-	// 	headers: {
-	// 		"Authorization" : "api_key xlagn7"
-	// 	}
-	// }).done(function(response){
-	// 	console.log(response);
-
-	// 	for(var i=0; i<response.deals.length; i++) {
-	// 		var dealPic = $("<img>");
-	// 		dealPic.attr("src", response.deals[i].deal.image_url);
-	// 		var shortTitle = $("<h2>").html(response.deals[i].deal.short_title);
-
-	// 		$("#first").append(dealPic);
-	// 		$("#firstText").append(shortTitle);
-	// 	}
-	// })
-
 	// THIS IS WHERE MY CODE STARTS WITH FIREBASE INITIATION
 	//initiating firebase to hold the search & location information
 	var config = {
@@ -677,7 +693,12 @@ $(document).ready(function() {
 
 	var location = "";
 
-	// Categories in Navbar Click handler
+	/*******************************************************************
+	
+					Categories in Navbar Click Handler
+
+	********************************************************************/
+
 	$('.nav-category').on('click', function(event) {
 
 		console.log('========= Nav Categories are clicked ========');
@@ -707,6 +728,12 @@ $(document).ready(function() {
 
 		Squpon.displayObject();
 	});
+
+	/*******************************************************************
+	
+					Page Number Click Handler
+
+	********************************************************************/
 
 	$('.page-number').on('click', function (event) {
 
@@ -767,9 +794,15 @@ $(document).ready(function() {
 	});
 
 	$('#next').on('click', next);
-
 	$('#previous').on('click', previous);
 
+
+	/*******************************************************************
+	
+					Scoop Button Click Handler
+
+	********************************************************************/	
+	
 	$(".main-content").delegate('.map-modal', 'click', function() {
 
 		//grab cardData from its parent div.
