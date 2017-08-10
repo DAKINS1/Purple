@@ -20,44 +20,44 @@ function displayInfo(location, query, category, page) {
 	   		queryURL += '?query=' + query + '&location=' + location;
 	   	}
 
-	} else {
+	   } else {
 
    		// If user allow geolocation, use it for searching category
    		if (Gmap.isCurrentLocation){
    			queryURL += '?category_slugs=' + category + '&location=' + location;
 
    		//If user blocks geolocation, search for online deals.
-   		} else {
-   			queryURL += '?category_slugs=' + category + '&online=true';
-   		}
-
-   	}
-
-   	if ( page === "") {
-
-   		queryURL += '&page=1' + '&per_page=9';
-
    	} else {
-
-   		queryURL += '&page=' + page + '&per_page=9';
-
+   		queryURL += '?category_slugs=' + category + '&online=true';
    	}
 
-   	console.log("query= " + queryURL);
+   }
 
-   	$.ajax({
-   		url: queryURL,
-   		method: "GET",
-   		headers: {
-   			"Authorization" : "api_key xlagn7"
-   		}
-   	}).done(function(response) {
+   if ( page === "") {
 
-   		console.log("================ response from ajax call (displayInfo)==============")
-   		console.log(response);
-   		var results = response.deals;
-   		console.log("================ results =================");
-   		console.log(results);
+   	queryURL += '&page=1' + '&per_page=9';
+
+   } else {
+
+   	queryURL += '&page=' + page + '&per_page=9';
+
+   }
+
+   console.log("query= " + queryURL);
+
+   $.ajax({
+   	url: queryURL,
+   	method: "GET",
+   	headers: {
+   		"Authorization" : "api_key xlagn7"
+   	}
+   }).done(function(response) {
+
+   	console.log("================ response from ajax call (displayInfo)==============")
+   	console.log(response);
+   	var results = response.deals;
+   	console.log("================ results =================");
+   	console.log(results);
 
    		// Remove duplicates coupons
    		var seenCoupons = {};
@@ -134,7 +134,11 @@ function displayInfo(location, query, category, page) {
    					card.append(cardContent);
 
    					var cardAction = $("<div class=\"card-action center-align\">");
-   					var scoopBtn = $("<a href=\"#modal\" class=\"waves-effect waves-teal btn deep-purple modal-trigger map-modal\"><i class=\"material-icons left\">play_for_work</i>Scoop</a>");
+   					var scoopBtn = $("<a href=\"#modal\" class=\"\">Scoop</a>");
+   					scoopBtn.attr("href", "#modal");
+   					scoopBtn.addClass("scoop-btn waves-effect waves-purple btn deep-purple modal-trigger map-modal");
+   					scoopBtn.html("<i class=\"material-icons left\">play_for_work</i>Scoop");
+
    					var categoryName = coupon.category_name;
 
    					cardAction.append(scoopBtn);
@@ -163,18 +167,11 @@ function displayInfo(location, query, category, page) {
    						'cardNum': couponNum,
    						'shortTitle': shortTitle,
    						'description': description,
-   						'url': couponURL
+   						'url': couponURL,
+   						'id' : coupon.id
    					}
 
    					couponDiv.attr('data-card', JSON.stringify(dataCard));
-
-   					// Write card data into firebase.
-   					// database.ref('cards/' + couponNum).set({
-   					// 	cardNum: couponNum,
-   					// 	merchantName: merchantName,
-   					// 	description: description,
-   					// 	url: couponURL
-   					// })
 
    					couponNum++;
    				}
@@ -537,7 +534,6 @@ init.autocomplete = function () {
 
 $(document).ready(function() {
 
-
 	ipLocation();
 
 	$(".button-collapse").sideNav();
@@ -684,7 +680,7 @@ $(document).ready(function() {
 		console.log(location);
 
 		Squpon.pageNumber = 1;
-	
+
 		$('[data-page]').closest('li').removeClass('active').addClass('waves-effect');
 		$('.pagination').find('a[data-page=1]').closest('li').removeClass('waves-effect').addClass('active');
 		Squpon.queryLocation = location;
@@ -766,6 +762,7 @@ $(document).ready(function() {
 		var cardData = $(this).closest("div[data-card]").data('card');
 
 		var cardNum = cardData['cardNum'];
+		console.log("This is the cardNum : " + cardNum);
 
 		$(".modal-content").empty();
 
@@ -822,8 +819,19 @@ $(document).ready(function() {
 				// Load map
 				Gmap.initMap( cardNum );
 			}
+		});		
+	});
+
+	$(".main-content").delegate('.scoop-btn', 'click', function() {
+
+		var cardData = $(this).closest("div[data-card]").data('card');
+		var couponID = cardData['id'];
+
+		// Write card data into firebase.
+		database.ref("/cards/").push({
+			couponID: couponID,
+			dateAdded: firebase.database.ServerValue.TIMESTAMP
 		});
-		
-	})
+	});
 
 });
