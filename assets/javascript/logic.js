@@ -489,6 +489,7 @@ var Gmap = {
 		var marker = new google.maps.Marker({
 			position: myLatLng,
 			map: map,
+			animation: google.maps.Animation.DROP,
 			title: 'deal location'
 		})
 
