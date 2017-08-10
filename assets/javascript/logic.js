@@ -270,10 +270,6 @@ function previous(event) {
 
 	event.preventDefault();
 
-	// Clean contents before appending.
-	$('h3.main-content-header').remove();
-	$('div.card-display').remove();
-
 	// Grab location, query, category for searching
 	var location = Squpon.queryLocation;
 	var query = Squpon.queryQuery;
@@ -287,35 +283,42 @@ function previous(event) {
 
 	console.log("page:    " + curr);
 
-	// when current number reaches 1, disable previous arrow
-	if ( curr === 1 ) {
+	// if curr = 0, nothing will happen
+	if ( curr !== 0 ) {
 
-		// fade out previous arrow when curr page is 1
-		$(this).closest('li').removeClass('waves-effect').addClass('disabled');
+		// Clean contents before appending.
+		$('h3.main-content-header').remove();
+		$('div.card-display').remove();
 
-		// disable click handler
-		$(this).off('click');
+		// when current number reaches 1, disable previous arrow
+		if ( curr === 1 ) {
 
-		// change active class
-		$prevPage.closest('li').removeClass('active').addClass('waves-effect');
-		$currPage.closest('li').removeClass('waves-effect').addClass('active');
-		Squpon.pageNumber--;
-		displayInfo(location, query, category, curr);
+			// fade out previous arrow when curr page is 1
+			$(this).closest('li').removeClass('waves-effect').addClass('disabled');
 
-	} else {
+			// disable click handler
+			$(this).off('click');
 
-		// re-enable next arrow
-		if ( curr === 4 ) {
-			$('#next').closest('li').removeClass('disabled').addClass('waves-effect');
-			$('#next').on('click', next);
+			// change active class
+			$prevPage.closest('li').removeClass('active').addClass('waves-effect');
+			$currPage.closest('li').removeClass('waves-effect').addClass('active');
+			Squpon.pageNumber--;
+			displayInfo(location, query, category, curr);
+
+		} else {
+
+			// re-enable next arrow
+			if ( curr === 4 ) {
+				$('#next').closest('li').removeClass('disabled').addClass('waves-effect');
+				$('#next').on('click', next);
+			}
+
+			$prevPage.closest('li').removeClass('active').addClass('waves-effect');
+			$currPage.closest('li').removeClass('waves-effect').addClass('active');
+			Squpon.pageNumber--;
+			displayInfo(location, query, category, curr);
 		}
-
-		$prevPage.closest('li').removeClass('active').addClass('waves-effect');
-		$currPage.closest('li').removeClass('waves-effect').addClass('active');
-		Squpon.pageNumber--;
-		displayInfo(location, query, category, curr);
-	}
-	
+	} 
 }
 
 
