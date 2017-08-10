@@ -136,7 +136,6 @@ function displayInfo(location, query, category, page) {
    					var cardAction = $("<div class=\"card-action center-align\">");
    					var scoopBtn = $("<a href=\"#modal\" class=\"\">Scoop</a>");
    					scoopBtn.attr("href", "#modal");
-   					scoopBtn.attr("data-id", coupon.id);
    					scoopBtn.addClass("scoop-btn waves-effect waves-purple btn deep-purple modal-trigger map-modal");
    					scoopBtn.html("<i class=\"material-icons left\">play_for_work</i>Scoop");
 
@@ -168,7 +167,8 @@ function displayInfo(location, query, category, page) {
    						'cardNum': couponNum,
    						'shortTitle': shortTitle,
    						'description': description,
-   						'url': couponURL
+   						'url': couponURL,
+   						'id' : coupon.id
    					}
 
    					couponDiv.attr('data-card', JSON.stringify(dataCard));
@@ -534,7 +534,6 @@ init.autocomplete = function () {
 
 $(document).ready(function() {
 
-
 	ipLocation();
 
 	$(".button-collapse").sideNav();
@@ -681,7 +680,7 @@ $(document).ready(function() {
 		console.log(location);
 
 		Squpon.pageNumber = 1;
-		
+
 		$('[data-page]').closest('li').removeClass('active').addClass('waves-effect');
 		$('.pagination').find('a[data-page=1]').closest('li').removeClass('waves-effect').addClass('active');
 		Squpon.queryLocation = location;
@@ -763,6 +762,7 @@ $(document).ready(function() {
 		var cardData = $(this).closest("div[data-card]").data('card');
 
 		var cardNum = cardData['cardNum'];
+		console.log("This is the cardNum : " + cardNum);
 
 		$(".modal-content").empty();
 
@@ -824,21 +824,14 @@ $(document).ready(function() {
 
 	$(".main-content").delegate('.scoop-btn', 'click', function() {
 
-		var couponID = $(this).data("id");
+		var cardData = $(this).closest("div[data-card]").data('card');
+		var couponID = cardData['id'];
+
 		// Write card data into firebase.
 		database.ref("/cards/").push({
-			couponID: couponID
+			couponID: couponID,
+			dateAdded: firebase.database.ServerValue.TIMESTAMP
 		});
 	});
 
-	var getCoupons = database.ref("/cards/");
-	getCoupons.on("value", function(snapshot) {
-		snapshot.forEach(function(childSnapshot) {
-			var childKey = childSnapshot.key;
-			var childData = childSnapshot.val();
-			console.log(childKey);
-			console.log(childData.couponID);
-		});
-
-	});
 });
