@@ -8,6 +8,8 @@
 
 function displayInfo(location, query, category, page) {
 
+	var animatedArray = ['animated bounceInUp', 'animated bounceInLeft', 'animated bounceInRight', 'animated bounceInDown'];
+
 	var queryURL = "https://api.sqoot.com/v2/deals/";
 
 	if (category === ""){
@@ -190,6 +192,11 @@ function displayInfo(location, query, category, page) {
 
    					couponDiv.attr('data-card', JSON.stringify(dataCard));
    					couponDiv.attr('data-map', JSON.stringify(latlng));
+
+   					// Add random animation to couponDiv
+   					var randNum = Math.floor((Math.random() * 4) + 0);
+   					couponDiv.addClass(animatedArray[randNum]);
+
 
    					couponNum++;
    				}
@@ -802,7 +809,7 @@ $(document).ready(function() {
 					Scoop Button Click Handler
 
 	********************************************************************/	
-	
+
 	$(".main-content").delegate('.map-modal', 'click', function() {
 
 		//grab cardData from its parent div.
