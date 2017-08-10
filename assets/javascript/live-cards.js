@@ -2,6 +2,8 @@ $(document).ready(function() {
 
 	function firebaseCards(id) {
 
+      console.log('---------------0------firebaseCards() called---------------------------------r')
+
 		var queryURL = "https://api.sqoot.com/v2/deals/" + id;
 
 		$.ajax({
@@ -20,6 +22,7 @@ $(document).ready(function() {
    			if (coupon.merchant.latitude){
    				// get lat,lng from each deals and push into Squpon.dealsLocation array;
    				Gmap.dealsLocation.push({'lat': coupon.merchant.latitude, 'lng': coupon.merchant.longitude});
+
    				console.log("== start map info ==");
    				console.log(coupon.merchant.latitude);
    				console.log(coupon.merchant.longitude);
@@ -89,7 +92,13 @@ $(document).ready(function() {
    						'url': couponURL,
    					}
 
+                  var latlng = {
+                     'lat': coupon.merchant.latitude, 
+                     'lng': coupon.merchant.longitude
+                  };
+
    					couponDiv.attr('data-card', JSON.stringify(dataCard));
+                  couponDiv.attr('data-map', JSON.stringify(latlng));
 
    					$(".main-content").children().prepend(couponDiv[0]);   					
    				}
