@@ -619,6 +619,8 @@ $(document).ready(function() {
 		// update active class to display
 		$('.pagination li').removeClass('active').addClass('waves-effect');
 		$('.pagination').find('a[data-page=1]').closest('li').removeClass('waves-effect').addClass('active');
+		$('#next').parent('li').removeClass('disabled').addClass('waves-effect');
+		$('#previous').parent('li').removeClass('waves-effect').addClass('disabled');
 		Squpon.queryLocation = location;
 		Squpon.queryQuery = query;
 
@@ -694,6 +696,8 @@ $(document).ready(function() {
 
 		$('[data-page]').closest('li').removeClass('active').addClass('waves-effect');
 		$('.pagination').find('a[data-page=1]').closest('li').removeClass('waves-effect').addClass('active');
+		$('#next').parent('li').removeClass('disabled').addClass('waves-effect');
+		$('#previous').parent('li').removeClass('waves-effect').addClass('disabled');
 		Squpon.queryLocation = location;
 		Squpon.queryCategory = category;
 
