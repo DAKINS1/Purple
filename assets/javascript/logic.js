@@ -81,6 +81,9 @@ function displayInfo(location, query, category, page) {
 
    		var couponNum = 0;
 
+   		// Clean location array before pushing new location
+   		Gmap.dealsLocation = [];
+
    		console.log('results.length:   ' + results.length)
 
    		for (var i = 0; i < results.length; i++) {
