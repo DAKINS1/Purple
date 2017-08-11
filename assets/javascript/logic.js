@@ -132,6 +132,7 @@ function displayInfo(location, query, category) {
    					couponDiv.append(card);
    					row.append(couponDiv);
 
+   					var address = coupon.merchant.address;
    					var couponURL = coupon.untracked_url;
 
    					//store card info in JSON object
@@ -139,9 +140,10 @@ function displayInfo(location, query, category) {
    						'cardNum': couponNum,
    						'shortTitle': shortTitle,
    						'description': description,
-   						'url': couponURL
+   						'url': couponURL,
+   						'address': address
    					}
-
+   					console.log(dataCard);
    					couponDiv.attr('data-card', JSON.stringify(dataCard));
 
    					// Write card data into firebase.
@@ -187,6 +189,7 @@ var Squpon = {
 
 	dealsLocation: [],
 
+
 	// ajax call function with callback function so that you can handle response from ajax request on function call.
 	getJSON: function ( url, callback ) {
 
@@ -199,6 +202,8 @@ var Squpon = {
 			}
 
 		}).done( function (response) {
+
+
 
 			console.log('getJSON() success!');
 			console.log(response);
@@ -326,6 +331,13 @@ var Gmap = {
 			map: map,
 			title: 'deal location'
 		})
+		var infowindow = new google.maps.InfoWindow({
+  			content: ("<p>" + Squpon.currentLocation + "<p>")
+  		});
+
+		google.maps.event.addListener(marker, 'click', function() {
+  		infowindow.open(map,marker);
+  		});
 
 	},
 
@@ -459,7 +471,7 @@ $(document).ready(function() {
 	});
 
 	// Get current location, and fill the location input with current location.
-	// Gmap.getLocation();
+	Gmap.getLocation();
 
 	// // Deal of the day to be displayed on page load
 	// var startPanelImages = [];
@@ -581,6 +593,7 @@ $(document).ready(function() {
 					google.maps.event.trigger(map, "resize");
 					map.setCenter(center); 
 				})
+
 
 				// Load map
 				Gmap.initMap( cardNum );
