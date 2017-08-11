@@ -885,15 +885,18 @@ $(document).ready(function() {
 
 		var cardData = $(this).closest("div[data-card]").data('card');
 		var couponID = cardData['id'];
-		var hasCoupon = snapshot.hasChild(couponID);
 
-		if (!hasCoupon) {
-			// Write card data into firebase.
-			database.ref("/cards/" + couponID).update({
-				couponID: couponID,
-				dateAdded: firebase.database.ServerValue.TIMESTAMP
-			});
-		}
+		database.ref("/cards/").once("value").then(function(snapshot) {
+			var hasCoupon = snapshot.hasChild(JSON.stringify(couponID));
+
+			if (!hasCoupon) {
+				// Write card data into firebase.
+				database.ref("/cards/" + couponID).update({
+					couponID: couponID,
+					dateAdded: firebase.database.ServerValue.TIMESTAMP
+				});
+			}
+		});		
 	});
 
 });
