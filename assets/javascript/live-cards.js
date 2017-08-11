@@ -4,19 +4,19 @@ $(document).ready(function() {
 
       console.log('---------------0------firebaseCards() called---------------------------------r')
 
-		var queryURL = "https://api.sqoot.com/v2/deals/" + id;
+      var queryURL = "https://api.sqoot.com/v2/deals/" + id;
 
-		$.ajax({
-			url: queryURL,
-			method: "GET",
-			headers: {
-				"Authorization" : "api_key xlagn7"
-			}
-		}).done(function(response) {
+      $.ajax({
+         url: queryURL,
+         method: "GET",
+         headers: {
+          "Authorization" : "api_key xlagn7"
+       }
+    }).done(function(response) {
 
-			var coupon = response.deal;
-			var couponNum = id;
-			var couponDiv;
+      var coupon = response.deal;
+      var couponNum = id;
+      var couponDiv;
 
    			// Validate Data
    			if (coupon.merchant.latitude){
@@ -97,15 +97,15 @@ $(document).ready(function() {
                      'lng': coupon.merchant.longitude
                   };
 
-   					couponDiv.attr('data-card', JSON.stringify(dataCard));
+                  couponDiv.attr('data-card', JSON.stringify(dataCard));
                   couponDiv.attr('data-map', JSON.stringify(latlng));
 
-   					$(".main-content").children().prepend(couponDiv[0]);   					
-   				}
+                  $(".main-content").children().prepend(couponDiv[0]);   					
+               }
 
-   			});
+            });
 
-	}
+ }
 
 	// Create a variable to reference the database
 	var database = firebase.database();
@@ -120,7 +120,7 @@ $(document).ready(function() {
 		//Invisible pagination
 		$('.pagination').addClass('hidden');
 
-		cardsRef.on("child_added", function(snapshot) {
+		cardsRef.limitToFirst(9).on("child_added", function(snapshot) {
 			var childKey = snapshot.key;
 			var childData = snapshot.val();
 			firebaseCards(childData.couponID);
