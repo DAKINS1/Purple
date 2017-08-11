@@ -100,6 +100,7 @@ $(document).ready(function() {
 
                couponDiv.attr('data-card', JSON.stringify(dataCard));
                couponDiv.attr('data-map', JSON.stringify(latlng));
+               couponDiv.attr('data-address', JSON.stringify(formatted));
 
                $(".main-content").children().prepend(couponDiv[0]);   					
             }
