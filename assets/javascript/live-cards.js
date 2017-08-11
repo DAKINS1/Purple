@@ -93,6 +93,11 @@ $(document).ready(function() {
                   'lng': coupon.merchant.longitude
                };
 
+               var address = coupon.merchant.address;
+               var formatted = {
+                  'address': address
+               }
+
                couponDiv.attr('data-card', JSON.stringify(dataCard));
                couponDiv.attr('data-map', JSON.stringify(latlng));
 
