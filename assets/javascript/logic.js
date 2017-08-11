@@ -79,17 +79,17 @@ function displayInfo(location, query, category, page) {
    		} else if (!query && location){
 
    			$(".main-content").append("<h3 class='main-content-header'>Coupons in " + location + "<h3>");
-   		}   		
+   		}
 
    		var couponNum = 0;
 
    		// Clean location array before pushing new location
-   		Gmap.dealsLocation = []; 
+   		Gmap.dealsLocation = [];
 
    		// Validate data
    		if (results[couponNum]) {
    			var row = $("<div class=\"row card-display\">");
-   		}  		
+   		}
 
    		for (var i = 0; i < results.length; i++) {
 
@@ -114,7 +114,7 @@ function displayInfo(location, query, category, page) {
 
 
    				couponImg.attr("src", coupon.image_url);
-   				cardImage.append(couponImg);   					
+   				cardImage.append(couponImg);
    				cardImage.append(price);
    				card.append(moreInfoBtn);
    				card.append(cardImage);
@@ -148,7 +148,7 @@ function displayInfo(location, query, category, page) {
 
    				cardReveal.append(cardRevealTitle);
    				cardReveal.append("<h5>" + description + "</h5>");
-   				cardReveal.append(finePrint);   				
+   				cardReveal.append(finePrint);
 
    				card.append(cardReveal);
 
@@ -170,7 +170,7 @@ function displayInfo(location, query, category, page) {
 
    				// store map info in JSON object
    				var latlng = {
-   					'lat': coupon.merchant.latitude, 
+   					'lat': coupon.merchant.latitude,
    					'lng': coupon.merchant.longitude
    				};
 
@@ -206,7 +206,7 @@ function changeTitle() {
 	var $change = $('#change')
 
 	setInterval(function () {
-		
+
 		index++;
 
 		$change.fadeOut(400, function () {
@@ -223,7 +223,7 @@ function ipLocation() {
 	$.ajax({
 		url : queryURL,
 		method : "GET"
-	}).done(function(ip) {		
+	}).done(function(ip) {
 		Squpon.queryLocation = ip.city + ", " + ip.region_code;
 		displayInfo(ip.city + ", " + ip.region_code, "", "","");
 	});
@@ -276,13 +276,13 @@ function next(event) {
 
 		// Enable click effect on previous arrow
 		if ( curr === 2 ) {
-			
+
 			$('#previous').closest('li').removeClass('disabled').addClass('waves-effect');
 			$('#previous').off('click');
 			$('#previous').on('click', previous);
 
 		}
-		
+
 		$prevPage.closest('li').removeClass('active').addClass('waves-effect');
 		$currPage.closest('li').removeClass('waves-effect').addClass('active');
 
@@ -352,7 +352,7 @@ function previous(event) {
 			Squpon.pageNumber--;
 			displayInfo(location, query, category, curr);
 		}
-	} 
+	}
 }
 
 
@@ -565,12 +565,12 @@ var Gmap = {
 
 		if (!userPlace.geometry) {
 			return;
-		} 
+		}
 		Gmap.place = autocomplete.getPlace();
 		// else {
 		// 	//formatted_address
 		// 	$("#location-input").val(place.formatted_address);
-		// }       
+		// }
 
 	},
 
@@ -625,46 +625,46 @@ $(document).ready(function() {
 			event.preventDefault();
 	});
 
-	$(".button-collapse").sideNav();
-	$(".carousel").carousel();
+	// $(".button-collapse").sideNav();
+	// $(".carousel").carousel();
 	// $('.carousel.carousel-slider').carousel({fullWidth: true});
 
 	// Get current location, and fill the location input with current location.
 	Gmap.getLocation();
 
-	// Deal of the day to be displayed on page load
-	var startPanelImages = [];
+	// // Deal of the day to be displayed on page load
+	// var startPanelImages = [];
 
-	var queryURL = "https://api.sqoot.com/v2/deals/?online=true&per_page=4";
+	// var queryURL = "https://api.sqoot.com/v2/deals/?online=true&per_page=4";
 
-	$.ajax({
-		url: queryURL,
-		method: "GET",
-		headers: {
-			"Authorization" : "api_key xlagn7"
-		}
-	}).done(function(response){
+	// $.ajax({
+	// 	url: queryURL,
+	// 	method: "GET",
+	// 	headers: {
+	// 		"Authorization" : "api_key xlagn7"
+	// 	}
+	// }).done(function(response){
 
-		var slideIds = ["first", "second", "third", "fourth"];
-		for(var i=0; i<response.deals.length; i++) {
-			var dealPic = $("<img>");
-			var dealHeader = $("<p>").html("Deal of the Day");
-			dealPic.addClass("deal-link");
-			dealPic.attr("src", response.deals[i].deal.image_url);
-			var shortTitle = $("<h2>").html(response.deals[i].deal.short_title);
+	// 	var slideIds = ["first", "second", "third", "fourth"];
+	// 	for(var i=0; i<response.deals.length; i++) {
+	// 		var dealPic = $("<img>");
+	// 		var dealHeader = $("<p>").html("Deal of the Day");
+	// 		dealPic.addClass("deal-link");
+	// 		dealPic.attr("src", response.deals[i].deal.image_url);
+	// 		var shortTitle = $("<h2>").html(response.deals[i].deal.short_title);
 
-			var newDiv = $("<div>");
-			newDiv.append(dealHeader);
-			newDiv.append(dealPic);
-			newDiv.append(shortTitle);
-			$("#" + slideIds[i]).append(newDiv).wrap($("<a/>").attr("href", response.deals[i].deal.untracked_url));
+	// 		var newDiv = $("<div>");
+	// 		newDiv.append(dealHeader);
+	// 		newDiv.append(dealPic);
+	// 		newDiv.append(shortTitle);
+	// 		$("#" + slideIds[i]).append(newDiv).wrap($("<a/>").attr("href", response.deals[i].deal.untracked_url));
 
-		}
-	})
+	// 	}
+	// })
 
 
 	// ******************************************************************
-	
+
 	// 					Search Submit Click Handler
 
 	// *******************************************************************
@@ -735,7 +735,7 @@ $(document).ready(function() {
 	// })
 
 
-	// THIS IS WHERE MY CODE STARTS WITH FIREBASE INITIATION
+
 	//initiating firebase to hold the search & location information
 	var config = {
 		apiKey: "AIzaSyDODJ70GzuA3CF8kKG2JIyr1242t7P0qRE",
@@ -755,7 +755,7 @@ $(document).ready(function() {
 	var location = "";
 
 	// ******************************************************************
-	
+
 	// 				Categories in Navbar Click Handler
 
 	// *******************************************************************
@@ -791,7 +791,7 @@ $(document).ready(function() {
 	});
 
 	// ******************************************************************
-	
+
 	// 				Page Number Click Handler
 
 	// *******************************************************************
@@ -803,7 +803,7 @@ $(document).ready(function() {
 		// Clean contents before appending.
 		$('h3.main-content-header').remove();
 		$('div.card-display').remove();
-		
+
 		var $li = $('.pagination li');
 
 		// Change active class to current page
@@ -859,10 +859,10 @@ $(document).ready(function() {
 
 
 	// ******************************************************************
-	
+
 	// 				Scoop Button Click Handler
 
-	// *******************************************************************	
+	// *******************************************************************
 
 	$(".main-content").delegate('.map-modal', 'click', function() {
 
@@ -934,7 +934,7 @@ $(document).ready(function() {
 				// Load map
 				Gmap.initMap( mapData, addressData );
 			}
-		});		
+		});
 	});
 
 	$(".main-content").delegate('.scoop-btn', 'click', function() {
@@ -952,7 +952,7 @@ $(document).ready(function() {
 					dateAdded: firebase.database.ServerValue.TIMESTAMP
 				});
 			}
-		});		
+		});
 	});
 
 });
