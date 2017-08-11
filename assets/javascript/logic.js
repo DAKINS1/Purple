@@ -227,6 +227,24 @@ function displayInfo(location, query, category, page) {
 	});
 }
 
+function changeTitle() {
+
+	var scoopThings = ['COUPONS', 'DEALS', 'DISCOUNTS', 'SAVINGS', 'THINGS'];
+	var index = 0;
+
+	var $change = $('#change')
+
+	setInterval(function () {
+		
+		index++;
+
+		$change.fadeOut(400, function () {
+		  $(this).text(scoopThings[index % scoopThings.length]).fadeIn(400);
+		});
+	}, 3000);
+}
+
+
 // Populate front page with coupons by location from IP address
 function ipLocation() {
 	queryURL = "https://freegeoip.net/json/";
@@ -615,6 +633,12 @@ init.autocomplete = function () {
 
 
 $(document).ready(function() {
+
+	//change header title content in every 2 sec
+	changeTitle();
+
+	//initiate parallax
+	$('.parallax').parallax();
 
 	ipLocation();
 

@@ -1,7 +1,11 @@
+/* font-family: 'Raleway', sans-serif;
+font-family: 'Montserrat', sans-serif; */
+
 body {
 	display: flex;
 	min-height: 100vh;
 	flex-direction: column;
+	font-family: 'Montserrat', sans-serif;
 }
 
 .hidden {
@@ -20,7 +24,7 @@ nav .input-field label {
 }
 
 .logo img {
-	margin-top: 12px;
+	margin-top: 25px;
 }
 
 .header-billboard {
@@ -40,7 +44,7 @@ nav {
 }
 
 .input-box {
-	background-color: white !important;
+	/*background-color: white !important;*/
 	padding-left: 5px !important;
 	margin: 0 !important;
 	color: black;
@@ -141,4 +145,81 @@ div.card-image > span.coupon-price {
 
 #map {
 	height: 100%;
+}
+
+/* Parallax */
+
+.parallax-container {
+/*  background-color: rgba(64,46,116, 0.7);
+*/  height: 550px;
+
+}
+
+.image {
+
+	background: url(../images/icon-seamless-purple.png);
+	background-repeat: repeat;
+	height: 450px;
+	z-index: 1;
+	
+	opacity: 1;
+
+}
+
+/*ac6bad*/
+
+.nav-background {
+	
+	
+	z-index: -1;
+	opacity: 0.9;
+
+
+}
+
+.header-wrapper {
+	opacity: 1 !important;
+	z-index:-1 !important;
+}
+
+
+
+.parallax img {
+    max-width: 200%;
+}
+
+#content {
+	font-family: 'Raleway', sans-serif;
+
+}
+
+#change {
+	font-family: 'Montserrat', sans-serif;
+	font-weight: 500;
+	font-size: 5vw;
+}
+
+#header-content {
+	    margin-top: 8%;
+}
+
+#search-input, #location-input {
+	border-bottom: 2px solid white;
+	font-size: 20px;
+	color: white;
+}
+
+#progressBar {
+    width: 50px;
+    height: 22px;
+    border: 1px solid #111;
+    background-color: #292929;
+}
+#progressBar div {
+    height: 100%;
+    color: #fff;
+    text-align: right;
+    line-height: 22px; /* same as #progressBar height if we want text middle aligned */
+    width: 0;
+    background-color: #0099ff;
 }
