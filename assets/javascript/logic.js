@@ -58,16 +58,10 @@ function displayInfo(location, query, category, page) {
    $.ajax({
    	url: queryURL,
    	method: "GET",
-   	headers: {
-   		"Authorization" : "api_key xlagn7"
-   	}
+   	headers: { "Authorization" : "api_key xlagn7" }
    }).done(function(response) {
 
-   	console.log("================ response from ajax call (displayInfo)==============")
-   	console.log(response);
    	var results = response.deals;
-   	console.log("================ results =================");
-   	console.log(results);
 
    		// Remove duplicates coupons
    		var seenCoupons = {};
@@ -92,14 +86,14 @@ function displayInfo(location, query, category, page) {
    		var couponNum = 0;
 
    		// Clean location array before pushing new location
-   		Gmap.dealsLocation = [];
+   		Gmap.dealsLocation = []; 
 
-   		console.log('results.length:   ' + results.length)
+   		// Validate data
+   		if (results[couponNum]) {
+   			var row = $("<div class=\"row card-display\">");
+   		}  		
 
    		for (var i = 0; i < results.length; i++) {
-
-   			console.log(' ');
-   			console.log('i:   ' + i);
 
    			// Validate Data
    			if (results[i].deal.merchant.latitude){
@@ -107,123 +101,110 @@ function displayInfo(location, query, category, page) {
    				Gmap.dealsLocation.push({'lat': results[i].deal.merchant.latitude, 'lng': results[i].deal.merchant.longitude});
    			}
 
-			// Validate data
-			if (results[couponNum]) {
-				var row = $("<div class=\"row card-display\">");
-			}
+   			// Validate data
+   			if (results[couponNum]) {
 
-			for (var j = 0; j < 3; j++) {
+   				var coupon = results[couponNum].deal;
 
-				console.log('              rendering deal cards:  ' + j);
-
-   				// Validate data
-   				if (results[couponNum]) {
-
-   					var coupon = results[couponNum].deal;
-
-   					var couponDiv = $("<div class=\"col s12 m4 card-div\">");
-   					var card = $("<div class=\"card large sticky-action hoverable\" id=\"card-" + couponNum + "\">");
-   					var moreInfoBtn = "<a class=\"btn-floating halfway-fab waves-effect waves-light activator purple\"><i class=\"material-icons\">more_vert</i></a>";
-   					var cardImage = $("<div class=\"card-image waves-effect waves-block waves-light\">");
-   					var couponImg = $("<img class=\"activator img-fit\">");
-   					var couponPrice = coupon.price;
-   					var price = $("<span class=\"card-title coupon-price right-align\">").append("$" + couponPrice);
-   					
-
-   					couponImg.attr("src", coupon.image_url);
-   					cardImage.append(couponImg);   					
-   					cardImage.append(price);
-   					card.append(moreInfoBtn);
-   					card.append(cardImage);
-
-   					var cardContent = $("<div class=\"card-content\">");
-   					var shortTitle = coupon.short_title;
-   					var merchantName = coupon.merchant.name;
-
-   					var cardMainTitle = $("<span class=\"card-title activator grey-text text-darken-4\">" + shortTitle + "</span>");
-
-   					cardContent.append(cardMainTitle);
-   					cardContent.append("<p>" + merchantName + "</p>");
-   					card.append(cardContent);
-
-   					var cardAction = $("<div class=\"card-action center-align\">");
-   					var scoopBtn = $("<a href=\"#modal\" class=\"\">Scoop</a>");
-   					scoopBtn.attr("href", "#modal");
-   					scoopBtn.addClass("scoop-btn waves-effect waves-purple btn deep-purple modal-trigger map-modal");
-   					scoopBtn.html("<i class=\"material-icons left\">play_for_work</i>Scoop");
-
-   					var categoryName = coupon.category_name;
-
-   					cardAction.append(scoopBtn);
-   					card.append(cardAction);
-
-   					var categoryName = coupon.category_name;
-   					var cardReveal = $("<div class=\"card-reveal\">");
-   					var cardRevealTitle = $("<span class=\"card-title grey-text text-darken-4\">" + merchantName + "<i class=\"material-icons right\">close</i></span>");
-   					var description = coupon.title;
-   					var finePrint = $("<p>" + coupon.fine_print + "</p>");
-
-   					cardReveal.append(cardRevealTitle);
-   					cardReveal.append("<h5>" + description + "</h5>");
-   					cardReveal.append(finePrint);
-   					//cardReveal.append(toggleMenuTemp);
-
-   					card.append(cardReveal);
-
-   					couponDiv.append(card);
-   					row.append(couponDiv);
-
-   					var address = coupon.merchant.address;
-   					var couponURL = coupon.untracked_url;
+   				var couponDiv = $("<div class=\"col s12 m4 card-div\">");
+   				var card = $("<div class=\"card large sticky-action hoverable\" id=\"card-" + couponNum + "\">");
+   				var moreInfoBtn = "<a class=\"btn-floating halfway-fab waves-effect waves-light activator purple\"><i class=\"material-icons\">more_vert</i></a>";
+   				var cardImage = $("<div class=\"card-image waves-effect waves-block waves-light\">");
+   				var couponImg = $("<img class=\"activator img-fit\">");
+   				var couponPrice = coupon.price;
+   				var price = $("<span class=\"card-title coupon-price right-align\">").append("$" + couponPrice);
 
 
-   					//store card info in JSON object
-   					var dataCard = {
-   						'cardNum': couponNum,
-   						'shortTitle': shortTitle,
-   						'description': description,
-   						'url': couponURL,
-   						'address': address,
-   						'id' : coupon.id
+   				couponImg.attr("src", coupon.image_url);
+   				cardImage.append(couponImg);   					
+   				cardImage.append(price);
+   				card.append(moreInfoBtn);
+   				card.append(cardImage);
 
-   					}
+   				var cardContent = $("<div class=\"card-content\">");
+   				var shortTitle = coupon.short_title;
+   				var merchantName = coupon.merchant.name;
 
-   					// store map info in JSON object
-   					var latlng = {
-   						'lat': coupon.merchant.latitude, 
-   						'lng': coupon.merchant.longitude
-   					};
+   				var cardMainTitle = $("<span class=\"card-title activator grey-text text-darken-4\">" + shortTitle + "</span>");
+
+   				cardContent.append(cardMainTitle);
+   				cardContent.append("<p>" + merchantName + "</p>");
+   				card.append(cardContent);
+
+   				var cardAction = $("<div class=\"card-action center-align\">");
+   				var scoopBtn = $("<a href=\"#modal\" class=\"\">Scoop</a>");
+   				scoopBtn.attr("href", "#modal");
+   				scoopBtn.addClass("scoop-btn waves-effect waves-purple btn deep-purple modal-trigger map-modal");
+   				scoopBtn.html("<i class=\"material-icons left\">play_for_work</i>Scoop");
+
+   				var categoryName = coupon.category_name;
+
+   				cardAction.append(scoopBtn);
+   				card.append(cardAction);
+
+   				var categoryName = coupon.category_name;
+   				var cardReveal = $("<div class=\"card-reveal\">");
+   				var cardRevealTitle = $("<span class=\"card-title grey-text text-darken-4\">" + merchantName + "<i class=\"material-icons right\">close</i></span>");
+   				var description = coupon.title;
+   				var finePrint = $("<p>" + coupon.fine_print + "</p>");
+
+   				cardReveal.append(cardRevealTitle);
+   				cardReveal.append("<h5>" + description + "</h5>");
+   				cardReveal.append(finePrint);
+   				
+
+   				card.append(cardReveal);
+
+   				couponDiv.append(card);
+   				row.append(couponDiv);
+
+   				var address = coupon.merchant.address;
+   				var couponURL = coupon.untracked_url;
 
 
-   					var formatted = {
-   						'address': address
-   					}
+   				//store card info in JSON object
+   				var dataCard = {
+   					'cardNum': couponNum,
+   					'shortTitle': shortTitle,
+   					'description': description,
+   					'url': couponURL,
+   					'address': address,
+   					'id' : coupon.id
 
-
-
-   					couponDiv.attr('data-card', JSON.stringify(dataCard));
-   					couponDiv.attr('data-map', JSON.stringify(latlng));
-   					couponDiv.attr('data-address', JSON.stringify(formatted));
-
-   					console.log('alkfdjslkfjsadlkfjdsaf')
-   					console.log(formatted);
-
-   					// Add random animation to couponDiv
-   					var randNum = Math.floor((Math.random() * 4) + 0);
-   					couponDiv.addClass(animatedArray[randNum]);
-
-
-   					couponNum++;
    				}
+
+   				// store map info in JSON object
+   				var latlng = {
+   					'lat': coupon.merchant.latitude, 
+   					'lng': coupon.merchant.longitude
+   				};
+
+
+   				var formatted = {
+   					'address': address
+   				}
+
+   				couponDiv.attr('data-card', JSON.stringify(dataCard));
+   				couponDiv.attr('data-map', JSON.stringify(latlng));
+   				couponDiv.attr('data-address', JSON.stringify(formatted));
+
+   				console.log('alkfdjslkfjsadlkfjdsaf')
+   				console.log(formatted);
+
+   				// Add random animation to couponDiv
+   				var randNum = Math.floor((Math.random() * 4) + 0);
+   				couponDiv.addClass(animatedArray[randNum]);
+
+
+   				couponNum++;
    			}
+
 
    			$(".main-content").append(row);
 
 			//display pagination
 			$('.pagination').removeClass('hidden');
 		}
-		console.log("======== Gmap latlng object ===========");
-		console.log(Gmap.dealsLocation);
 	});
 }
 
@@ -550,12 +531,12 @@ var Gmap = {
 			title: 'deal location'
 		})
 		var infowindow = new google.maps.InfoWindow({
-  			content: ("<p>" + address + "<p>")
-  		});
+			content: ("<p>" + address + "<p>")
+		});
 
 		google.maps.event.addListener(marker, 'click', function() {
-  		infowindow.open(map,marker);
-  		});
+			infowindow.open(map,marker);
+		});
 
 	},
 
@@ -574,9 +555,15 @@ var Gmap = {
 		// Get the place details from the autocomplete object.
 		var place = autocomplete.getPlace();
 
-        //formatted_address
-        document.getElementById('location-input').value = place.formatted_address;
-    },
+		if (!place.geometry) {
+			return;
+		}
+		// } else {
+		// 	//formatted_address
+		// 	document.getElementById('location-input').value = place.formatted_address;
+		// }       
+
+	},
 
 	// It specifies a function to run if it fails to get the user's location
 	showError: function (error) {
@@ -624,19 +611,6 @@ $(document).ready(function() {
 
 	// Get current location, and fill the location input with current location.
 	Gmap.getLocation();
-
-	// Enterkey listener for search button
-	// $(document).on("keyup", function (event) {
-	// 	if (event.which == 13) {
-	// 		event.preventDefault();
-	// 		$("#search-submit").trigger('click');
-	// 	}
-	// });
-	$('#location-input').keypress(function(event){
-		if (event.keyCode === 10 || event.keyCode === 13)
-			event.preventDefault();
-	});
-
 
 	// Deal of the day to be displayed on page load
 	var startPanelImages = [];
