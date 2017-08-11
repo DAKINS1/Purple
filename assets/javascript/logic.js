@@ -173,6 +173,7 @@ function displayInfo(location, query, category, page) {
    					couponDiv.append(card);
    					row.append(couponDiv);
 
+   					var address = coupon.merchant.address;
    					var couponURL = coupon.untracked_url;
 
    					//store card info in JSON object
@@ -181,6 +182,7 @@ function displayInfo(location, query, category, page) {
    						'shortTitle': shortTitle,
    						'description': description,
    						'url': couponURL,
+   						'address': address,
    						'id' : coupon.id
    					}
 
@@ -386,6 +388,8 @@ var Squpon = {
 
 		}).done( function (response) {
 
+
+
 			console.log('getJSON() success!');
 			console.log(response);
 
@@ -525,6 +529,13 @@ var Gmap = {
 			animation: google.maps.Animation.DROP,
 			title: 'deal location'
 		})
+		var infowindow = new google.maps.InfoWindow({
+  			content: ("<p>" + Squpon.currentLocation + "<p>")
+  		});
+
+		google.maps.event.addListener(marker, 'click', function() {
+  		infowindow.open(map,marker);
+  		});
 
 	},
 
@@ -680,6 +691,34 @@ $(document).ready(function() {
 		return false;
 
 	});
+
+
+	// Get current location, and fill the location input with current location.
+	Gmap.getLocation();
+
+	// // Deal of the day to be displayed on page load
+	// var startPanelImages = [];
+
+	// var queryURL = "https://api.sqoot.com/v2/deals/?online=true&per_page=4";
+	// $.ajax({
+	// 	url: queryURL,
+	// 	method: "GET",
+	// 	headers: {
+	// 		"Authorization" : "api_key xlagn7"
+	// 	}
+	// }).done(function(response){
+	// 	console.log(response);
+
+	// 	for(var i=0; i<response.deals.length; i++) {
+	// 		var dealPic = $("<img>");
+	// 		dealPic.attr("src", response.deals[i].deal.image_url);
+	// 		var shortTitle = $("<h2>").html(response.deals[i].deal.short_title);
+
+	// 		$("#first").append(dealPic);
+	// 		$("#firstText").append(shortTitle);
+	// 	}
+	// })
+
 
 	// THIS IS WHERE MY CODE STARTS WITH FIREBASE INITIATION
 	//initiating firebase to hold the search & location information
@@ -874,6 +913,7 @@ $(document).ready(function() {
 					google.maps.event.trigger(map, "resize");
 					map.setCenter(center);
 				})
+
 
 				// Load map
 				Gmap.initMap( mapData );
