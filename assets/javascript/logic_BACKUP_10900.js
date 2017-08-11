@@ -182,8 +182,12 @@ function displayInfo(location, query, category, page) {
    						'shortTitle': shortTitle,
    						'description': description,
    						'url': couponURL,
-   						'address': address,
-   						'id' : coupon.id	
+<<<<<<< HEAD
+   						'address': address
+   					}
+   					console.log(dataCard);
+=======
+   						'id' : coupon.id
    					}
 
    					// store map info in JSON object
@@ -192,7 +196,7 @@ function displayInfo(location, query, category, page) {
    						'lng': coupon.merchant.longitude
    					};
 
-
+>>>>>>> master
    					couponDiv.attr('data-card', JSON.stringify(dataCard));
    					couponDiv.attr('data-map', JSON.stringify(latlng));
 
@@ -368,6 +372,8 @@ var Squpon = {
 
 	dealsLocation: [],
 
+<<<<<<< HEAD
+=======
 	queryLocation: "",
 
 	queryQuery: "",
@@ -375,7 +381,7 @@ var Squpon = {
 	queryCategory: "",
 
 	pageNumber: 1,
-
+>>>>>>> master
 
 	// ajax call function with callback function so that you can handle response from ajax request on function call.
 	getJSON: function ( url, callback ) {
@@ -694,7 +700,7 @@ $(document).ready(function() {
 
 	});
 
-
+<<<<<<< HEAD
 	// Get current location, and fill the location input with current location.
 	Gmap.getLocation();
 
@@ -721,7 +727,8 @@ $(document).ready(function() {
 	// 	}
 	// })
 
-
+=======
+>>>>>>> master
 	// THIS IS WHERE MY CODE STARTS WITH FIREBASE INITIATION
 	//initiating firebase to hold the search & location information
 	var config = {

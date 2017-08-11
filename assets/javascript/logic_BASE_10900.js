@@ -1,19 +1,9 @@
 
-/*******************************************************************
-	
-						 DisplayInfo
-
-********************************************************************/
-
-
-function displayInfo(location, query, category, page) {
-
-	var animatedArray = ['animated bounceInUp', 'animated bounceInLeft', 'animated bounceInRight', 'animated bounceInDown'];
+function displayInfo(location, query, category) {
 
 	var queryURL = "https://api.sqoot.com/v2/deals/";
 
-	if (category === ""){
-
+	if (category === undefined || category === ""){
    		//when query input is empty, but not location input
    		if (query === "" && location !== "") {
    			queryURL += '?location=' + location;
@@ -36,38 +26,24 @@ function displayInfo(location, query, category, page) {
    		if (Gmap.isCurrentLocation){
    			queryURL += '?category_slugs=' + category + '&location=' + location;
 
-   		//If user blocks geolocation, search for online deals.
-   	} else {
-   		queryURL += '?category_slugs=' + category + '&online=true';
+   			//If user blocks geolocation, search for online deals.
+   		} else {
+   			queryURL += '?category_slugs=' + category + '&online=true';
+   		}
+
    	}
 
-   }
+   	$.ajax({
+   		url: queryURL,
+   		method: "GET",
+   		headers: {
+   			"Authorization" : "api_key xlagn7"
+   		}
+   	}).done(function(response) {
 
-   if ( page === "") {
-
-   	queryURL += '&page=1' + '&per_page=9';
-
-   } else {
-
-   	queryURL += '&page=' + page + '&per_page=9';
-
-   }
-
-   console.log("query= " + queryURL);
-
-   $.ajax({
-   	url: queryURL,
-   	method: "GET",
-   	headers: {
-   		"Authorization" : "api_key xlagn7"
-   	}
-   }).done(function(response) {
-
-   	console.log("================ response from ajax call (displayInfo)==============")
-   	console.log(response);
-   	var results = response.deals;
-   	console.log("================ results =================");
-   	console.log(results);
+   		var results = response.deals;
+ 		console.log("results");
+   		console.log(results);
 
    		// Remove duplicates coupons
    		var seenCoupons = {};
@@ -81,25 +57,14 @@ function displayInfo(location, query, category, page) {
    		});
 
    		if (query && location) {
-
-   			$(".main-content").append("<h3 class='main-content-header'>Coupons for " + query + " in " + location + "<h3>");
-
+   			$(".main-content").append("<h3>Coupons for " + query + " in " + location + "<h3>");
    		} else if (!query && location){
-
-   			$(".main-content").append("<h3 class='main-content-header'>Coupons in " + location + "<h3>");
+   			$(".main-content").append("<h3>Coupons in " + location + "<h3>");
    		}   		
 
    		var couponNum = 0;
 
-   		// Clean location array before pushing new location
-   		Gmap.dealsLocation = [];
-
-   		console.log('results.length:   ' + results.length)
-
    		for (var i = 0; i < results.length; i++) {
-
-   			console.log(' ');
-   			console.log('i:   ' + i);
 
    			// Validate Data
    			if (results[i].deal.merchant.latitude){
@@ -114,8 +79,6 @@ function displayInfo(location, query, category, page) {
 
 			for (var j = 0; j < 3; j++) {
 
-				console.log('              rendering deal cards:  ' + j);
-
    				// Validate data
    				if (results[couponNum]) {
 
@@ -123,35 +86,31 @@ function displayInfo(location, query, category, page) {
 
    					var couponDiv = $("<div class=\"col s12 m4 card-div\">");
    					var card = $("<div class=\"card large sticky-action hoverable\" id=\"card-" + couponNum + "\">");
-   					var moreInfoBtn = "<a class=\"btn-floating halfway-fab waves-effect waves-light activator purple\"><i class=\"material-icons\">more_vert</i></a>";
    					var cardImage = $("<div class=\"card-image waves-effect waves-block waves-light\">");
    					var couponImg = $("<img class=\"activator img-fit\">");
    					var couponPrice = coupon.price;
    					var price = $("<span class=\"card-title coupon-price right-align\">").append("$" + couponPrice);
-   					
+   					var moreInfoBtn = "<a class=\"btn-floating halfway-fab waves-effect waves-light activator purple\"><i class=\"material-icons\">more_vert</i></a>";
 
    					couponImg.attr("src", coupon.image_url);
-   					cardImage.append(couponImg);   					
+   					cardImage.append(couponImg);
+   					cardImage.append(moreInfoBtn);
    					cardImage.append(price);
-   					card.append(moreInfoBtn);
-   					card.append(cardImage);
+   					card.append(cardImage);   					
 
    					var cardContent = $("<div class=\"card-content\">");
    					var shortTitle = coupon.short_title;
    					var merchantName = coupon.merchant.name;
-
+   					
    					var cardMainTitle = $("<span class=\"card-title activator grey-text text-darken-4\">" + shortTitle + "</span>");
 
    					cardContent.append(cardMainTitle);
    					cardContent.append("<p>" + merchantName + "</p>");
    					card.append(cardContent);
 
-   					var cardAction = $("<div class=\"card-action center-align\">");
-   					var scoopBtn = $("<a href=\"#modal\" class=\"\">Scoop</a>");
-   					scoopBtn.attr("href", "#modal");
-   					scoopBtn.addClass("scoop-btn waves-effect waves-purple btn deep-purple modal-trigger map-modal");
-   					scoopBtn.html("<i class=\"material-icons left\">play_for_work</i>Scoop");
 
+   					var cardAction = $("<div class=\"card-action center-align\">");
+   					var scoopBtn = $("<a href=\"#modal\" class=\"waves-effect waves-teal btn deep-purple modal-trigger map-modal\"><i class=\"material-icons left\">play_for_work</i>Scoop</a>");
    					var categoryName = coupon.category_name;
 
    					cardAction.append(scoopBtn);
@@ -161,7 +120,7 @@ function displayInfo(location, query, category, page) {
    					var cardReveal = $("<div class=\"card-reveal\">");
    					var cardRevealTitle = $("<span class=\"card-title grey-text text-darken-4\">" + merchantName + "<i class=\"material-icons right\">close</i></span>");
    					var description = coupon.title;
-   					var finePrint = $("<p>" + coupon.fine_print + "</p>");
+   					var finePrint = $("<p>" + coupon.fine_print + "</p>"); 
 
    					cardReveal.append(cardRevealTitle);
    					cardReveal.append("<h5>" + description + "</h5>");
@@ -173,7 +132,6 @@ function displayInfo(location, query, category, page) {
    					couponDiv.append(card);
    					row.append(couponDiv);
 
-   					var address = coupon.merchant.address;
    					var couponURL = coupon.untracked_url;
 
    					//store card info in JSON object
@@ -181,32 +139,25 @@ function displayInfo(location, query, category, page) {
    						'cardNum': couponNum,
    						'shortTitle': shortTitle,
    						'description': description,
-   						'url': couponURL,
-   						'address': address,
-   						'id' : coupon.id	
+   						'url': couponURL
    					}
 
-   					// store map info in JSON object
-   					var latlng = {
-   						'lat': coupon.merchant.latitude, 
-   						'lng': coupon.merchant.longitude
-   					};
-
-
    					couponDiv.attr('data-card', JSON.stringify(dataCard));
-   					couponDiv.attr('data-map', JSON.stringify(latlng));
 
-   					// Add random animation to couponDiv
-   					var randNum = Math.floor((Math.random() * 4) + 0);
-   					couponDiv.addClass(animatedArray[randNum]);
-
+   					// Write card data into firebase.
+   					// database.ref('cards/' + couponNum).set({
+   					// 	cardNum: couponNum,
+   					// 	merchantName: merchantName,
+   					// 	description: description,
+   					// 	url: couponURL
+   					// })
 
    					couponNum++;
    				}
    			}
 
    			$(".main-content").append(row);
-
+   			
 			//display pagination
 			$('.pagination').removeClass('hidden');
 		}
@@ -223,159 +174,18 @@ function ipLocation() {
 		url : queryURL,
 		method : "GET"
 	}).done(function(ip) {
-		console.log("=================== ipLocation ajax request ==================")
 		console.log(ip);
-		Squpon.queryLocation = ip.city + ", " + ip.region_code;
-		displayInfo(ip.city + ", " + ip.region_code, "", "","");
+		displayInfo(ip.city + ", " + ip.region_code, "", "");
 	});
 }
 
-/*******************************************************************
-	
-				Next Arrow Event Handler
 
-********************************************************************/
-
-function next(event) {
-
-	event.preventDefault();
-
-	// Clean contents before appending.
-	$('h3.main-content-header').remove();
-	$('div.card-display').remove();
-
-	// Grab location, query, category for searching
-	var location = Squpon.queryLocation;
-	var query = Squpon.queryQuery;
-	var category = Squpon.queryCategory;
-
-	var curr = Squpon.pageNumber + 1;
-	var prev = curr -1;
-
-	var $prevPage = $('.pagination').find('a[data-page=' + prev + ']');
-	var $currPage = $('.pagination').find('a[data-page='+ curr +']');
-
-	console.log("page:  " + curr);
-
-	// When curr number reaches 5, disable next arrow
-	if ( curr === 5 ) {
-
-		// fade out arrow
-		$(this).closest('li').removeClass('waves-effect').addClass('disabled');
-
-		// unbind click handler.
-		$(this).off('click');
-
-		// change active class
-		$prevPage.closest('li').removeClass('active').addClass('waves-effect');
-		$currPage.closest('li').removeClass('waves-effect').addClass('active');
-
-		Squpon.pageNumber++;
-		displayInfo(location, query, category, curr);
-
-	} else {
-
-		// Enable click effect on previous arrow
-		if ( curr === 2 ) {
-			
-			$('#previous').closest('li').removeClass('disabled').addClass('waves-effect');
-			$('#previous').off('click');
-			$('#previous').on('click', previous);
-
-		}
-		
-		$prevPage.closest('li').removeClass('active').addClass('waves-effect');
-		$currPage.closest('li').removeClass('waves-effect').addClass('active');
-
-		Squpon.pageNumber++;
-		displayInfo(location, query, category, curr);
-
-	}
-
-	console.log('Squpon.pageNumber:    ' + Squpon.pageNumber);
-}
-
-/*******************************************************************
-	
-				Previous Arrow Event Handler
-
-********************************************************************/
-
-function previous(event) {
-
-	event.preventDefault();
-
-	// Grab location, query, category for searching
-	var location = Squpon.queryLocation;
-	var query = Squpon.queryQuery;
-	var category = Squpon.queryCategory;
-
-	var curr = Squpon.pageNumber - 1;
-	var prev = curr + 1;
-
-	var $prevPage = $('.pagination').find('a[data-page=' + prev + ']');
-	var $currPage = $('.pagination').find('a[data-page='+ curr +']');
-
-	console.log("page:    " + curr);
-
-	// if curr = 0, nothing will happen
-	if ( curr !== 0 ) {
-
-		// Clean contents before appending.
-		$('h3.main-content-header').remove();
-		$('div.card-display').remove();
-
-		// when current number reaches 1, disable previous arrow
-		if ( curr === 1 ) {
-
-			// fade out previous arrow when curr page is 1
-			$(this).closest('li').removeClass('waves-effect').addClass('disabled');
-
-			// disable click handler
-			$(this).off('click');
-
-			// change active class
-			$prevPage.closest('li').removeClass('active').addClass('waves-effect');
-			$currPage.closest('li').removeClass('waves-effect').addClass('active');
-			Squpon.pageNumber--;
-			displayInfo(location, query, category, curr);
-
-		} else {
-
-			// re-enable next arrow
-			if ( curr === 4 ) {
-				$('#next').closest('li').removeClass('disabled').addClass('waves-effect');
-				$('#next').on('click', next);
-			}
-
-			$prevPage.closest('li').removeClass('active').addClass('waves-effect');
-			$currPage.closest('li').removeClass('waves-effect').addClass('active');
-			Squpon.pageNumber--;
-			displayInfo(location, query, category, curr);
-		}
-	} 
-}
-
-
-/*******************************************************************
-	
-						Squpon Object
-
-********************************************************************/
+// Squpon Object.
 var Squpon = {
 
 	currentLocation: "",
 
 	dealsLocation: [],
-
-	queryLocation: "",
-
-	queryQuery: "",
-
-	queryCategory: "",
-
-	pageNumber: 1,
-
 
 	// ajax call function with callback function so that you can handle response from ajax request on function call.
 	getJSON: function ( url, callback ) {
@@ -390,24 +200,13 @@ var Squpon = {
 
 		}).done( function (response) {
 
-
-
 			console.log('getJSON() success!');
 			console.log(response);
-
+			
 			if( typeof callback === 'function') {
 				callback(response);
 			}
 		});
-	},
-
-	displayObject: function () {
-		console.log('----------- queryLocation ---------')
-		console.log(this.queryLocation);
-		console.log('----------- queryQuery ---------')
-		console.log(this.queryQuery);
-		console.log('----------- queryCatagory ---------')
-		console.log(this.queryCategory);
 	}
 }
 
@@ -423,12 +222,7 @@ var componentForm = {
 };
 
 
-/*******************************************************************
-	
-						Google Map Object
-
-********************************************************************/
-
+//Google Map Object.
 var Gmap = {
 
 	isCurrentLocation: false,
@@ -511,11 +305,13 @@ var Gmap = {
 	    });
 	},
 
-	initMap: function ( mapData ) {
+	initMap: function ( cardNum ) {
 
 		console.log("initMap function");
 
-		var myLatLng = mapData;
+		console.log(Gmap.dealsLocation[0]);
+
+		var myLatLng = Gmap.dealsLocation[cardNum];
 
 		var map = new google.maps.Map(document.getElementById('map'), {
 			zoom: 12,
@@ -528,16 +324,8 @@ var Gmap = {
 		var marker = new google.maps.Marker({
 			position: myLatLng,
 			map: map,
-			animation: google.maps.Animation.DROP,
 			title: 'deal location'
 		})
-		var infowindow = new google.maps.InfoWindow({
-  			content: ("<p>" + Squpon.currentLocation + "<p>")
-  		});
-
-		google.maps.event.addListener(marker, 'click', function() {
-  		infowindow.open(map,marker);
-  		});
 
 	},
 
@@ -580,6 +368,7 @@ var Gmap = {
 	}
 }
 
+
 // because google api is loaded asynchronously..
 // use callback to wait unitl api is fully loaded.
 
@@ -589,23 +378,13 @@ init.autocomplete = function () {
 	Gmap.initAutoComplete();
 }
 
-/*******************************************************************
-	
-						Main Function
-
-********************************************************************/
-
-
 $(document).ready(function() {
+
 
 	ipLocation();
 
 	$(".button-collapse").sideNav();
-	$('.carousel').carousel();
-	// $('.carousel.carousel-slider').carousel({fullWidth: true});
-
-	// Get current location, and fill the location input with current location.
-	Gmap.getLocation();
+	$('.carousel.carousel-slider').carousel({fullWidth: true});
 
 	// Enterkey listener for search button
 	// $(document).on("keyup", function (event) {
@@ -615,7 +394,7 @@ $(document).ready(function() {
 	// 	}
 	// });
 	$('#location-input').keypress(function(event){
-		if (event.keyCode === 10 || event.keyCode === 13)
+		if (event.keyCode === 10 || event.keyCode === 13) 
 			event.preventDefault();
 	});
 
@@ -632,6 +411,8 @@ $(document).ready(function() {
 			"Authorization" : "api_key xlagn7"
 		}
 	}).done(function(response){
+		console.log(response);
+		console.log("gg")
 
 		var slideIds = ["first", "second", "third", "fourth"];
 		for(var i=0; i<response.deals.length; i++) {
@@ -650,19 +431,15 @@ $(document).ready(function() {
 		}
 	})
 
-
-	/*******************************************************************
-	
-						Search Submit Click Handler
-
-	********************************************************************/
-
+	// Whenever a user clicks the add train submit button
 	$("#search-submit").on("click", function(event){
 
 		event.preventDefault();
 
 		var location = $("#location-input").val().trim();
+		console.log(location);
 		var query = $("#search-input").val().trim();
+		console.log(query);
 
 		searchRef.push({
 			location: location,
@@ -672,31 +449,17 @@ $(document).ready(function() {
 
 		$(".main-content").empty();
 
-		// when search btn is clicked, change page to first page.
-		Squpon.pageNumber = 1;
-
-		// update active class to display
-		$('.pagination li').removeClass('active').addClass('waves-effect');
-		$('.pagination').find('a[data-page=1]').closest('li').removeClass('waves-effect').addClass('active');
-		$('#next').parent('li').removeClass('disabled').addClass('waves-effect');
-		$('#previous').parent('li').removeClass('waves-effect').addClass('disabled');
-		Squpon.queryLocation = location;
-		Squpon.queryQuery = query;
-
-		displayInfo(location, query, "", "");
+		displayInfo(location, query);
 
 		// clear text-boxes for next entry
 		$("#location-input").val("");
 		$("#search-input").val("");
-
-		Squpon.displayObject();
 		return false;
 
 	});
 
-
 	// Get current location, and fill the location input with current location.
-	Gmap.getLocation();
+	// Gmap.getLocation();
 
 	// // Deal of the day to be displayed on page load
 	// var startPanelImages = [];
@@ -721,7 +484,6 @@ $(document).ready(function() {
 	// 	}
 	// })
 
-
 	// THIS IS WHERE MY CODE STARTS WITH FIREBASE INITIATION
 	//initiating firebase to hold the search & location information
 	var config = {
@@ -741,15 +503,8 @@ $(document).ready(function() {
 
 	var location = "";
 
-	/*******************************************************************
-	
-					Categories in Navbar Click Handler
-
-	********************************************************************/
-
+	// Categories in Navbar Click handler
 	$('.nav-category').on('click', function(event) {
-
-		console.log('========= Nav Categories are clicked ========');
 
 		event.preventDefault();
 
@@ -761,108 +516,19 @@ $(document).ready(function() {
 		var location = Gmap.currentLocation;
 		console.log(location);
 
-		Squpon.pageNumber = 1;
-
-		$('[data-page]').closest('li').removeClass('active').addClass('waves-effect');
-		$('.pagination').find('a[data-page=1]').closest('li').removeClass('waves-effect').addClass('active');
-		$('#next').parent('li').removeClass('disabled').addClass('waves-effect');
-		$('#previous').parent('li').removeClass('waves-effect').addClass('disabled');
-		Squpon.queryLocation = location;
-		Squpon.queryCategory = category;
-
 		query = "";
 
-		displayInfo(location, query, category, "");
-
-		Squpon.displayObject();
-	});
-
-	/*******************************************************************
-	
-					Page Number Click Handler
-
-	********************************************************************/
-
-	$('.page-number').on('click', function (event) {
-
-		event.preventDefault();
-
-		// Clean contents before appending.
-		$('h3.main-content-header').remove();
-		$('div.card-display').remove();
-		
-		var $li = $('.pagination li');
-
-		// Change active class to current page
-		$li.removeClass('active').addClass('waves-effect');
-		$(this).closest('li').removeClass('waves-effect').addClass('active');
-
-		// Grab query info from previous search
-		var location = Squpon.queryLocation;
-		var query = Squpon.queryQuery;
-		var category = Squpon.queryCategory;
-		var page = $(this).closest("a[data-page]").data('page');
-		Squpon.pageNumber = page;
-
-		if (page === 1) {
-			// fade out previous arrow when curr page is 1
-			$('#previous').closest('li').removeClass('waves-effect').addClass('disabled');
-
-			// disable click handler
-			$('#previous').off('click');
-		}
-
-		if (page === 2 || page === 3 || page === 4 || page === 5) {
-
-			$('#previous').closest('li').removeClass('disabled').addClass('waves-effect');
-			$('#previous').off('click');
-			$('#previous').on('click', previous);
-
-		}
-
-		if (page === 4 ) {
-
-			$('#next').closest('li').removeClass('disabled').addClass('waves-effect');
-			$('#next').on('click', next);
-
-		}
-
-		if (page === 5) {
-			// fade out next arrow when curr page is 1
-			$('#next').closest('li').removeClass('waves-effect').addClass('disabled');
-
-			// disable click handler
-			$('#next').off('click');
-		}
-
-		console.log('page:  ' + page);
-
-		displayInfo(location, query, category, page);
-
-	});
-
-	$('#next').on('click', next);
-	$('#previous').on('click', previous);
-
-
-	/*******************************************************************
-	
-					Scoop Button Click Handler
-
-	********************************************************************/	
+		displayInfo(location, query, category);
+	})
 
 	$(".main-content").delegate('.map-modal', 'click', function() {
+		console.log("test");
 
 		//grab cardData from its parent div.
 		//data will be automatically converted to JSON object
 		var cardData = $(this).closest("div[data-card]").data('card');
-		var mapData = $(this).closest("div[data-map]").data('map');
-
-		console.log('this is map-data')
-		console.log(mapData);
 
 		var cardNum = cardData['cardNum'];
-		console.log("This is the cardNum : " + cardNum);
 
 		$(".modal-content").empty();
 
@@ -903,7 +569,7 @@ $(document).ready(function() {
 			// Callback for modal open
 			// When modal is opened, load google map
 			ready: function(modal, trigger){
-
+				
 				google.maps.event.addDomListener(window, 'load', Gmap.initMap);
 
 				// Center google map on brower resize
@@ -913,26 +579,15 @@ $(document).ready(function() {
 					var map = Gmap.gmap;
 					var center = map.getCenter();
 					google.maps.event.trigger(map, "resize");
-					map.setCenter(center);
+					map.setCenter(center); 
 				})
 
-
 				// Load map
-				Gmap.initMap( mapData );
+				Gmap.initMap( cardNum );
 			}
-		});		
-	});
-
-	$(".main-content").delegate('.scoop-btn', 'click', function() {
-
-		var cardData = $(this).closest("div[data-card]").data('card');
-		var couponID = cardData['id'];
-
-		// Write card data into firebase.
-		database.ref("/cards/").push({
-			couponID: couponID,
-			dateAdded: firebase.database.ServerValue.TIMESTAMP
 		});
-	});
+
+		
+	})
 
 });
