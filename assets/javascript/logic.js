@@ -53,8 +53,6 @@ function displayInfo(location, query, category, page) {
 
    }
 
-   console.log("query= " + queryURL);
-
    $.ajax({
    	url: queryURL,
    	method: "GET",
@@ -150,8 +148,7 @@ function displayInfo(location, query, category, page) {
 
    				cardReveal.append(cardRevealTitle);
    				cardReveal.append("<h5>" + description + "</h5>");
-   				cardReveal.append(finePrint);
-   				
+   				cardReveal.append(finePrint);   				
 
    				card.append(cardReveal);
 
@@ -161,7 +158,6 @@ function displayInfo(location, query, category, page) {
    				var address = coupon.merchant.address;
    				var couponURL = coupon.untracked_url;
 
-
    				//store card info in JSON object
    				var dataCard = {
    					'cardNum': couponNum,
@@ -170,7 +166,6 @@ function displayInfo(location, query, category, page) {
    					'url': couponURL,
    					'address': address,
    					'id' : coupon.id
-
    				}
 
    				// store map info in JSON object
@@ -178,7 +173,6 @@ function displayInfo(location, query, category, page) {
    					'lat': coupon.merchant.latitude, 
    					'lng': coupon.merchant.longitude
    				};
-
 
    				var formatted = {
    					'address': address
@@ -188,13 +182,9 @@ function displayInfo(location, query, category, page) {
    				couponDiv.attr('data-map', JSON.stringify(latlng));
    				couponDiv.attr('data-address', JSON.stringify(formatted));
 
-   				console.log('alkfdjslkfjsadlkfjdsaf')
-   				console.log(formatted);
-
    				// Add random animation to couponDiv
    				var randNum = Math.floor((Math.random() * 4) + 0);
    				couponDiv.addClass(animatedArray[randNum]);
-
 
    				couponNum++;
    			}
@@ -220,7 +210,7 @@ function changeTitle() {
 		index++;
 
 		$change.fadeOut(400, function () {
-		  $(this).text(scoopThings[index % scoopThings.length]).fadeIn(400);
+			$(this).text(scoopThings[index % scoopThings.length]).fadeIn(400);
 		});
 	}, 3000);
 }
@@ -233,9 +223,7 @@ function ipLocation() {
 	$.ajax({
 		url : queryURL,
 		method : "GET"
-	}).done(function(ip) {
-		console.log("=================== ipLocation ajax request ==================")
-		console.log(ip);
+	}).done(function(ip) {		
 		Squpon.queryLocation = ip.city + ", " + ip.region_code;
 		displayInfo(ip.city + ", " + ip.region_code, "", "","");
 	});
@@ -454,6 +442,8 @@ var Gmap = {
 
 	gmap: {},
 
+	place: "",
+
 	getLocation: function () {
 
 		//Check if Geolocation is supported
@@ -571,14 +561,15 @@ var Gmap = {
 
     fillInAddress: function () {
 		// Get the place details from the autocomplete object.
-		var place = autocomplete.getPlace();
+		var userPlace = autocomplete.getPlace();
 
-		if (!place.geometry) {
+		if (!userPlace.geometry) {
 			return;
-		}
-		// } else {
+		} 
+		Gmap.place = autocomplete.getPlace();
+		// else {
 		// 	//formatted_address
-		// 	document.getElementById('location-input').value = place.formatted_address;
+		// 	$("#location-input").val(place.formatted_address);
 		// }       
 
 	},
@@ -629,8 +620,13 @@ $(document).ready(function() {
 
 	ipLocation();
 
+	$("#search-input, #location-input").keypress(function(event){
+		if (event.keyCode === 10 || event.keyCode === 13)
+			event.preventDefault();
+	});
+
 	$(".button-collapse").sideNav();
-	$('.carousel').carousel();
+	$(".carousel").carousel();
 	// $('.carousel.carousel-slider').carousel({fullWidth: true});
 
 	// Get current location, and fill the location input with current location.
@@ -677,7 +673,8 @@ $(document).ready(function() {
 
 		event.preventDefault();
 
-		var location = $("#location-input").val().trim();
+		// var location = $("#location-input").val().trim();
+		var location = Gmap.place.formatted_address;
 		var query = $("#search-input").val().trim();
 
 		searchRef.push({
