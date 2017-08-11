@@ -5,7 +5,7 @@ body {
 	display: flex;
 	min-height: 100vh;
 	flex-direction: column;
-	font-family: 'Montserrat', sans-serif;
+	font-family: 'Raleway', sans-serif;
 }
 
 .hidden {
@@ -153,54 +153,29 @@ div.card-image > span.coupon-price {
 /*  background-color: rgba(64,46,116, 0.7);
 */  height: 550px;
 
-}
 
-.image {
-
-	background: url(../images/icon-seamless-purple.png);
-	background-repeat: repeat;
-	height: 450px;
-	z-index: 1;
-	
-	opacity: 1;
-
-}
-
-/*ac6bad*/
-
-.nav-background {
-	
-	
-	z-index: -1;
-	opacity: 0.9;
-
-
-}
-
-.header-wrapper {
-	opacity: 1 !important;
-	z-index:-1 !important;
-}
-
-
-
-.parallax img {
-    max-width: 200%;
 }
 
 #content {
 	font-family: 'Raleway', sans-serif;
-
+	display: inline-block;
+	font-size: 4.5vw;
 }
 
 #change {
 	font-family: 'Montserrat', sans-serif;
 	font-weight: 500;
 	font-size: 5vw;
+	display: inline-block;
+/*	color: #000352;*/
+	color:#4527a0;
 }
 
+
+
 #header-content {
-	    margin-top: 8%;
+	margin: 8% auto;
+	height: 100%;
 }
 
 #search-input, #location-input {
@@ -209,17 +184,122 @@ div.card-image > span.coupon-price {
 	color: white;
 }
 
-#progressBar {
-    width: 50px;
-    height: 22px;
-    border: 1px solid #111;
-    background-color: #292929;
+#myProgress {
+	margin: 0 auto;
+  width: 20%;
+  transition: width 2s;
+ 
 }
-#progressBar div {
-    height: 100%;
-    color: #fff;
-    text-align: right;
-    line-height: 22px; /* same as #progressBar height if we want text middle aligned */
-    width: 0;
-    background-color: #0099ff;
+
+#myBar {
+  width: 0%;
+  height: 5px;
+  background-color: #9c27b0;
+  opacity: 0.7;
+}
+
+input::-webkit-input-placeholder {
+color: white !important;
+}
+
+input:-ms-input-placeholder {  
+color: white !important;  
+}
+
+
+/* Media Queries */
+/*
+640
+768
+980
+*/
+
+@media screen and (max-width: 980px) {
+	#search-input, #location-input {
+		font-size: 15px;
+	}
+
+	.parallax-container {
+		height: 500px;
+	}
+
+	#sub {
+		font-size: 1.4rem;
+	}
+}
+
+@media screen and (max-width: 768px) {
+
+	.card.large {
+		height: 400px;
+	}
+
+	.parallax-container {
+		height: 450px;
+	}
+
+	#search-input, #location-input {
+		font-size: 12px;
+	}
+
+	#sub {
+		font-size: 1.25rem
+	}
+
+}
+
+@media screen and (max-width: 640px) {
+
+	
+	#content {
+		width: 100%;
+		font-size: 2.5rem;
+	}
+
+	#change {
+		font-weight: 500;
+		font-size: 2.8rem;
+	}
+
+	#header-content {
+		margin-top: 1%;
+	}
+
+	.main-content-header {
+		font-size: 2rem;
+	}
+
+	.modal-content-title {
+		font-size: 2rem;
+	}
+
+}
+
+@media screen and (max-width: 600px) {
+
+	.parallax-container {
+		height: 600px
+	}
+
+	#content-wrap {
+		margin-top: 0;
+		margin-bottom: 0;
+	}
+
+	#content {
+		font-size: 1.7rem;
+	}
+
+	#change {
+		font-size: 2rem;
+	}
+
+	#sub {
+		font-size: 1.3rem;
+	}
+
+	/*#we-scoop {
+		display: none;
+	}*/
+
 }
