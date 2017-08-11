@@ -10,9 +10,9 @@ $(document).ready(function() {
          url: queryURL,
          method: "GET",
          headers: {
-          "Authorization" : "api_key xlagn7"
-       }
-    }).done(function(response) {
+           "Authorization" : "api_key xlagn7"
+        }
+     }).done(function(response) {
 
       var coupon = response.deal;
       var couponNum = id;
@@ -105,7 +105,7 @@ $(document).ready(function() {
 
             });
 
- }
+  }
 
 	// Create a variable to reference the database
 	var database = firebase.database();
