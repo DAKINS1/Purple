@@ -176,6 +176,7 @@ function displayInfo(location, query, category, page) {
    					var address = coupon.merchant.address;
    					var couponURL = coupon.untracked_url;
 
+
    					//store card info in JSON object
    					var dataCard = {
    						'cardNum': couponNum,
@@ -192,9 +193,17 @@ function displayInfo(location, query, category, page) {
    						'lng': coupon.merchant.longitude
    					};
 
+   					var formatted = {
+   						'address': address
+   					}
+
 
    					couponDiv.attr('data-card', JSON.stringify(dataCard));
    					couponDiv.attr('data-map', JSON.stringify(latlng));
+   					couponDiv.attr('data-address', JSON.stringify(formatted));
+
+   					console.log('alkfdjslkfjsadlkfjdsaf')
+   					console.log(formatted);
 
    					// Add random animation to couponDiv
    					var randNum = Math.floor((Math.random() * 4) + 0);
@@ -376,6 +385,8 @@ var Squpon = {
 
 	pageNumber: 1,
 
+	dealsFormattedAddress: [],
+
 
 	// ajax call function with callback function so that you can handle response from ajax request on function call.
 	getJSON: function ( url, callback ) {
@@ -511,11 +522,14 @@ var Gmap = {
 	    });
 	},
 
-	initMap: function ( mapData ) {
+	initMap: function ( mapData, addressData ) {
 
 		console.log("initMap function");
 
 		var myLatLng = mapData;
+		var address = addressData.address;
+		console.log('$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$')
+		console.log(address);
 
 		var map = new google.maps.Map(document.getElementById('map'), {
 			zoom: 12,
@@ -532,7 +546,7 @@ var Gmap = {
 			title: 'deal location'
 		})
 		var infowindow = new google.maps.InfoWindow({
-  			content: ("<p>" + Squpon.currentLocation + "<p>")
+  			content: ("<p>" + address + "<p>")
   		});
 
 		google.maps.event.addListener(marker, 'click', function() {
@@ -857,6 +871,7 @@ $(document).ready(function() {
 		//data will be automatically converted to JSON object
 		var cardData = $(this).closest("div[data-card]").data('card');
 		var mapData = $(this).closest("div[data-map]").data('map');
+		var addressData = $(this).closest("div[data-address]").data('address');
 
 		console.log('this is map-data')
 		console.log(mapData);
@@ -918,7 +933,7 @@ $(document).ready(function() {
 
 
 				// Load map
-				Gmap.initMap( mapData );
+				Gmap.initMap( mapData, addressData );
 			}
 		});		
 	});
