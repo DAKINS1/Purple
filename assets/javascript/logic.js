@@ -1,9 +1,9 @@
 
-/*******************************************************************
-	
-						 DisplayInfo
+// ******************************************************************
 
-********************************************************************/
+// 						 DisplayInfo
+
+// *******************************************************************
 
 
 function displayInfo(location, query, category, page) {
@@ -184,7 +184,8 @@ function displayInfo(location, query, category, page) {
    						'description': description,
    						'url': couponURL,
    						'address': address,
-   						'id' : coupon.id	
+   						'id' : coupon.id
+
    					}
 
    					// store map info in JSON object
@@ -193,9 +194,11 @@ function displayInfo(location, query, category, page) {
    						'lng': coupon.merchant.longitude
    					};
 
+
    					var formatted = {
    						'address': address
    					}
+
 
 
    					couponDiv.attr('data-card', JSON.stringify(dataCard));
@@ -239,11 +242,11 @@ function ipLocation() {
 	});
 }
 
-/*******************************************************************
-	
-				Next Arrow Event Handler
+// ******************************************************************
 
-********************************************************************/
+// 				Next Arrow Event Handler
+
+// *******************************************************************
 
 function next(event) {
 
@@ -304,11 +307,11 @@ function next(event) {
 	console.log('Squpon.pageNumber:    ' + Squpon.pageNumber);
 }
 
-/*******************************************************************
-	
-				Previous Arrow Event Handler
+// ******************************************************************
 
-********************************************************************/
+// 				Previous Arrow Event Handler
+
+// *******************************************************************
 
 function previous(event) {
 
@@ -366,11 +369,11 @@ function previous(event) {
 }
 
 
-/*******************************************************************
-	
-						Squpon Object
+// ******************************************************************
 
-********************************************************************/
+// 						Squpon Object
+
+// *******************************************************************
 var Squpon = {
 
 	currentLocation: "",
@@ -386,6 +389,7 @@ var Squpon = {
 	pageNumber: 1,
 
 	dealsFormattedAddress: [],
+
 
 
 	// ajax call function with callback function so that you can handle response from ajax request on function call.
@@ -434,11 +438,11 @@ var componentForm = {
 };
 
 
-/*******************************************************************
-	
-						Google Map Object
+// ******************************************************************
 
-********************************************************************/
+// 						Google Map Object
+
+// *******************************************************************
 
 var Gmap = {
 
@@ -603,11 +607,11 @@ init.autocomplete = function () {
 	Gmap.initAutoComplete();
 }
 
-/*******************************************************************
-	
-						Main Function
+// ******************************************************************
 
-********************************************************************/
+// 						Main Function
+
+// *******************************************************************
 
 
 $(document).ready(function() {
@@ -665,11 +669,11 @@ $(document).ready(function() {
 	})
 
 
-	/*******************************************************************
+	// ******************************************************************
 	
-						Search Submit Click Handler
+	// 					Search Submit Click Handler
 
-	********************************************************************/
+	// *******************************************************************
 
 	$("#search-submit").on("click", function(event){
 
@@ -755,11 +759,11 @@ $(document).ready(function() {
 
 	var location = "";
 
-	/*******************************************************************
+	// ******************************************************************
 	
-					Categories in Navbar Click Handler
+	// 				Categories in Navbar Click Handler
 
-	********************************************************************/
+	// *******************************************************************
 
 	$('.nav-category').on('click', function(event) {
 
@@ -791,11 +795,11 @@ $(document).ready(function() {
 		Squpon.displayObject();
 	});
 
-	/*******************************************************************
+	// ******************************************************************
 	
-					Page Number Click Handler
+	// 				Page Number Click Handler
 
-	********************************************************************/
+	// *******************************************************************
 
 	$('.page-number').on('click', function (event) {
 
@@ -859,11 +863,11 @@ $(document).ready(function() {
 	$('#previous').on('click', previous);
 
 
-	/*******************************************************************
+	// ******************************************************************
 	
-					Scoop Button Click Handler
+	// 				Scoop Button Click Handler
 
-	********************************************************************/	
+	// *******************************************************************	
 
 	$(".main-content").delegate('.map-modal', 'click', function() {
 
@@ -943,11 +947,17 @@ $(document).ready(function() {
 		var cardData = $(this).closest("div[data-card]").data('card');
 		var couponID = cardData['id'];
 
-		// Write card data into firebase.
-		database.ref("/cards/").push({
-			couponID: couponID,
-			dateAdded: firebase.database.ServerValue.TIMESTAMP
-		});
+		database.ref("/cards/").once("value").then(function(snapshot) {
+			var hasCoupon = snapshot.hasChild(JSON.stringify(couponID));
+
+			if (!hasCoupon) {
+				// Write card data into firebase.
+				database.ref("/cards/" + couponID).update({
+					couponID: couponID,
+					dateAdded: firebase.database.ServerValue.TIMESTAMP
+				});
+			}
+		});		
 	});
 
 });
