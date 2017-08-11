@@ -887,7 +887,7 @@ $(document).ready(function() {
 		// var map = $("<img src=\"assets/images/map.png\" class=\"responsive-img\">");
 		var map = $('<div>');
 		var colRight = $("<div class=\"col s12 m6\">");
-		var text = "<p class='modal-content-description'>" + cardData['description'] +"</p>";
+		var text = "<h5 class='modal-content-description'>" + cardData['description'] +"</h5>";
 		var link = $("<a class=\"modal-action waves-effect waves-green btn-large\">");
 
 		link.attr("href", cardData['url']);
