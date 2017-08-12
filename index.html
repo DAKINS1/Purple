@@ -45,7 +45,7 @@
 									<input id="search-input" type="text" class="input-box" placeholder="Search for">
 								</div>
 								<div class="input-field col s12 m4 location">
-									<input id="location-input" type="text" class="input-box validate" placeholder="Zipcode or Address" required>
+									<input id="location-input" type="text" class="input-box validate" placeholder="Address, City, or Zipcode" required>
 								</div>
 								<div class="col s12 m1 center-align search-button">
 									<button id="search-submit" class="btn-floating btn-large waves-effect waves-light purple" type="submit" name="action"><i class="material-icons">search</i>
@@ -85,7 +85,7 @@
 						<li><a class="nav-category" href="#" data-slug="activities-events">Activities &amp; Event</a></li>
 						<li><a class="nav-category" href="#" data-slug="restaurants">Restaurant</a></li>
 						<li><a class="nav-category" href="#" data-slug="product">Shopping</a></li>
-						<li><a id="live-view" class="nav-category" href="#">Recently Viewed</a></li>
+						<li><a id="live-view" href="#">Recently Viewed</a></li>
 					</ul>
 					<ul class="side-nav" id="mobile-demo">
 						<li><a class="nav-category" href="#">Things to Do</a></li>
@@ -107,6 +107,18 @@
 	<!-- Modal Structure -->
 	<div id="modal" class="modal bottom-sheet">
 		<div class="modal-content"></div>
+	</div>
+
+	<!-- Modal Structure -->
+	<!-- Modal Structure -->
+	<div id="results" class="modal">
+		<div class="modal-content">
+			<h4>Sorry!</h4>
+			<p>No results!</p>
+		</div>
+		<div class="modal-footer">
+			<a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat">close</a>
+		</div>
 	</div>
 
 	<div class="row center-align">
