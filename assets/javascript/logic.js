@@ -686,6 +686,7 @@ $(document).ready(function() {
 	$("#search-submit").on("click", function(event){
 
 		event.preventDefault();
+		$("#nav-mobile li").removeClass("active");
 
 		var location = $("#location-input").val().trim();
 
