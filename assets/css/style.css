@@ -27,14 +27,6 @@ nav .input-field label {
 	margin-top: 25px;
 }
 
-.header-billboard {
-	padding: 20px;
-}
-
-.header-billboard img {
-	width: 400px;
-}
-
 nav {
 	margin-bottom: 15px;
 }
@@ -61,6 +53,10 @@ nav {
 
 .search-button {
 	margin-top: 20px;
+}
+
+.main-content-header::first-letter, .query-uppercase::first-letter {
+	text-transform: uppercase;
 }
 
 
@@ -166,8 +162,6 @@ div.card-image > span.coupon-price {
 	/*	color: #000352;*/
 	color:#4527a0;
 }
-
-
 
 #header-content {
 	margin: 8% auto;
