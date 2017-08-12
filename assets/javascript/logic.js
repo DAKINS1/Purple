@@ -660,7 +660,10 @@ $(document).ready(function() {
 	$('.parallax').parallax();
 
 	//menu for mobile devices
-	$(".button-collapse").sideNav();
+	$(".button-collapse").sideNav({
+		closeOnClick: true,
+		draggable: true, 
+	});
 
 	ipLocation();
 
