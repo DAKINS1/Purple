@@ -178,12 +178,20 @@ var displayInfo = function(location, query, category, page) {
 
    	if (query && location) {
 
-   		$(".main-content").append("<h3 class='main-content-header'>Coupons for " + query + " in " + location + "<h3>");
+   		$(".main-content").append("<h3 class='main-content-header'>Deals for " + "<span class='query-uppercase'>" + query + "</span>"+ " in " + location + "<h3>");
 
    	} else if (!query && location){
 
-   		$(".main-content").append("<h3 class='main-content-header'>Coupons in " + location + "<h3>");
+   		$(".main-content").append("<h3 class='main-content-header'>Deals in " + location + "<h3>");
+
+   	} else if (query && !location){
+
+   		$(".main-content").append("<h3 class='main-content-header'>" + query + " near you<h3>");
+
+   	} else {
+   		$(".main-content").append("<h3 class='main-content-header'>Deals near you<h3>");
    	}
+
 
    	var couponNum = 0;
 
@@ -551,12 +559,8 @@ var Gmap = {
 
 	initMap: function ( mapData, addressData ) {
 
-		console.log("initMap function");
-
 		var myLatLng = mapData;
 		var address = addressData.address;
-		console.log('$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$')
-		console.log(address);
 
 		var map = new google.maps.Map(document.getElementById('map'), {
 			zoom: 12,
@@ -662,9 +666,10 @@ $(document).ready(function() {
 			event.preventDefault();
 	});
 
-	// Get current location, and fill the location input with current location.
-	Gmap.getLocation();
-
+	$("#location-input").on("click", function() {		
+		// Get current location, and fill the location input with current location.
+		Gmap.getLocation();
+	});
 
 	// ******************************************************************
 
@@ -676,8 +681,8 @@ $(document).ready(function() {
 
 		event.preventDefault();
 
-		// var location = $("#location-input").val().trim();
-		var location = Gmap.place.formatted_address;
+		var location = $("#location-input").val().trim();
+		//var location = Gmap.place.formatted_address;
 		var query = $("#search-input").val().trim();
 
 		// when search btn is clicked, change page to first page.
@@ -723,17 +728,10 @@ $(document).ready(function() {
 
 	// *******************************************************************
 
-	$('.nav-category').on('click', function(event) {
-
-		console.log('========= Nav Categories are clicked ========');
-
-		event.preventDefault();
+	$('.nav-category').on('click', function() {
 
 		var category = $(this).data('slug');
-		console.log(category);
-
 		var location = Gmap.currentLocation;
-		console.log(location);
 
 		Squpon.pageNumber = 1;
 
@@ -930,5 +928,10 @@ $(document).ready(function() {
       });
 
   });
+
+	// When the user clicks on the button, toggle between hiding and showing the dropdown content
+	function myFunction() {
+		// document.getElementById("myDropdown").classList.toggle("show");
+	}
 
 });
