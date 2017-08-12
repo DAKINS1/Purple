@@ -105,7 +105,7 @@ var generateCards = function(id, object, isFirebase) {
 // *******************************************************************
 
 
-function displayInfo(location, query, category, page) {
+var displayInfo = function(location, query, category, page) {
 
 	var queryURL = "https://api.sqoot.com/v2/deals/";
 
@@ -158,27 +158,34 @@ function displayInfo(location, query, category, page) {
 
    	var results = response.deals;
 
-   		// Remove duplicates coupons
-   		var seenCoupons = {};
-   		results = results.filter(function(currentObject) {
-   			if (currentObject.deal.short_title in seenCoupons) {
-   				return false;
-   			} else {
-   				seenCoupons[currentObject.deal.short_title] = true;
-   				return true;
-   			}
-   		});
+   	if(results.length === 0) {
+   		$("#results").modal();
+   		$("#results").modal("open");
+   		return true;
+   	}
 
-   		if (query && location) {
-
-   			$(".main-content").append("<h3 class='main-content-header'>Coupons for " + query + " in " + location + "<h3>");
-
-   		} else if (!query && location){
-
-   			$(".main-content").append("<h3 class='main-content-header'>Coupons in " + location + "<h3>");
+   	$(".main-content").empty();
+   	// Remove duplicates coupons
+   	var seenCoupons = {};
+   	results = results.filter(function(currentObject) {
+   		if (currentObject.deal.short_title in seenCoupons) {
+   			return false;
+   		} else {
+   			seenCoupons[currentObject.deal.short_title] = true;
+   			return true;
    		}
+   	});
 
-   		var couponNum = 0;
+   	if (query && location) {
+
+   		$(".main-content").append("<h3 class='main-content-header'>Coupons for " + query + " in " + location + "<h3>");
+
+   	} else if (!query && location){
+
+   		$(".main-content").append("<h3 class='main-content-header'>Coupons in " + location + "<h3>");
+   	}
+
+   	var couponNum = 0;
 
    		// Clean location array before pushing new location
    		Gmap.dealsLocation = [];
@@ -214,7 +221,7 @@ function displayInfo(location, query, category, page) {
 	});
 }
 
-function firebaseCards(id) {
+var firebaseCards = function(id) {
 
 	var queryURL = "https://api.sqoot.com/v2/deals/" + id;
 
@@ -244,7 +251,7 @@ function firebaseCards(id) {
 }
 
 // Populate front page with coupons by location from IP address
-function ipLocation() {
+var ipLocation = function() {
 	queryURL = "https://freegeoip.net/json/";
 
 	$.ajax({
@@ -645,14 +652,15 @@ $(document).ready(function() {
 	//initiate parallax
 	$('.parallax').parallax();
 
+	//menu for mobile devices
+	$(".button-collapse").sideNav();
+
 	ipLocation();
 
 	$("#search-input, #location-input").keypress(function(event){
 		if (event.keyCode === 10 || event.keyCode === 13)
 			event.preventDefault();
 	});
-
-	$(".button-collapse").sideNav();
 
 	// Get current location, and fill the location input with current location.
 	Gmap.getLocation();
@@ -671,8 +679,6 @@ $(document).ready(function() {
 		// var location = $("#location-input").val().trim();
 		var location = Gmap.place.formatted_address;
 		var query = $("#search-input").val().trim();
-
-		$(".main-content").empty();
 
 		// when search btn is clicked, change page to first page.
 		Squpon.pageNumber = 1;
@@ -722,8 +728,6 @@ $(document).ready(function() {
 		console.log('========= Nav Categories are clicked ========');
 
 		event.preventDefault();
-
-		$(".main-content").empty();
 
 		var category = $(this).data('slug');
 		console.log(category);
