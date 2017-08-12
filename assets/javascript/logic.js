@@ -863,7 +863,7 @@ $(document).ready(function() {
 		var cardNum = cardData['cardNum'];
 		console.log("This is the cardNum : " + cardNum);
 
-		$(".modal-content").empty();
+		$("#modal>.modal-content").empty();
 
 		// Fill modal contents
 		var title = $("<i class=\"material-icons right\">close</i>" + "<span>" + "<h4 class='modal-content-title'>" + cardData['shortTitle'] + "</h4></span>");
@@ -895,11 +895,11 @@ $(document).ready(function() {
 		row.append(colLeft);
 		row.append(colRight);
 
-		$(".modal-content").append(title);
-		$(".modal-content").append(row);
+		$("#modal>.modal-content").append(title);
+		$("#modal>.modal-content").append(row);
 
 		// Modal Triggers here
-		$('.modal').modal({
+		$('#modal').modal({
 
 			// Callback for modal open
 			// When modal is opened, load google map
