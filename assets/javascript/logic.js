@@ -291,7 +291,7 @@ var generateCards = function(id, object, isFirebase) {
 	if (isFirebase) {
 		scoopBtn.addClass("scoop-btn");
    		// Add random animation to couponDiv
-   		var animatedArray = ['animated bounceInUp', 'animated bounceInLeft', 'animated bounceInRight', 'animated bounceInDown'];
+   		var animatedArray = ['animated bounceInUp', 'animated bounceInLeft', 'animated bounceInRight'];
    		var randNum = Math.floor((Math.random() * 4) + 0);
    		couponDiv.addClass(animatedArray[randNum]);
    	}
