@@ -133,10 +133,6 @@ div.card-image > span.coupon-price {
 	margin-bottom: 2vw;
 }
 
-.modal-content-description {
-	font-size: 1vw;
-}
-
 /* Google Map */
 
 .map-container {
@@ -167,7 +163,7 @@ div.card-image > span.coupon-price {
 	font-weight: 500;
 	font-size: 5vw;
 	display: inline-block;
-/*	color: #000352;*/
+	/*	color: #000352;*/
 	color:#4527a0;
 }
 
@@ -186,24 +182,24 @@ div.card-image > span.coupon-price {
 
 #myProgress {
 	margin: 0 auto;
-  width: 20%;
-  transition: width 2s;
- 
+	width: 20%;
+	transition: width 2s;
+	
 }
 
 #myBar {
-  width: 0%;
-  height: 5px;
-  background-color: #9c27b0;
-  opacity: 0.7;
+	width: 0%;
+	height: 5px;
+	background-color: #9c27b0;
+	opacity: 0.7;
 }
 
 input::-webkit-input-placeholder {
-color: white !important;
+	color: white !important;
 }
 
 input:-ms-input-placeholder {  
-color: white !important;  
+	color: white !important;  
 }
 
 
@@ -300,6 +296,6 @@ color: white !important;
 
 	/*#we-scoop {
 		display: none;
-	}*/
+		}*/
 
-}
+	}

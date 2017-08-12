@@ -842,7 +842,7 @@ $(document).ready(function() {
 		$(".modal-content").empty();
 
 		// Fill modal contents
-		var title = $("<span>" + "<h4 class='modal-content-title'>" + cardData['shortTitle'] + "</h4>" + "<i class=\"material-icons right\">close</i>" + "</span>");
+		var title = $("<i class=\"material-icons right\">close</i>" + "<span>" + "<h4 class='modal-content-title'>" + cardData['shortTitle'] + "</h4></span>");
 		var row = $("<div class=\"row\">");
 		var colLeft = $("<div class=\"col s12 m6 map-container\">");
 		// var map = $("<img src=\"assets/images/map.png\" class=\"responsive-img\">");
