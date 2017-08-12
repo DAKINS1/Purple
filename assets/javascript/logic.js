@@ -410,6 +410,7 @@ var displayInfo = function(location, query, category, page) {
    	}
 
    	$(".main-content").empty();
+   	$(".firebase-content").empty();	
    	// Remove duplicates coupons
    	var seenCoupons = {};
    	results = results.filter(function(currentObject) {
@@ -496,7 +497,7 @@ var firebaseCards = function(id) {
          // Validate data
          if (coupon) {
             // generateCards(couponNum, coupon, false);
-            $(".main-content").children().prepend(generateCards(couponNum, coupon, false)[0]);   					
+            $(".firebase-content").children().prepend(generateCards(couponNum, coupon, false)[0]);   					
         }
 
     });
@@ -850,7 +851,7 @@ $(document).ready(function() {
 
 	// *******************************************************************
 
-	$(".main-content").delegate('.map-modal', 'click', function() {
+	$(".main-content, .firebase-content").delegate('.map-modal', 'click', function() {
 
 		//grab cardData from its parent div.
 		//data will be automatically converted to JSON object
@@ -946,9 +947,10 @@ $(document).ready(function() {
 		$("#nav-mobile li").removeClass("active");
 
 		$(".main-content").empty();
+		$(".firebase-content").empty();		
 
 		var row = $("<div class=\"row recent-view\">");
-		$(".main-content").append(row);
+		$(".firebase-content").append(row);
 
       	//Invisible pagination
       	$('.pagination').addClass('hidden');
