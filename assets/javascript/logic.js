@@ -1,403 +1,3 @@
-// Changes title animation
-
-function changeTitle() {
-
-	var scoopThings = ['COUPONS', 'DEALS', 'DISCOUNTS', 'SAVINGS', 'THINGS'];
-	var index = 0;
-
-	var $change = $('#change')
-
-	setInterval(function () {
-
-		index++;
-
-		$change.fadeOut(400, function () {
-			$(this).text(scoopThings[index % scoopThings.length]).fadeIn(400);
-		});
-	}, 3000);
-}  
-
-// Generates Coupon Cards and returns div
-
-var generateCards = function(id, object, isFirebase) {
-	var couponDiv = $("<div class=\"col s12 m4 card-div\">");
-	var card = $("<div class=\"card large sticky-action hoverable\" id=\"card-" + id + "\">");
-	var moreInfoBtn = "<a class=\"btn-floating halfway-fab waves-effect waves-light activator purple\"><i class=\"material-icons\">more_vert</i></a>";
-	var cardImage = $("<div class=\"card-image waves-effect waves-block waves-light\">");
-	var couponImg = $("<img class=\"activator img-fit\">");
-	var price = $("<span class=\"card-title coupon-price right-align\">").append("$" + object.price);
-
-	couponImg.attr("src", object.image_url);
-	cardImage.append(couponImg);
-	cardImage.append(price);
-	card.append(moreInfoBtn);
-	card.append(cardImage);
-
-	var cardContent = $("<div class=\"card-content\">");
-	var cardMainTitle = $("<span class=\"card-title activator grey-text text-darken-4\">" + object.short_title + "</span>");
-
-	cardContent.append(cardMainTitle);
-	cardContent.append("<p>" + object.merchant.name + "</p>");
-	card.append(cardContent);
-
-	var cardAction = $("<div class=\"card-action center-align\">");
-	var scoopBtn = $("<a href=\"#modal\" class=\"\">Scoop</a>");
-	scoopBtn.attr("href", "#modal");
-
-	if (isFirebase) {
-		scoopBtn.addClass("scoop-btn");
-   		// Add random animation to couponDiv
-   		var animatedArray = ['animated bounceInUp', 'animated bounceInLeft', 'animated bounceInRight', 'animated bounceInDown'];
-   		var randNum = Math.floor((Math.random() * 4) + 0);
-   		couponDiv.addClass(animatedArray[randNum]);
-   	}
-
-   	scoopBtn.addClass("waves-effect waves-purple btn deep-purple modal-trigger map-modal");
-   	scoopBtn.html("<i class=\"material-icons left\">play_for_work</i>Scoop");
-
-   	cardAction.append(scoopBtn);
-   	card.append(cardAction);
-
-   	var cardReveal = $("<div class=\"card-reveal\">");
-   	var cardRevealTitle = $("<span class=\"card-title grey-text text-darken-4\">" + object.merchant.name + "<i class=\"material-icons right\">close</i></span>");
-   	var finePrint = $("<p>" + object.fine_print + "</p>");
-
-   	cardReveal.append(cardRevealTitle);
-   	cardReveal.append("<h5>" + object.title + "</h5>");
-   	cardReveal.append(finePrint);
-
-   	card.append(cardReveal);
-
-   	couponDiv.append(card);
-
-    //store card info in JSON object
-    var dataCard = {
-    	'cardNum': id,
-    	'shortTitle': object.short_title,
-    	'description': object.title,
-    	'url': object.untracked_url,
-    	'address': object.merchant.address,
-    	'id' : object.id
-    }
-
-    // store map info in JSON object
-    var latlng = {
-    	'lat': object.merchant.latitude,
-    	'lng': object.merchant.longitude
-    };
-
-    var formatted = {
-    	'address': object.merchant.address
-    }
-
-    couponDiv.attr('data-card', JSON.stringify(dataCard));
-    couponDiv.attr('data-map', JSON.stringify(latlng));
-    couponDiv.attr('data-address', JSON.stringify(formatted));
-
-    return couponDiv;
-}
-
-
-// ******************************************************************
-
-// 						 DisplayInfo
-
-// *******************************************************************
-
-
-var displayInfo = function(location, query, category, page) {
-
-	var queryURL = "https://api.sqoot.com/v2/deals/";
-
-	if (category === ""){
-
-   		//when query input is empty, but not location input
-   		if (query === "" && location !== "") {
-   			queryURL += '?location=' + location;
-   		}
-
-	   	//when query input is not empty, but location is empty
-	   	//w/o location, search for online deals
-	   	if (query !== "" && location === "") {
-	   		queryURL += '?query=' + query + '&online=true';
-	   	}
-
-	   	//when both input is entered
-	   	if (query !== "" && location !== "") {
-	   		queryURL += '?query=' + query + '&location=' + location;
-	   	}
-
-	   } else {
-
-   		// If user allow geolocation, use it for searching category
-   		if (Gmap.isCurrentLocation){
-   			queryURL += '?category_slugs=' + category + '&location=' + location;
-
-   		//If user blocks geolocation, search for online deals.
-   	} else {
-   		queryURL += '?category_slugs=' + category + '&online=true';
-   	}
-
-   }
-
-   if ( page === "") {
-
-   	queryURL += '&page=1' + '&per_page=9';
-
-   } else {
-
-   	queryURL += '&page=' + page + '&per_page=9';
-
-   }
-
-   $.ajax({
-   	url: queryURL,
-   	method: "GET",
-   	headers: { "Authorization" : "api_key xlagn7" }
-   }).done(function(response) {
-
-   	var results = response.deals;
-
-   	if(results.length === 0) {
-   		$("#results").modal();
-   		$("#results").modal("open");
-   		return true;
-   	}
-
-   	$(".main-content").empty();
-   	// Remove duplicates coupons
-   	var seenCoupons = {};
-   	results = results.filter(function(currentObject) {
-   		if (currentObject.deal.short_title in seenCoupons) {
-   			return false;
-   		} else {
-   			seenCoupons[currentObject.deal.short_title] = true;
-   			return true;
-   		}
-   	});
-
-   	if (query && location) {
-
-   		$(".main-content").append("<h3 class='main-content-header'>Deals for " + "<span class='query-uppercase'>" + query + "</span>"+ " in " + location + "<h3>");
-
-   	} else if (!query && location){
-
-   		$(".main-content").append("<h3 class='main-content-header'>Deals in " + location + "<h3>");
-
-   	} else if (query && !location){
-
-   		$(".main-content").append("<h3 class='main-content-header'>" + query + " near you<h3>");
-
-   	} else {
-   		$(".main-content").append("<h3 class='main-content-header'>Deals near you<h3>");
-   	}
-
-
-   	var couponNum = 0;
-
-   		// Clean location array before pushing new location
-   		Gmap.dealsLocation = [];
-
-   		// Validate data
-   		if (results[couponNum]) {
-   			var row = $("<div class=\"row card-display\">");
-
-   			for (var i = 0; i < results.length; i++) {
-
-	   			// Validate Data
-	   			if (results[i].deal.merchant.latitude){
-	   				// get lat,lng from each deals and push into Squpon.dealsLocation array;
-	   				Gmap.dealsLocation.push({'lat': results[i].deal.merchant.latitude, 'lng': results[i].deal.merchant.longitude});
-	   			}
-
-	   			// Validate data
-	   			if (results[couponNum]) {
-
-	   				var coupon = results[couponNum].deal;
-
-	   				row.append(generateCards(couponNum, coupon, true));
-
-	   				couponNum++;
-	   			}
-
-	   			$(".main-content").append(row);
-
-				//display pagination
-				$('.pagination').removeClass('hidden');
-			}
-		}
-	});
-}
-
-var firebaseCards = function(id) {
-
-	var queryURL = "https://api.sqoot.com/v2/deals/" + id;
-
-	$.ajax({
-		url: queryURL,
-		method: "GET",
-		headers: {"Authorization" : "api_key xlagn7"}
-	}).done(function(response) {
-
-		var coupon = response.deal;
-		var couponNum = id;
-
-         // Validate Data
-         if (coupon.merchant.latitude) {
-            // get lat,lng from each deals and push into Squpon.dealsLocation array;
-            Gmap.dealsLocation.push({'lat': coupon.merchant.latitude, 'lng': coupon.merchant.longitude});
-        }
-
-         // Validate data
-         if (coupon) {
-            // generateCards(couponNum, coupon, false);
-            $(".main-content").children().prepend(generateCards(couponNum, coupon, false)[0]);   					
-        }
-
-    });
-
-}
-
-// Populate front page with coupons by location from IP address
-var ipLocation = function() {
-	queryURL = "https://freegeoip.net/json/";
-
-	$.ajax({
-		url : queryURL,
-		method : "GET"
-	}).done(function(ip) {
-		Squpon.queryLocation = ip.city + ", " + ip.region_code;
-		displayInfo(ip.city + ", " + ip.region_code, "", "","");
-	});
-}
-
-// ******************************************************************
-
-// 				Next Arrow Event Handler
-
-// *******************************************************************
-
-function next(event) {
-
-	event.preventDefault();
-
-	// Clean contents before appending.
-	$('h3.main-content-header').remove();
-	$('div.card-display').remove();
-
-	// Grab location, query, category for searching
-	var location = Squpon.queryLocation;
-	var query = Squpon.queryQuery;
-	var category = Squpon.queryCategory;
-
-	var curr = Squpon.pageNumber + 1;
-	var prev = curr -1;
-
-	var $prevPage = $('.pagination').find('a[data-page=' + prev + ']');
-	var $currPage = $('.pagination').find('a[data-page='+ curr +']');
-
-	console.log("page:  " + curr);
-
-	// When curr number reaches 5, disable next arrow
-	if ( curr === 5 ) {
-
-		// fade out arrow
-		$(this).closest('li').removeClass('waves-effect').addClass('disabled');
-
-		// unbind click handler.
-		$(this).off('click');
-
-		// change active class
-		$prevPage.closest('li').removeClass('active').addClass('waves-effect');
-		$currPage.closest('li').removeClass('waves-effect').addClass('active');
-
-		Squpon.pageNumber++;
-		displayInfo(location, query, category, curr);
-
-	} else {
-
-		// Enable click effect on previous arrow
-		if ( curr === 2 ) {
-
-			$('#previous').closest('li').removeClass('disabled').addClass('waves-effect');
-			$('#previous').off('click');
-			$('#previous').on('click', previous);
-
-		}
-
-		$prevPage.closest('li').removeClass('active').addClass('waves-effect');
-		$currPage.closest('li').removeClass('waves-effect').addClass('active');
-
-		Squpon.pageNumber++;
-		displayInfo(location, query, category, curr);
-
-	}
-
-	console.log('Squpon.pageNumber:    ' + Squpon.pageNumber);
-}
-
-// ******************************************************************
-
-// 				Previous Arrow Event Handler
-
-// *******************************************************************
-
-function previous(event) {
-
-	event.preventDefault();
-
-	// Grab location, query, category for searching
-	var location = Squpon.queryLocation;
-	var query = Squpon.queryQuery;
-	var category = Squpon.queryCategory;
-
-	var curr = Squpon.pageNumber - 1;
-	var prev = curr + 1;
-
-	var $prevPage = $('.pagination').find('a[data-page=' + prev + ']');
-	var $currPage = $('.pagination').find('a[data-page='+ curr +']');
-
-	console.log("page:    " + curr);
-
-	// if curr = 0, nothing will happen
-	if ( curr !== 0 ) {
-
-		// Clean contents before appending.
-		$('h3.main-content-header').remove();
-		$('div.card-display').remove();
-
-		// when current number reaches 1, disable previous arrow
-		if ( curr === 1 ) {
-
-			// fade out previous arrow when curr page is 1
-			$(this).closest('li').removeClass('waves-effect').addClass('disabled');
-
-			// disable click handler
-			$(this).off('click');
-
-			// change active class
-			$prevPage.closest('li').removeClass('active').addClass('waves-effect');
-			$currPage.closest('li').removeClass('waves-effect').addClass('active');
-			Squpon.pageNumber--;
-			displayInfo(location, query, category, curr);
-
-		} else {
-
-			// re-enable next arrow
-			if ( curr === 4 ) {
-				$('#next').closest('li').removeClass('disabled').addClass('waves-effect');
-				$('#next').on('click', next);
-			}
-
-			$prevPage.closest('li').removeClass('active').addClass('waves-effect');
-			$currPage.closest('li').removeClass('waves-effect').addClass('active');
-			Squpon.pageNumber--;
-			displayInfo(location, query, category, curr);
-		}
-	}
-}
-
-
 // ******************************************************************
 
 // 						Squpon Object
@@ -419,7 +19,7 @@ var Squpon = {
 
 	dealsFormattedAddress: [],
 
-
+	ipLocation: "",
 
 	// ajax call function with callback function so that you can handle response from ajax request on function call.
 	getJSON: function ( url, callback ) {
@@ -433,8 +33,6 @@ var Squpon = {
 			}
 
 		}).done( function (response) {
-
-
 
 			console.log('getJSON() success!');
 			console.log(response);
@@ -605,6 +203,9 @@ var Gmap = {
 			return;
 		}
 		Gmap.place = autocomplete.getPlace();
+		Squpon.queryLocation = autocomplete.getPlace().formatted_address;
+		Gmap.currentLocation = autocomplete.getPlace().formatted_address;
+		Gmap.isCurrentLocation = true;
 		// else {
 		// 	//formatted_address
 		// 	$("#location-input").val(place.formatted_address);
@@ -640,6 +241,407 @@ init = {}
 init.autocomplete = function () {
 	Gmap.initAutoComplete();
 }
+
+// Changes title animation
+
+function changeTitle() {
+
+	var scoopThings = ['COUPONS', 'DEALS', 'DISCOUNTS', 'SAVINGS', 'THINGS'];
+	var index = 0;
+
+	var $change = $('#change')
+
+	setInterval(function () {
+
+		index++;
+
+		$change.fadeOut(400, function () {
+			$(this).text(scoopThings[index % scoopThings.length]).fadeIn(400);
+		});
+	}, 3000);
+}  
+
+// Generates Coupon Cards and returns div
+
+var generateCards = function(id, object, isFirebase) {
+	var couponDiv = $("<div class=\"col s12 m4 card-div\">");
+	var card = $("<div class=\"card large sticky-action hoverable\" id=\"card-" + id + "\">");
+	var moreInfoBtn = "<a class=\"btn-floating halfway-fab waves-effect waves-light activator purple\"><i class=\"material-icons\">more_vert</i></a>";
+	var cardImage = $("<div class=\"card-image waves-effect waves-block waves-light\">");
+	var couponImg = $("<img class=\"activator img-fit\">");
+	var price = $("<span class=\"card-title coupon-price right-align\">").append("$" + object.price);
+
+	couponImg.attr("src", object.image_url);
+	cardImage.append(couponImg);
+	cardImage.append(price);
+	card.append(moreInfoBtn);
+	card.append(cardImage);
+
+	var cardContent = $("<div class=\"card-content\">");
+	var cardMainTitle = $("<span class=\"card-title activator grey-text text-darken-4\">" + object.short_title + "</span>");
+
+	cardContent.append(cardMainTitle);
+	cardContent.append("<p>" + object.merchant.name + "</p>");
+	card.append(cardContent);
+
+	var cardAction = $("<div class=\"card-action center-align\">");
+	var scoopBtn = $("<a href=\"#modal\" class=\"\">Scoop</a>");
+	scoopBtn.attr("href", "#modal");
+
+	if (isFirebase) {
+		scoopBtn.addClass("scoop-btn");
+   		// Add random animation to couponDiv
+   		var animatedArray = ['animated bounceInUp', 'animated bounceInLeft', 'animated bounceInRight', 'animated bounceInDown'];
+   		var randNum = Math.floor((Math.random() * 4) + 0);
+   		couponDiv.addClass(animatedArray[randNum]);
+   	}
+
+   	scoopBtn.addClass("waves-effect waves-purple btn deep-purple modal-trigger map-modal");
+   	scoopBtn.html("<i class=\"material-icons left\">play_for_work</i>Scoop");
+
+   	cardAction.append(scoopBtn);
+   	card.append(cardAction);
+
+   	var cardReveal = $("<div class=\"card-reveal\">");
+   	var cardRevealTitle = $("<span class=\"card-title grey-text text-darken-4\">" + object.merchant.name + "<i class=\"material-icons right\">close</i></span>");
+   	var finePrint = $("<p>" + object.fine_print + "</p>");
+
+   	cardReveal.append(cardRevealTitle);
+   	cardReveal.append("<h5>" + object.title + "</h5>");
+   	cardReveal.append(finePrint);
+
+   	card.append(cardReveal);
+
+   	couponDiv.append(card);
+
+    //store card info in JSON object
+    var dataCard = {
+    	'cardNum': id,
+    	'shortTitle': object.short_title,
+    	'description': object.title,
+    	'url': object.untracked_url,
+    	'address': object.merchant.address,
+    	'id' : object.id
+    }
+
+    // store map info in JSON object
+    var latlng = {
+    	'lat': object.merchant.latitude,
+    	'lng': object.merchant.longitude
+    };
+
+    var formatted = {
+    	'address': object.merchant.address
+    }
+
+    couponDiv.attr('data-card', JSON.stringify(dataCard));
+    couponDiv.attr('data-map', JSON.stringify(latlng));
+    couponDiv.attr('data-address', JSON.stringify(formatted));
+
+    return couponDiv;
+}
+
+
+// ******************************************************************
+
+// 						 DisplayInfo
+
+// *******************************************************************
+
+
+var displayInfo = function(location, query, category, page) {
+
+	var queryURL = "https://api.sqoot.com/v2/deals/";
+
+	if (category === ""){
+
+   		//when query input is empty, but not location input
+   		if (query === "" && location !== "") {
+   			queryURL += '?location=' + location;
+   		}
+
+	   	//when query input is not empty, but location is empty
+	   	//w/o location, search for online deals
+	   	if (query !== "" && location === "") {
+	   		queryURL += '?query=' + query + '&online=true';
+	   	}
+
+	   	//when both input is entered
+	   	if (query !== "" && location !== "") {
+	   		queryURL += '?query=' + query + '&location=' + location;
+	   	}
+
+	   } else {
+
+   		// If user allow geolocation, use it for searching category
+   		if (Gmap.isCurrentLocation){
+   			queryURL += '?category_slugs=' + category + '&location=' + location;
+
+   		//If user blocks geolocation, search for online deals.
+   	} else {
+   		queryURL += '?category_slugs=' + category + '&location=' + Squpon.querryLocation;
+   	}
+
+   }
+
+   if ( page === "") {
+
+   	queryURL += '&page=1' + '&per_page=9';
+
+   } else {
+
+   	queryURL += '&page=' + page + '&per_page=9';
+
+   }
+
+   $.ajax({
+   	url: queryURL,
+   	method: "GET",
+   	headers: { "Authorization" : "api_key xlagn7" }
+   }).done(function(response) {
+
+   	var results = response.deals;
+
+   	if(results.length === 0) {
+   		$("#results").modal();
+   		$("#results").modal("open");
+   		return true;
+   	}
+
+   	$(".main-content").empty();
+   	// Remove duplicates coupons
+   	var seenCoupons = {};
+   	results = results.filter(function(currentObject) {
+   		if (currentObject.deal.short_title in seenCoupons) {
+   			return false;
+   		} else {
+   			seenCoupons[currentObject.deal.short_title] = true;
+   			return true;
+   		}
+   	});
+
+   	if (query && location) {
+
+   		$(".main-content").append("<h3 class='main-content-header'>Deals for " + "<span class='query-uppercase'>" + query + "</span>"+ " in " + location + "<h3>");
+
+   	} else if (!query && location){
+
+   		$(".main-content").append("<h3 class='main-content-header'>Deals in " + location + "<h3>");
+
+   	} else if (query && !location){
+
+   		$(".main-content").append("<h3 class='main-content-header'>" + query + " near you<h3>");
+
+   	} else {
+   		$(".main-content").append("<h3 class='main-content-header'>Deals near you<h3>");
+   	}
+
+
+   	var couponNum = 0;
+
+   		// Clean location array before pushing new location
+   		Gmap.dealsLocation = [];
+
+   		// Validate data
+   		if (results[couponNum]) {
+   			var row = $("<div class=\"row card-display\">");
+
+   			for (var i = 0; i < results.length; i++) {
+
+	   			// Validate Data
+	   			if (results[i].deal.merchant.latitude){
+	   				// get lat,lng from each deals and push into Squpon.dealsLocation array;
+	   				Gmap.dealsLocation.push({'lat': results[i].deal.merchant.latitude, 'lng': results[i].deal.merchant.longitude});
+	   			}
+
+	   			// Validate data
+	   			if (results[couponNum]) {
+
+	   				var coupon = results[couponNum].deal;
+
+	   				row.append(generateCards(couponNum, coupon, true));
+
+	   				couponNum++;
+	   			}
+
+	   			$(".main-content").append(row);
+
+				//display pagination
+				$('.pagination').removeClass('hidden');
+			}
+		}
+	});
+}
+
+var firebaseCards = function(id) {
+
+	var queryURL = "https://api.sqoot.com/v2/deals/" + id;
+
+	$.ajax({
+		url: queryURL,
+		method: "GET",
+		headers: {"Authorization" : "api_key xlagn7"}
+	}).done(function(response) {
+
+		var coupon = response.deal;
+		var couponNum = id;
+
+         // Validate Data
+         if (coupon.merchant.latitude) {
+            // get lat,lng from each deals and push into Squpon.dealsLocation array;
+            Gmap.dealsLocation.push({'lat': coupon.merchant.latitude, 'lng': coupon.merchant.longitude});
+        }
+
+         // Validate data
+         if (coupon) {
+            // generateCards(couponNum, coupon, false);
+            $(".main-content").children().prepend(generateCards(couponNum, coupon, false)[0]);   					
+        }
+
+    });
+
+}
+
+// Populate front page with coupons by location from IP address
+var ipLocation = function() {
+	queryURL = "https://freegeoip.net/json/";
+
+	$.ajax({
+		url : queryURL,
+		method : "GET"
+	}).done(function(ip) {
+		Squpon.ipLocation = ip.city;
+		Squpon.queryLocation = ip.city + ", " + ip.region_code;
+		displayInfo(ip.city + ", " + ip.region_code, "", "","");
+	});
+}
+
+// ******************************************************************
+
+// 				Next Arrow Event Handler
+
+// *******************************************************************
+
+function next(event) {
+
+	event.preventDefault();
+
+	// Clean contents before appending.
+	$('h3.main-content-header').remove();
+	$('div.card-display').remove();
+
+	// Grab location, query, category for searching
+	var location = Squpon.queryLocation;
+	var query = Squpon.queryQuery;
+	var category = Squpon.queryCategory;
+
+	var curr = Squpon.pageNumber + 1;
+	var prev = curr -1;
+
+	var $prevPage = $('.pagination').find('a[data-page=' + prev + ']');
+	var $currPage = $('.pagination').find('a[data-page='+ curr +']');
+
+	console.log("page:  " + curr);
+
+	// When curr number reaches 5, disable next arrow
+	if ( curr === 5 ) {
+
+		// fade out arrow
+		$(this).closest('li').removeClass('waves-effect').addClass('disabled');
+
+		// unbind click handler.
+		$(this).off('click');
+
+		// change active class
+		$prevPage.closest('li').removeClass('active').addClass('waves-effect');
+		$currPage.closest('li').removeClass('waves-effect').addClass('active');
+
+		Squpon.pageNumber++;
+		displayInfo(location, query, category, curr);
+
+	} else {
+
+		// Enable click effect on previous arrow
+		if ( curr === 2 ) {
+
+			$('#previous').closest('li').removeClass('disabled').addClass('waves-effect');
+			$('#previous').off('click');
+			$('#previous').on('click', previous);
+
+		}
+
+		$prevPage.closest('li').removeClass('active').addClass('waves-effect');
+		$currPage.closest('li').removeClass('waves-effect').addClass('active');
+
+		Squpon.pageNumber++;
+		displayInfo(location, query, category, curr);
+
+	}
+
+	console.log('Squpon.pageNumber:    ' + Squpon.pageNumber);
+}
+
+// ******************************************************************
+
+// 				Previous Arrow Event Handler
+
+// *******************************************************************
+
+function previous(event) {
+
+	event.preventDefault();
+
+	// Grab location, query, category for searching
+	var location = Squpon.queryLocation;
+	var query = Squpon.queryQuery;
+	var category = Squpon.queryCategory;
+
+	var curr = Squpon.pageNumber - 1;
+	var prev = curr + 1;
+
+	var $prevPage = $('.pagination').find('a[data-page=' + prev + ']');
+	var $currPage = $('.pagination').find('a[data-page='+ curr +']');
+
+	console.log("page:    " + curr);
+
+	// if curr = 0, nothing will happen
+	if ( curr !== 0 ) {
+
+		// Clean contents before appending.
+		$('h3.main-content-header').remove();
+		$('div.card-display').remove();
+
+		// when current number reaches 1, disable previous arrow
+		if ( curr === 1 ) {
+
+			// fade out previous arrow when curr page is 1
+			$(this).closest('li').removeClass('waves-effect').addClass('disabled');
+
+			// disable click handler
+			$(this).off('click');
+
+			// change active class
+			$prevPage.closest('li').removeClass('active').addClass('waves-effect');
+			$currPage.closest('li').removeClass('waves-effect').addClass('active');
+			Squpon.pageNumber--;
+			displayInfo(location, query, category, curr);
+
+		} else {
+
+			// re-enable next arrow
+			if ( curr === 4 ) {
+				$('#next').closest('li').removeClass('disabled').addClass('waves-effect');
+				$('#next').on('click', next);
+			}
+
+			$prevPage.closest('li').removeClass('active').addClass('waves-effect');
+			$currPage.closest('li').removeClass('waves-effect').addClass('active');
+			Squpon.pageNumber--;
+			displayInfo(location, query, category, curr);
+		}
+	}
+}
+
 
 // ******************************************************************
 
@@ -682,6 +684,16 @@ $(document).ready(function() {
 		event.preventDefault();
 
 		var location = $("#location-input").val().trim();
+
+		if (!location) {
+			location = Squpon.ipLocation;
+			Gmap.isCurrentLocation = false;
+		}
+
+		if (Gmap.isCurrentLocation) {
+			var location = Gmap.currentLocation;
+		}
+
 		//var location = Gmap.place.formatted_address;
 		var query = $("#search-input").val().trim();
 
@@ -699,10 +711,9 @@ $(document).ready(function() {
 		displayInfo(location, query, "", "");
 
 		// clear text-boxes for next entry
-		$("#location-input").val("");
 		$("#search-input").val("");
 
-		Squpon.displayObject();
+		// Squpon.displayObject();
 		return false;
 
 	});
@@ -728,10 +739,19 @@ $(document).ready(function() {
 
 	// *******************************************************************
 
-	$('.nav-category').on('click', function() {
+	$('.nav-category').on('click', function(event) {
+
+		event.preventDefault();
 
 		var category = $(this).data('slug');
-		var location = Gmap.currentLocation;
+		var location;
+		if (Gmap.isCurrentLocation) {
+			location = Gmap.currentLocation;
+		} else {
+			location = Squpon.queryLocation;
+		}
+
+		console.log("this is location " + location);
 
 		Squpon.pageNumber = 1;
 
@@ -928,10 +948,5 @@ $(document).ready(function() {
       });
 
   });
-
-	// When the user clicks on the button, toggle between hiding and showing the dropdown content
-	function myFunction() {
-		// document.getElementById("myDropdown").classList.toggle("show");
-	}
 
 });
