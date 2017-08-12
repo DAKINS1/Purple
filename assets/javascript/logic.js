@@ -755,6 +755,8 @@ $(document).ready(function() {
 
 		Squpon.pageNumber = 1;
 
+		$("#nav-mobile li").removeClass("active");
+		$(this).parent().addClass("active");
 		$('[data-page]').closest('li').removeClass('active').addClass('waves-effect');
 		$('.pagination').find('a[data-page=1]').closest('li').removeClass('waves-effect').addClass('active');
 		$('#next').parent('li').removeClass('disabled').addClass('waves-effect');
