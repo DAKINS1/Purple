@@ -321,7 +321,8 @@ var generateCards = function(id, object, isFirebase) {
     	'description': object.title,
     	'url': object.untracked_url,
     	'address': object.merchant.address,
-    	'id' : object.id
+    	'id' : object.id,
+    	'merchant' : object.merchant.name
     }
 
     // store map info in JSON object
@@ -868,12 +869,13 @@ $(document).ready(function() {
 		// var map = $("<img src=\"assets/images/map.png\" class=\"responsive-img\">");
 		var map = $('<div>');
 		var colRight = $("<div class=\"col s12 m6\">");
+		var merchant = $("<h4>" + cardData['merchant'] + "</h4>");
 		var text = "<h5 class='modal-content-description'>" + cardData['description'] +"</h5>";
-		var link = $("<a class=\"modal-action waves-effect waves-green btn-large\">");
+		var link = $("<br><a class=\"modal-action waves-effect waves-purple deep-purple btn-large\">");
 
 		link.attr("href", cardData['url']);
 		link.attr('target','_blank');
-		link.text("GO!")
+		link.text("Scoop it!")
 
 		$("#modal").delegate(".right", "click", function() {
 			$(".bottom-sheet").modal("close");
@@ -883,6 +885,7 @@ $(document).ready(function() {
 		colLeft.append(map);
 		// colLeft.append(map);
 
+		colRight.append(merchant);
 		colRight.append(text);
 		colRight.append(link);
 
@@ -933,22 +936,25 @@ $(document).ready(function() {
 
 	});
 
-	$("#live-view").on("click", function() {
+	$("#live-view").on("click", function(event) {
+
+		event.preventDefault();
+		$("#nav-mobile li").removeClass("active");
+
 		$(".main-content").empty();
 
 		var row = $("<div class=\"row recent-view\">");
 		$(".main-content").append(row);
 
-      //Invisible pagination
-      $('.pagination').addClass('hidden');
+      	//Invisible pagination
+      	$('.pagination').addClass('hidden');
 
-      var cardsRef = database.ref('/cards');
-      cardsRef.orderByValue().limitToLast(9).on("child_added", function(snapshot) {
-      	firebaseCards(snapshot.key);
-      }, function (error) {
-      	console.log("Error: " + error.code);
+      	var cardsRef = database.ref('/cards');
+      	cardsRef.orderByValue().limitToLast(9).on("child_added", function(snapshot) {
+      		firebaseCards(snapshot.key);
+      	}, function (error) {
+      		console.log("Error: " + error.code);
+      	});
+
       });
-
-  });
-
 });
