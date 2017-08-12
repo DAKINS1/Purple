@@ -645,14 +645,15 @@ $(document).ready(function() {
 	//initiate parallax
 	$('.parallax').parallax();
 
+	//menu for mobile devices
+	$(".button-collapse").sideNav();
+
 	ipLocation();
 
 	$("#search-input, #location-input").keypress(function(event){
 		if (event.keyCode === 10 || event.keyCode === 13)
 			event.preventDefault();
 	});
-
-	$(".button-collapse").sideNav();
 
 	// Get current location, and fill the location input with current location.
 	Gmap.getLocation();
