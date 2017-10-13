@@ -12,9 +12,9 @@ Open folder, right click on index.html and choose Open With.
 Choose your browser.
 
 ## Built With:
-- Materialize CSS,
-- Firebase,
-- AJAX,
+- Materialize CSS
+- Firebase
+- AJAX
 - API's: Squpon, Google Maps
 
 
