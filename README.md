@@ -1,7 +1,6 @@
-# Purple
 1st Group Project
 
-# Squpon (Groupon-like Application)
+## Squpon (Groupon-like Application)
 
 API powered web application that pulls available (in-store and online) coupons from a user-given address or location.
 
