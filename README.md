@@ -13,18 +13,18 @@ Open folder, right click on index.html and choose Open With.
 Choose your browser.
 
 ## Built With:
--Materialize CSS,
--Firebase,
--AJAX,
--API's: Squpon, Google Maps
+- Materialize CSS,
+- Firebase,
+- AJAX,
+- API's: Squpon, Google Maps
 
 
 ## Authors:
--Sandro Wong
--Christopher Kim
--Ditas Fleck
--Brendan Ha
--Bill Roush
+- Sandro Wong
+- Christopher Kim
+- Ditas Fleck
+- Brendan Ha
+- Bill Roush
 
 ##  License & Copyright
 © Sandro Wong, Christopher Kim, Ditas Fleck, Brendan Ha, Bill Roush, UCI Coding Bootcamp 2017
