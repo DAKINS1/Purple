@@ -246,7 +246,7 @@ init.autocomplete = function () {
 
 function changeTitle() {
 
-	var scoopThings = ['COUPONS', 'DEALS', 'DISCOUNTS', 'SAVINGS', 'THINGS'];
+	var scoopThings = ['COUPONS', 'DISCOUNTS', 'SAVINGS',];
 	var index = 0;
 
 	var $change = $('#change')
@@ -259,7 +259,7 @@ function changeTitle() {
 			$(this).text(scoopThings[index % scoopThings.length]).fadeIn(400);
 		});
 	}, 3000);
-}  
+}
 
 // Generates Coupon Cards and returns div
 
@@ -410,7 +410,7 @@ var displayInfo = function(location, query, category, page) {
    	}
 
    	$(".main-content").empty();
-   	$(".firebase-content").empty();	
+   	$(".firebase-content").empty();
    	// Remove duplicates coupons
    	var seenCoupons = {};
    	results = results.filter(function(currentObject) {
@@ -497,7 +497,7 @@ var firebaseCards = function(id) {
          // Validate data
          if (coupon) {
             // generateCards(couponNum, coupon, false);
-            $(".firebase-content").children().prepend(generateCards(couponNum, coupon, false)[0]);   					
+            $(".firebase-content").children().prepend(generateCards(couponNum, coupon, false)[0]);
         }
 
     });
@@ -663,7 +663,7 @@ $(document).ready(function() {
 	//menu for mobile devices
 	$(".button-collapse").sideNav({
 		closeOnClick: true,
-		draggable: true, 
+		draggable: true,
 	});
 
 	ipLocation();
@@ -673,7 +673,7 @@ $(document).ready(function() {
 			event.preventDefault();
 	});
 
-	$("#location-input").on("click", function() {		
+	$("#location-input").on("click", function() {
 		// Get current location, and fill the location input with current location.
 		Gmap.getLocation();
 	});
@@ -926,7 +926,7 @@ $(document).ready(function() {
 		});
 	});
 
-	
+
 
 	$(".main-content").delegate('.scoop-btn', 'click', function() {
 
@@ -947,7 +947,7 @@ $(document).ready(function() {
 		$("#nav-mobile li").removeClass("active");
 
 		$(".main-content").empty();
-		$(".firebase-content").empty();		
+		$(".firebase-content").empty();
 
 		var row = $("<div class=\"row recent-view\">");
 		$(".firebase-content").append(row);

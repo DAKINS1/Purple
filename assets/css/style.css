@@ -47,7 +47,7 @@ nav {
 }
 
 .header-wrapper {
-	padding-top: 10px;
+/*	padding-top: 10px;*/
 	margin-bottom: 0 !important;
 }
 
@@ -62,7 +62,6 @@ nav {
 .main-content-header::first-letter, .query-uppercase::first-letter {
 	text-transform: uppercase;
 }
-
 
 .modal.bottom-sheet {
 	max-height: 65%;
@@ -147,34 +146,34 @@ div.card-image > span.coupon-price {
 
 .parallax-container {
 /*  background-color: rgba(64,46,116, 0.7);
-*/  height: 550px;
-
-
+*/  height: 100px;
 }
 
+
+
 #content {
-	font-family: 'Raleway', sans-serif;
+	font-family: 'Montserrat', sans-serif;
 	display: inline-block;
-	font-size: 4.5vw;
+	font-size: 2.5vw;
 }
 
 #change {
 	font-family: 'Montserrat', sans-serif;
 	font-weight: 500;
-	font-size: 5vw;
+	font-size: 2.5vw;
 	display: inline-block;
 	/*	color: #000352;*/
 	color:#4527a0;
 }
 
 #header-content {
-	margin: 8% auto;
-	height: 100%;
+	margin: 0% auto;
+	height: 50%;
 }
 
 #search-input, #location-input {
-	border-bottom: 2px solid white;
-	font-size: 20px;
+	border-bottom: 1px solid white;
+	font-size: 18px;
 	color: white;
 }
 
@@ -182,7 +181,7 @@ div.card-image > span.coupon-price {
 	margin: 0 auto;
 	width: 20%;
 	transition: width 2s;
-	
+
 }
 
 #myBar {
@@ -196,8 +195,8 @@ input::-webkit-input-placeholder {
 	color: white !important;
 }
 
-input:-ms-input-placeholder {  
-	color: white !important;  
+input:-ms-input-placeholder {
+	color: white !important;
 }
 
 
@@ -214,7 +213,7 @@ input:-ms-input-placeholder {
 	}
 
 	.parallax-container {
-		height: 500px;
+		height: 100px;
 	}
 
 	#sub {
@@ -229,7 +228,7 @@ input:-ms-input-placeholder {
 	}
 
 	.parallax-container {
-		height: 450px;
+		height: 100px;
 	}
 
 	#search-input, #location-input {
@@ -244,7 +243,10 @@ input:-ms-input-placeholder {
 
 @media screen and (max-width: 640px) {
 
-	
+	.parallax-container {
+		height: 100px;
+	}
+
 	#content {
 		width: 100%;
 		font-size: 2.5rem;
@@ -272,7 +274,7 @@ input:-ms-input-placeholder {
 @media screen and (max-width: 600px) {
 
 	.parallax-container {
-		height: 600px
+		height: 350px
 	}
 
 	#content-wrap {
