@@ -19,7 +19,7 @@ Working site at: https://dakins1.github.io/SQUPON-COUPON-FINDER/
 - Materialize CSS
 - Firebase
 - AJAX
-- API's: Squpon, Google Maps
+- API's: Sqoop, Google Maps
 
 
 ## Authors:
