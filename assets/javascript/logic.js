@@ -431,7 +431,7 @@ var displayInfo = function(location, query, category, page) {
 
    	} else if (query && !location){
 
-   		$(".main-content").append("<h3 class='main-content-header'>" + query + "<h3>");
+   		$(".main-content").append("<h3 class='main-content-header'>Deals in"+ " " + query + "<h3>");
 
    	} else {
    		$(".main-content").append("<h3 class='main-content-header'></h3>");
