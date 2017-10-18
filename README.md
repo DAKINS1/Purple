@@ -1,3 +1,5 @@
+![Alt text](https://s1.postimg.org/9nc797o3kv/Screen_Shot_2017-10-18_at_10.37.34_AM.png)
+
 1st Group Project
 
 ## Squpon (Groupon-like Application)
@@ -27,4 +29,5 @@ Choose your browser.
 
 ##  License & Copyright
 © Sandro Wong, Christopher Kim, Ditas Fleck, Brendan Ha, Bill Roush, UCI Coding Bootcamp 2017
+
 
