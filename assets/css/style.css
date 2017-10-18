@@ -294,7 +294,7 @@ input:-ms-input-placeholder {
 @media screen and (max-width: 600px) {
 
 	.parallax-container {
-		height: 100px
+		height: 600px
 	}
 
 
