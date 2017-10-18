@@ -57,24 +57,39 @@
 				</div>
 			</div>
 
-<!-- 			<div class="row" id="we-scoop">
-				<div class="center-align white-text" id="header-content">
-					<h5 id="content-wrap">
-						<div id="content">SCOOP on the </div>
-						<div id="change">DEALS</div>
-						<div id="myProgress">
-							<div id="myBar"></div>
-						</div>
-					</h5>
+ <div class="slider">
+    <ul class="slides">
+      <li>
+        <img src="assets/images/food.png"> <!-- random image -->
+<!--         <div class="caption center-align">
+          <h3>This is our big Tagline!</h3>
+          <h5 class="light grey-text text-lighten-3">Here's our small slogan.</h5>
+        </div> -->
+      </li>
+      <li>
+        <img src="assets/images/events.png"> <!-- random image -->
+<!--         <div class="caption left-align">
+          <h3>Left Aligned Caption</h3>
+          <h5 class="light grey-text text-lighten-3">Here's our small slogan.</h5>
+        </div> -->
+      </li>
+      <li>
+        <img src="assets/images/products.png"> <!-- random image -->
+<!--         <div class="caption right-align">
+          <h3>Right Aligned Caption</h3>
+          <h5 class="light grey-text text-lighten-3">Here's our small slogan.</h5>
+        </div> -->
+      </li>
+      <li>
+        <img src="assets/images/travel.png"> <!-- random image -->
+<!--         <div class="caption center-align">
+          <h3>This is our big Tagline!</h3>
+          <h5 class="light grey-text text-lighten-3">Here's our small slogan.</h5>
+        </div> -->
+      </li>
+    </ul>
+  </div>
 
-				</div>
-			</div> -->
-
-			<div class="parallax">
-				<img src="assets/images/9575CD.png">
-			</div>
-
-		</div>
 
 		<!-- Nav Bar -->
 		<nav>
@@ -170,7 +185,8 @@
 </footer>
 
 
-<!--  Scripts-->
+
+<!--   Scripts -->
 
 
 <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
@@ -180,4 +196,14 @@
 <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBZ0-zTd_gm89myBSRl47Yi0rprg7wjgKs&libraries=places&callback=init.autocomplete"></script>
 <script type="text/javascript" src="assets/javascript/logic.js"></script>
 </body>
+
+<script>
+$(document).ready(function(){
+  $('.slider').slider({fullWidth: true});
+});
+</script>
+
+
+
+
 </html>

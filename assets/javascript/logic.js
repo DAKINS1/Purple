@@ -246,7 +246,6 @@ init.autocomplete = function () {
 
 function changeTitle() {
 
-	var scoopThings = ['COUPONS', 'DISCOUNTS', 'SAVINGS',];
 	var index = 0;
 
 	var $change = $('#change')
@@ -424,18 +423,18 @@ var displayInfo = function(location, query, category, page) {
 
    	if (query && location) {
 
-   		$(".main-content").append("<h3 class='main-content-header'>Deals for " + "<span class='query-uppercase'>" + query + "</span>"+ " in " + location + "<h3>");
+   		$(".main-content").append("<h3 class='main-content-header'>" + "<span class='query-uppercase'>" + query + "</span>"+ " in " + location + "<h3>");
 
    	} else if (!query && location){
 
-   		$(".main-content").append("<h3 class='main-content-header'>Deals in " + location + "<h3>");
+   		$(".main-content").append("<h3 class='main-content-header'>" + location + "<h3>");
 
    	} else if (query && !location){
 
    		$(".main-content").append("<h3 class='main-content-header'>" + query + " near you<h3>");
 
    	} else {
-   		$(".main-content").append("<h3 class='main-content-header'>Deals near you<h3>");
+   		$(".main-content").append("<h3 class='main-content-header'><h3>");
    	}
 
 
