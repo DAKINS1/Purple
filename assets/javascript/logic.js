@@ -379,7 +379,7 @@ var displayInfo = function(location, query, category, page) {
 
    		//If user blocks geolocation, search for online deals.
    	} else {
-   		queryURL += '?category_slugs=' + category + '&location=' + Squpon.querryLocation;
+   		queryURL += '?category_slugs=' + category + '&location=' + Squpon.queryLocation;
    	}
 
    }
@@ -427,14 +427,14 @@ var displayInfo = function(location, query, category, page) {
 
    	} else if (!query && location){
 
-   		$(".main-content").append("<h3 class='main-content-header'>" + location + "<h3>");
+   		$(".main-content").append("<h3 class='main-content-header'>Deals in"+ " " + location + "<h3>");
 
    	} else if (query && !location){
 
    		$(".main-content").append("<h3 class='main-content-header'>" + query + "<h3>");
 
    	} else {
-   		$(".main-content").append("<h3 class='main-content-header'><h3>");
+   		$(".main-content").append("<h3 class='main-content-header'></h3>");
    	}
 
 

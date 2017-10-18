@@ -79,18 +79,18 @@ main {
 
 
 
-img {
+/*.slide img {
 	width: 1000px;
 	height: 550px;
-}
+}*/
 
 
 .slider .indicators .indicator-item {
   background-color: #666666;
   border: 2px solid #ffffff;
-  -webkit-box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
-  -moz-box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
-  box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
+  -webkit-box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 0px 0 rgba(0, 0, 0, 0.12);
+  -moz-box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 0px 0 rgba(0, 0, 0, 0.12);
+  box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 0px 0 rgba(0, 0, 0, 0.12);
 }
 .slider .indicators .indicator-item.active {
   background-color: #ffffff;
@@ -177,7 +177,7 @@ div.card-image > span.coupon-price {
 /* Parallax */
 
 .parallax-container {
-  background-color: rgba(64,46,116, 0.7);
+  background-color: white;
   height: 600px;
 }
 
@@ -208,11 +208,11 @@ div.card-image > span.coupon-price {
 }
 
 input::-webkit-input-placeholder {
-	color: white !important;
+	color: black !important;
 }
 
 input:-ms-input-placeholder {
-	color: white !important;
+	color: black !important;
 }
 
 
