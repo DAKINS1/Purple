@@ -13,6 +13,8 @@ Download or clone repository.
 Open folder, right click on index.html and choose Open With.
 Choose your browser.
 
+Working site at: https://dakins1.github.io/SQUPON-COUPON-FINDER/
+
 ## Built With:
 - Materialize CSS
 - Firebase
