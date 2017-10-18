@@ -86,7 +86,7 @@ main {
 
 
 .slider .indicators .indicator-item {
-  background-color: #666666;
+/*  background-color: #666666;*/
   border: 2px solid #ffffff;
   -webkit-box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 0px 0 rgba(0, 0, 0, 0.12);
   -moz-box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 0px 0 rgba(0, 0, 0, 0.12);
@@ -99,6 +99,7 @@ main {
   width: 100%;
   height: 100%;
   margin: 0 auto;
+  background-color: white!important;
 }
 .slider .indicators {
   bottom: 6px;
@@ -106,10 +107,11 @@ main {
   /* text-align: left; */
 }
 
-.slider .slides li img {
-    background-size:100% auto;
+/*.slider .slides li img {
+    background-size: 100% auto;
     background-repeat: no-repeat;
-}
+
+}*/
 
 
 
@@ -294,8 +296,10 @@ input:-ms-input-placeholder {
 @media screen and (max-width: 600px) {
 
 	.parallax-container {
-		height: 600px
+		height: 330px
+
 	}
+
 
 
 	#content-wrap {
