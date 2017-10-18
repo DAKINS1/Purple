@@ -145,7 +145,7 @@ var Gmap = {
 
 	        	var error = {
 
-	        		'ZERO_RESULTS': 'no adress'
+	        		'ZERO_RESULTS': 'no address'
 
 	        	}
 
@@ -423,7 +423,7 @@ var displayInfo = function(location, query, category, page) {
 
    	if (query && location) {
 
-   		$(".main-content").append("<h3 class='main-content-header'>" + "<span class='query-uppercase'>" + query + "</span>"+ " in " + location + "<h3>");
+   		$(".main-content").append("<h3 class='main-content-header'>" + "<span class='query-uppercase'>" + query + "</span>" + location + "<h3>");
 
    	} else if (!query && location){
 
@@ -431,7 +431,7 @@ var displayInfo = function(location, query, category, page) {
 
    	} else if (query && !location){
 
-   		$(".main-content").append("<h3 class='main-content-header'>" + query + " near you<h3>");
+   		$(".main-content").append("<h3 class='main-content-header'>" + query + "<h3>");
 
    	} else {
    		$(".main-content").append("<h3 class='main-content-header'><h3>");
